@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "name": "Exemplo 4 - Timer TOFF (Timer OFF Delay)",
+    "date": "2025-10-31",
+    "description": "Timer que desliga a saída após 2 segundos quando entrada é desligada",
+    "author": "Claude Code",
+    "difficulty": "Intermediário"
+  },
+  "code": "TOFF T2,20\n\nLD I0.0\nST T2\n\nLD T2\nST Q0.0",
+  "instructions": [
+    "1. Clique Start",
+    "2. Clique em I0.0 para ligar (Q0.0 acende imediatamente)",
+    "3. Desligue I0.0 (timer começa a contar)",
+    "4. Aguarde 2 segundos",
+    "5. Q0.0 irá apagar quando T2 completar"
+  ]
+}

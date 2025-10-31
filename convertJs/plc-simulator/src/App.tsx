@@ -4,9 +4,9 @@
  */
 
 import { useState } from 'react'
-import { CodeEditor, IOPanel, ControlBar, FileMenu, DataTable } from './components'
+import { CodeEditor, IOPanel, ControlBar, FileMenu, DataTable, ExamplesMenu } from './components'
 import { usePLCCycle } from './hooks'
-import { serializeMemory, deserializeMemory } from './core'
+import { saveProgram, loadProgram } from './utils'
 import './App.css'
 
 function App() {
@@ -24,56 +24,28 @@ function App() {
 
   // Salva o código em JSON
   const handleSave = () => {
-    const data = {
-      version: '1.0',
-      metadata: {
-        name: 'Programa PLC',
-        date: new Date().toISOString(),
-        description: 'Programa exportado do Simulador CLP'
-      },
-      code,
-      memory: serializeMemory(memory)
+    try {
+      saveProgram(code, memory, 'plc-program')
+    } catch (error) {
+      alert(`Erro ao salvar: ${error instanceof Error ? error.message : 'erro desconhecido'}`)
     }
-
-    const json = JSON.stringify(data, null, 2)
-    const blob = new Blob([json], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `plc-program-${Date.now()}.json`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-
-    console.log('💾 Arquivo salvo:', a.download)
   }
 
   // Carrega código de arquivo JSON
   const handleLoad = async (file: File) => {
     try {
-      const text = await file.text()
-      const data = JSON.parse(text)
+      const data = await loadProgram(file)
+      setCode(data.code)
 
-      if (data.code) {
-        setCode(data.code)
-        console.log('📂 Arquivo carregado:', file.name)
-
-        // Restaura memória se disponível
-        if (data.memory) {
-          const loadedMemory = deserializeMemory(data.memory)
-          memory.clear()
-          loadedMemory.forEach((value, key) => {
-            memory.set(key, value)
-          })
-        }
-      } else {
-        alert('Arquivo JSON inválido: campo "code" não encontrado')
+      // Restaura memória se disponível
+      if (data.memory) {
+        memory.clear()
+        Object.entries(data.memory).forEach(([key, value]) => {
+          memory.set(key, value as any)
+        })
       }
     } catch (error) {
-      console.error('Erro ao carregar arquivo:', error)
-      alert('Erro ao carregar arquivo. Verifique se é um JSON válido.')
+      alert(`Erro ao carregar: ${error instanceof Error ? error.message : 'erro desconhecido'}`)
     }
   }
 
@@ -84,11 +56,17 @@ function App() {
           <h1>🤖 Simulador CLP</h1>
           <p className="header-subtitle">Instruction List (IL) Interpreter</p>
         </div>
-        <FileMenu
-          onSave={handleSave}
-          onLoad={handleLoad}
-          disabled={isRunning}
-        />
+        <div className="header-actions">
+          <ExamplesMenu
+            onLoadExample={handleLoad}
+            disabled={isRunning}
+          />
+          <FileMenu
+            onSave={handleSave}
+            onLoad={handleLoad}
+            disabled={isRunning}
+          />
+        </div>
       </header>
 
       <main className="app-main">
@@ -126,7 +104,7 @@ function App() {
 
       <footer className="app-footer">
         <p>
-          ✅ TICKET-01 | TICKET-02 | TICKET-03 | TICKET-04 | TICKET-06
+          ✅ TICKET-01 | TICKET-02 | TICKET-03 | TICKET-04 | TICKET-06 | TICKET-07
           <span className="footer-separator">•</span>
           TypeScript {import.meta.env.MODE === 'development' ? 'DEV' : 'PROD'}
         </p>

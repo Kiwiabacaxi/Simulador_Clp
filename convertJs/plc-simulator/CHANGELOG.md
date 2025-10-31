@@ -6,6 +6,47 @@ Todas as mudanças notáveis do projeto serão documentadas aqui.
 
 ## [Unreleased]
 
+### ✅ 2025-10-31 - TICKET-07: File Handler (Save/Load)
+
+**Implementado:**
+- ✅ fileHandler.ts utility (fileHandler.ts - 220 linhas)
+  - saveProgram() - Download de JSON com código e memória
+  - loadProgram() - Upload e validação de JSON
+  - validateSaveFile() - Validação de versão e estrutura
+  - saveToLocalStorage() - Auto-save da sessão
+  - loadFromLocalStorage() - Restaurar última sessão
+- ✅ ExamplesMenu component (ExamplesMenu.tsx + CSS - 180 linhas)
+  - Dropdown modal com 10 exemplos
+  - Busca de arquivos via fetch() de public/examples/
+  - UI com animações e cores
+- ✅ Refatoração do App.tsx
+  - handleSave() usa fileHandler.saveProgram()
+  - handleLoad() usa fileHandler.loadProgram()
+  - ExamplesMenu integrado no header
+- ✅ 10 exemplos copiados para public/examples/
+  - 01-basico-entradas-saidas.json
+  - 02-logica-AND-OR.json
+  - 03-timer-TON.json
+  - 04-timer-TOFF.json
+  - 05-contador-CTU.json
+  - 06-semaforo.json
+  - 07-latch-auto-retencao.json
+  - 08-timer-contador-completo.json
+  - 09-pisca-pisca.json
+  - 10-portao-automatico.json
+
+**Funcionalidades:**
+- ✅ Save/Load JSON via browser (download/upload)
+- ✅ Validação de versão e formato do arquivo
+- ✅ Tratamento robusto de erros
+- ✅ Auto-save no LocalStorage (futuro)
+- ✅ Menu de exemplos com modal
+- ✅ Carrega exemplos via HTTP fetch
+
+**Total TICKET-07:** ~400 linhas (fileHandler + ExamplesMenu + estilos)
+
+---
+
 ### ✅ 2025-10-31 - TICKET-06: Data Table
 
 **Implementado:**

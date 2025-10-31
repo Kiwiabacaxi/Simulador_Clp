@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "name": "Exemplo 3 - Contador",
+    "description": "Programa com contador CTU (Count Up) e temporizadores TON",
+    "createdAt": "2025-10-31T00:00:00.000Z",
+    "author": "IFTM - Alunos 2024/02"
+  },
+  "code": "CTU C1,3\n\nLD I0.0\nOR Q0.5\nST Q0.5\n\nLD I0.0\nOR Q0.1\nAND I0.1\nANDN I1.0\nANDN Q0.3\nST Q0.1\n\nLD Q0.1\nST C1\n\nTON T1,30\nLD I1.0\nST T1\n\nLD T1\nST Q0.2\n\nLD T1\nST T2\n\nTON T2,50\nLD T2\nOR Q0.3\nAND I0.1\nAND I1.1\nANDN C1\nST Q0.3\n\nLDN I1.1\nOR Q0.1\nAND I0.1\nAND Q0.5\nANDN I1.0\nANDN C1\nST Q0.1\n\nLD I1.0\nST Q1.2\nLD Q0.1\nOR Q0.3\nOR Q0.2\nST Q1.0\n\nLDN Q1.0\nANDN I0.0\nORN I0.1\nST Q1.1"
+}

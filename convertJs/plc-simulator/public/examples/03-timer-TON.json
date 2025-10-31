@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "name": "Exemplo 3 - Timer TON (Timer ON Delay)",
+    "date": "2025-10-31",
+    "description": "Timer que ativa a saída após 3 segundos (preset = 30 x 100ms)",
+    "author": "Claude Code",
+    "difficulty": "Intermediário"
+  },
+  "code": "TON T1,30\n\nLD I0.0\nST T1\n\nLD T1\nST Q0.0",
+  "instructions": [
+    "1. Clique Start para iniciar a simulação",
+    "2. Clique em I0.0 para ligar (inicia o timer)",
+    "3. Aguarde 3 segundos",
+    "4. Q0.0 irá acender quando T1 completar",
+    "5. Desligue I0.0 para resetar o timer"
+  ]
+}

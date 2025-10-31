@@ -1,0 +1,230 @@
+/* Examples Menu - Dropdown de exemplos pré-definidos */
+
+.examples-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.examples-button {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.examples-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.examples-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.examples-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Overlay (fundo escuro) */
+.examples-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  animation: fadeIn 0.2s ease;
+}
+
+/* Dropdown */
+.examples-dropdown {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Header */
+.examples-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 2px solid #e0e0e0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.examples-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.close-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* Lista de exemplos */
+.examples-list {
+  overflow-y: auto;
+  padding: 12px;
+  max-height: calc(80vh - 80px);
+}
+
+.example-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  margin-bottom: 8px;
+}
+
+.example-item:hover {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e0e7ff 100%);
+  border-color: #667eea;
+  transform: translateX(4px);
+}
+
+.example-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.example-content {
+  flex: 1;
+}
+
+.example-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.example-description {
+  font-size: 13px;
+  color: #666;
+}
+
+/* Scrollbar customizado */
+.examples-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.examples-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.examples-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+}
+
+.examples-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #643a8a 100%);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .examples-dropdown {
+    max-width: 95%;
+    max-height: 90vh;
+  }
+
+  .examples-header {
+    padding: 16px 20px;
+  }
+
+  .examples-header h3 {
+    font-size: 16px;
+  }
+
+  .example-item {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .example-number {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .example-name {
+    font-size: 14px;
+  }
+
+  .example-description {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "name": "Exemplo 1 - Básico: Entradas → Saídas",
+    "date": "2025-10-31",
+    "description": "Exemplo simples: liga saídas quando entradas correspondentes estão ativas",
+    "author": "Claude Code",
+    "difficulty": "Iniciante"
+  },
+  "code": "LD I0.0\nST Q0.0\n\nLD I0.1\nST Q0.1\n\nLD I0.2\nST Q0.2\n\nLD I0.3\nST Q0.3",
+  "instructions": [
+    "Clique em I0.0 para acender Q0.0",
+    "Clique em I0.1 para acender Q0.1",
+    "Cada entrada controla uma saída independente"
+  ]
+}

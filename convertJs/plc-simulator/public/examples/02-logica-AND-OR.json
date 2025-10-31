@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "name": "Exemplo 2 - Lógica AND e OR",
+    "date": "2025-10-31",
+    "description": "Demonstra operadores lógicos AND e OR entre múltiplas entradas",
+    "author": "Claude Code",
+    "difficulty": "Iniciante"
+  },
+  "code": "LD I0.0\nAND I0.1\nST Q0.0\n\nLD I0.2\nOR I0.3\nST Q0.1\n\nLD I0.4\nAND I0.5\nAND I0.6\nST Q0.2",
+  "instructions": [
+    "Q0.0 = I0.0 AND I0.1 (precisa das duas entradas)",
+    "Q0.1 = I0.2 OR I0.3 (precisa de pelo menos uma)",
+    "Q0.2 = I0.4 AND I0.5 AND I0.6 (precisa das três)"
+  ]
+}

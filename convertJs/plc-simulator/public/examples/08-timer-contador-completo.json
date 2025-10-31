@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "name": "Exemplo 8 - Timer + Contador Completo",
+    "date": "2025-10-31",
+    "description": "Combina timer e contador: após 2s, conta 3 pulsos para ativar saída",
+    "author": "Claude Code",
+    "difficulty": "Avançado"
+  },
+  "code": "TON T1,20\nCTU C1,3\n\nLD I0.0\nST T1\n\nLD T1\nAND I0.1\nST C1\n\nLD C1\nST Q0.0\n\nLD T1\nST Q0.1",
+  "instructions": [
+    "1. Clique Start",
+    "2. Ligue I0.0 (inicia timer T1 de 2s)",
+    "3. Q0.1 acende quando T1 completar",
+    "4. Dê 3 pulsos em I0.1 (ligar/desligar 3 vezes)",
+    "5. Q0.0 acende após 3 pulsos",
+    "6. Use Refresh para reiniciar"
+  ]
+}

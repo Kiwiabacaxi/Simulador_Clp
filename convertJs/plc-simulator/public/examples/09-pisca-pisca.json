@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "name": "Exemplo 9 - Pisca-Pisca",
+    "date": "2025-10-31",
+    "description": "LED que pisca automaticamente a cada 1 segundo",
+    "author": "Claude Code",
+    "difficulty": "Avançado"
+  },
+  "code": "TON T1,10\nTOFF T2,10\n\nLD I0.0\nST M1\n\nLD M1\nST T1\n\nLD T1\nST T2\n\nLD T2\nST M1\n\nLD T1\nST Q0.0",
+  "instructions": [
+    "1. Clique Start",
+    "2. Ligue I0.0 para iniciar",
+    "3. Q0.0 começará a piscar",
+    "4. Liga por 1s, desliga por 1s, repete",
+    "5. Desligue I0.0 para parar"
+  ]
+}
