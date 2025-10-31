@@ -3,7 +3,11 @@
     "allow": [
       "Bash(./gradlew tasks:*)",
       "Bash(./gradlew run:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
