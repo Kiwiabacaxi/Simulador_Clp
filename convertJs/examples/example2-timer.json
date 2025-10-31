@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "name": "Exemplo 2 - Timer",
+    "description": "Programa com temporizadores TON (Timer ON Delay)",
+    "createdAt": "2025-10-31T00:00:00.000Z",
+    "author": "IFTM - Alunos 2024/02"
+  },
+  "code": "LD I0.0\nOR Q0.5\nST Q0.5\nLD I0.0\nOR Q0.1\nAND I0.1\nANDN I1.0\nANDN Q0.3\nST Q0.1\nTON T1,30\nLD I1.0\nST T1\nLD T1\nST Q0.2\nLD T1\nST T2\nTON T2,50\nLD T2\nOR Q0.3\nAND I0.1\nAND I1.1\nST Q0.3\nLDN I1.1\nOR Q0.1\nAND I0.1\nAND Q0.5\nANDN I1.0\nST Q0.1\nLD I1.0\nST Q1.2\nLD Q0.1\nOR Q0.3\nOR Q0.2\nST Q1.0\nLDN Q1.0\nANDN I0.0\nORN I0.1\nST Q1.1"
+}

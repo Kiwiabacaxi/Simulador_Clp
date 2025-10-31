@@ -116,7 +116,7 @@ public final class HomePg extends javax.swing.JFrame {
         sceneContainer.revalidate();
         sceneContainer.repaint();
 
-        this.setResizable(false);
+        this.setResizable(true);
 
         telaDataTable = new ListaDeVariaveisPg(HomePageModel.getInputs(), HomePageModel.getOutputs());
 

@@ -75,7 +75,7 @@ public class HomePageController {
             }
             List<String> memory;
             try {
-                memory = Save.load(dir + "\\" + filename);
+                memory = Save.load(dir + java.io.File.separator + filename);
                 codigoCampTextArea.setText("");
                 for (String line : memory) {
                     codigoCampTextArea.append(line);
@@ -103,7 +103,7 @@ public class HomePageController {
             memory = homePageInstance.saveLines(memory);
 
             try {
-                Save.save(dir + "\\" + filename, memory);
+                Save.save(dir + java.io.File.separator + filename, memory);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
