@@ -1,9 +1,10 @@
-# TICKET-06: UI - Data Table
+# TICKET-06: UI - Data Table ✅
 
-**Status**: 🔴 TODO
+**Status**: ✅ CONCLUÍDO
 **Prioridade**: 🟡 MÉDIA
 **Estimativa**: 1 dia
 **Dependências**: TICKET-04
+**Concluído em**: 2025-10-31
 
 ---
 
@@ -45,10 +46,13 @@ export function DataTable({ inputs, outputs, memoryVariables }: DataTableProps) 
 
 ## 🎯 Critérios de Aceitação
 
-- [ ] Mostra todas as variáveis (I, Q, M, T, C)
-- [ ] Atualiza em tempo real
-- [ ] Filtro por tipo
-- [ ] Busca por nome
+- [x] Mostra todas as variáveis (I, Q, M, T, C)
+- [x] Atualiza em tempo real
+- [x] Filtro por tipo
+- [x] Busca por nome
+- [x] Estatísticas no header
+- [x] Indicadores visuais (cores por tipo)
+- [x] Info de timers/contadores (counter/preset)
 
 ---
 

@@ -6,6 +6,41 @@ Todas as mudanças notáveis do projeto serão documentadas aqui.
 
 ## [Unreleased]
 
+### ✅ 2025-10-31 - TICKET-06: Data Table
+
+**Implementado:**
+- ✅ DataTable component (DataTable.tsx + CSS - 270 linhas)
+  - Tabela de variáveis em tempo real
+  - Mostra I, Q, M, T, C
+  - Atualização automática durante simulação
+- ✅ Filtros por tipo
+  - Botões: Todas, Entradas, Saídas, Memória, Timers, Contadores
+  - Cores diferentes para cada tipo
+- ✅ Busca por nome
+  - Input de busca com filtro em tempo real
+  - Pesquisa case-insensitive
+- ✅ Estatísticas no header
+  - Conta variáveis ativas
+  - Mostra total de cada tipo
+- ✅ Informações detalhadas
+  - Timers: counter/preset e porcentagem
+  - Contadores: counter/preset e tipo (UP/DOWN)
+  - Valores booleanos: ON/OFF
+- ✅ Layout 3 colunas
+  - Código | Simulação | Tabela de Dados
+  - Responsivo (mobile: 1 coluna)
+
+**Funcionalidades:**
+- ✅ Tabela sticky header (scroll independente)
+- ✅ Indicadores visuais (verde ON, cinza OFF)
+- ✅ Border lateral colorida por tipo
+- ✅ Hover effects nas linhas
+- ✅ Total de variáveis filtradas no footer
+
+**Total TICKET-06:** ~270 linhas
+
+---
+
 ### ✅ 2025-10-31 - TICKET-04: UI Components
 
 **Implementado:**

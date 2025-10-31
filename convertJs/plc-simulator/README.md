@@ -1,6 +1,6 @@
 # 🤖 PLC Simulator - Web App
 
-**Status**: ✅ UI Completa (TICKET-01 ✅ + TICKET-02 ✅ + TICKET-03 ✅ + TICKET-04 ✅)
+**Status**: ✅ UI Completa (TICKET-01 ✅ + TICKET-02 ✅ + TICKET-03 ✅ + TICKET-04 ✅ + TICKET-06 ✅)
 
 ---
 
@@ -100,6 +100,18 @@ plc-simulator/
 - ✅ Layout responsivo com gradientes
 - ✅ **Total: ~650 linhas entre componentes e estilos**
 
+### ✅ TICKET-06 Concluído
+
+- ✅ DataTable component (DataTable.tsx + CSS)
+- ✅ Mostra todas as variáveis em tempo real
+- ✅ Filtros por tipo (Todas, I, Q, M, T, C)
+- ✅ Busca por nome de variável
+- ✅ Estatísticas no header (contadores)
+- ✅ Cores diferentes por tipo de variável
+- ✅ Info detalhada para timers/contadores
+- ✅ Layout 3 colunas (código | simulação | tabela)
+- ✅ **Total: ~270 linhas (componente + estilos)**
+
 ---
 
 ## 🎯 Próximos Passos
@@ -116,10 +128,10 @@ plc-simulator/
 
 ```bash
 $ npm run build
-✓ 50 modules transformed.
-dist/assets/index-CquMYR0F.css    8.05 kB │ gzip:  2.30 kB
-dist/assets/index-B2sWHdD7.js   205.66 kB │ gzip: 64.27 kB
-✓ built in 731ms
+✓ 52 modules transformed.
+dist/assets/index-B9l7J9HF.css   11.67 kB │ gzip:  3.02 kB
+dist/assets/index-DJvYrESo.js   209.79 kB │ gzip: 65.30 kB
+✓ built in 759ms
 ```
 
 **Status**: ✅ Sem erros de compilação!
@@ -150,5 +162,5 @@ Quando rodar `npm run dev`, acesse:
 ---
 
 **Data**: 2025-10-31
-**Tickets**: TICKET-01 ✅ | TICKET-02 ✅ | TICKET-03 ✅ | TICKET-04 ✅
-**Próximo**: TICKET-05 (Simulation Panels)
+**Tickets**: TICKET-01 ✅ | TICKET-02 ✅ | TICKET-03 ✅ | TICKET-04 ✅ | TICKET-06 ✅
+**Próximo**: TICKET-05 (Simulation Panels) ou TICKET-08 (Electron)

@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react'
-import { CodeEditor, IOPanel, ControlBar, FileMenu } from './components'
+import { CodeEditor, IOPanel, ControlBar, FileMenu, DataTable } from './components'
 import { usePLCCycle } from './hooks'
 import { serializeMemory, deserializeMemory } from './core'
 import './App.css'
@@ -114,11 +114,19 @@ function App() {
             disabled={isRunning}
           />
         </section>
+
+        <aside className="data-section">
+          <DataTable
+            inputs={inputs}
+            outputs={outputs}
+            memoryVariables={memory}
+          />
+        </aside>
       </main>
 
       <footer className="app-footer">
         <p>
-          ✅ TICKET-01 | TICKET-02 | TICKET-03 | TICKET-04
+          ✅ TICKET-01 | TICKET-02 | TICKET-03 | TICKET-04 | TICKET-06
           <span className="footer-separator">•</span>
           TypeScript {import.meta.env.MODE === 'development' ? 'DEV' : 'PROD'}
         </p>
