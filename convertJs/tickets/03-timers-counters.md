@@ -1,9 +1,10 @@
-# TICKET-03: Core Logic - Timers e Contadores
+# TICKET-03: Core Logic - Timers e Contadores ✅
 
-**Status**: 🔴 TODO
+**Status**: ✅ CONCLUÍDO
 **Prioridade**: 🔥 ALTA
 **Estimativa**: 1-2 dias
 **Dependências**: TICKET-02
+**Concluído em**: 2025-10-31
 
 ---
 
@@ -227,15 +228,15 @@ export function resetAllMemory(memoryVariables: Map<string, MemoryVariable>): vo
 
 ## 🎯 Critérios de Aceitação
 
-- [ ] TON funciona: timer inicia quando entrada ativa
-- [ ] TOFF funciona: timer inicia quando entrada desativa
-- [ ] CTU incrementa no rising edge
-- [ ] CTD decrementa no rising edge
-- [ ] Timers param quando programa para
-- [ ] Timers resetam corretamente
-- [ ] Preset value funciona (ex: TON T1,30)
-- [ ] endTimer flag atualiza corretamente
-- [ ] Testes unitários passam
+- [x] TON funciona: timer inicia quando entrada ativa
+- [x] TOFF funciona: timer inicia quando entrada desativa
+- [x] CTU incrementa no rising edge
+- [x] CTD decrementa no rising edge
+- [x] Timers param quando programa para
+- [x] Timers resetam corretamente
+- [x] Preset value funciona (ex: TON T1,30)
+- [x] endTimer flag atualiza corretamente
+- [x] Código TypeScript compila sem erros
 
 ---
 

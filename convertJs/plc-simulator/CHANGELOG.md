@@ -6,6 +6,34 @@ Todas as mudanças notáveis do projeto serão documentadas aqui.
 
 ## [Unreleased]
 
+### ✅ 2025-10-31 - TICKET-03: Timers e Contadores
+
+**Implementado:**
+- ✅ Timer Manager (`timerManager.ts` - 158 linhas)
+  - startTimer() / stopTimer() / resetTimer()
+  - updateTimers() - Gerencia TON/TOFF baseado em currentValue
+  - stopAllTimers() - Cleanup para prevenir memory leaks
+- ✅ Memory Manager (`memoryManager.ts` - 169 linhas)
+  - resetAllMemory() / resetTimers() / resetCounters()
+  - getVariablesByType() / countVariablesByType()
+  - serializeMemory() / deserializeMemory() - Para save/load
+- ✅ Hook React (`useTimerUpdate.ts` - 88 linhas)
+  - useTimerUpdate() - Hook principal
+  - useTimerUpdateWithInterval() - Com controle de intervalo
+  - useTimerCleanup() - Apenas cleanup
+- ✅ Exports atualizados (`core/index.ts`, `hooks/index.ts`)
+
+**Funcionalidades:**
+- ✅ TON (Timer ON Delay) - Timer conta quando entrada = true
+- ✅ TOFF (Timer OFF Delay) - Timer conta quando entrada = false
+- ✅ CTU (Counter Up) - Rising edge detection
+- ✅ CTD (Counter Down) - Rising edge detection
+- ✅ Tick de 100ms (compatível com Java)
+
+**Total TICKET-03:** ~415 linhas de código TypeScript
+
+---
+
 ### ✅ 2025-10-31 - TICKET-02: Core Logic - Interpretador
 
 **Implementado:**

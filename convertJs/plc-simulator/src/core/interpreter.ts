@@ -135,13 +135,15 @@ function executeInstruction(
         mem = createMemoryVariable(variable)
         memoryVariables.set(variable, mem)
       }
-      mem.currentValue = accumulator
 
-      // Lógica de contador (CTU/CTD)
+      // Lógica de contador (CTU/CTD) - ANTES de atualizar currentValue
       const type = getMemoryType(variable)
       if (type === 'C') {
         handleCounter(mem, accumulator)
       }
+
+      // Atualiza currentValue depois do contador
+      mem.currentValue = accumulator
     }
   }
 
@@ -156,12 +158,15 @@ function executeInstruction(
         mem = createMemoryVariable(variable)
         memoryVariables.set(variable, mem)
       }
-      mem.currentValue = !accumulator
 
+      // Lógica de contador (CTU/CTD) - ANTES de atualizar currentValue
       const type = getMemoryType(variable)
       if (type === 'C') {
         handleCounter(mem, !accumulator)
       }
+
+      // Atualiza currentValue depois do contador
+      mem.currentValue = !accumulator
     }
   }
 
