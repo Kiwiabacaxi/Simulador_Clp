@@ -21,13 +21,17 @@ public class BatchSimulatorController {
         this.panel = panel;
     }
 
-    public void drawTankFill(Graphics2D g2d, int tankFillHeight) {
-        int fillTop = TANK_Y_BASE - tankFillHeight;
-        int fillHeight = tankFillHeight;
+    public void drawTankFill(Graphics2D g2d, int tankFillHeight, int drawX, int drawY, double scale) {
+        int scaledTankX = drawX + (int) (TANK_X * scale);
+        int scaledTankYBase = drawY + (int) (TANK_Y_BASE * scale);
+        int scaledTankWidth = (int) (TANK_WIDTH * scale);
+        int scaledFillHeight = (int) (tankFillHeight * scale);
+        
+        int fillTop = scaledTankYBase - scaledFillHeight;
 
         g2d.setColor(new Color(255, 255, 0, 200));
 
-        g2d.fillRect(TANK_X, fillTop, TANK_WIDTH, fillHeight);
+        g2d.fillRect(scaledTankX, fillTop, scaledTankWidth, scaledFillHeight);
     }
 
     public void startFilling(FillHeight fillHeight) {

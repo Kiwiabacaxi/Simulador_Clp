@@ -6,6 +6,8 @@ import ilcompiler.input.Input.InputType;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Map;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -19,6 +21,9 @@ public class BatchSimulationScenePanel extends javax.swing.JPanel implements ISc
     private Runnable onCriticalFailureCallback;
 
     private final Image backgroundImage;
+    private final double imageAspectRatio;
+    private static final int BASE_WIDTH = 624;
+    private static final int BASE_HEIGHT = 394;
 
     private final BatchSimulatorController controller;
     private final BatchSimulatorController.FillHeight tankFillHeightWrapper;
@@ -30,6 +35,9 @@ public class BatchSimulationScenePanel extends javax.swing.JPanel implements ISc
     private final RedIndicator pump1Indicator, pump3Indicator, mixerIndicator, hiLevelIndicator, loLevelIndicator;
 
     private final RedIndicator[] indicators;
+    
+    private JPanel buttonsPanel;
+    private JPanel ledsPanel;
 
     private Long hiLevelActivationTime = null;
     private boolean alertShown = false;
@@ -40,7 +48,9 @@ public class BatchSimulationScenePanel extends javax.swing.JPanel implements ISc
      private static final int timerForPumpsWarning = 1500;
 
     public BatchSimulationScenePanel() {
-        backgroundImage = new ImageIcon(getClass().getResource("/Assets/batch_bg.png")).getImage();
+        ImageIcon bgIcon = new ImageIcon(getClass().getResource("/Assets/batch_bg.png"));
+        backgroundImage = bgIcon.getImage();
+        imageAspectRatio = (double) bgIcon.getIconWidth() / bgIcon.getIconHeight();
 
         controller = new BatchSimulatorController(this);
         tankFillHeightWrapper = new BatchSimulatorController.FillHeight(0);
@@ -65,6 +75,13 @@ public class BatchSimulationScenePanel extends javax.swing.JPanel implements ISc
             hiLevelIndicator, loLevelIndicator};
 
         initComponents();
+        
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                repositionComponents();
+            }
+        });
     }
 
     @Override
@@ -205,9 +222,31 @@ public class BatchSimulationScenePanel extends javax.swing.JPanel implements ISc
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        
+        int panelWidth = getWidth();
+        int panelHeight = getHeight();
+        double panelAspectRatio = (double) panelWidth / panelHeight;
+        
+        int drawWidth, drawHeight, drawX, drawY;
+        double scale;
+        
+        if (panelAspectRatio > imageAspectRatio) {
+            drawHeight = panelHeight;
+            drawWidth = (int) (panelHeight * imageAspectRatio);
+            drawX = (panelWidth - drawWidth) / 2;
+            drawY = 0;
+            scale = (double) drawHeight / BASE_HEIGHT;
+        } else {
+            drawWidth = panelWidth;
+            drawHeight = (int) (panelWidth / imageAspectRatio);
+            drawX = 0;
+            drawY = (panelHeight - drawHeight) / 2;
+            scale = (double) drawWidth / BASE_WIDTH;
+        }
+        
+        g2d.drawImage(backgroundImage, drawX, drawY, drawWidth, drawHeight, this);
 
-        controller.drawTankFill(g2d, tankFillHeightWrapper.value);
+        controller.drawTankFill(g2d, tankFillHeightWrapper.value, drawX, drawY, scale);
     }
 
     @Override
@@ -251,7 +290,7 @@ public class BatchSimulationScenePanel extends javax.swing.JPanel implements ISc
     }
 
     private void addButtonsPanel() {
-        JPanel buttonsPanel = new JPanel();
+        buttonsPanel = new JPanel();
         buttonsPanel.setOpaque(false);
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttonsPanel.add(startBt);
@@ -259,17 +298,11 @@ public class BatchSimulationScenePanel extends javax.swing.JPanel implements ISc
         buttonsPanel.add(stopBt);
 
         setLayout(null);
-        int panelWidth = 60;
-        int panelHeight = 65;
-        int x = 81;
-        int y = getPreferredSize().height - panelHeight - 117;
-        buttonsPanel.setBounds(x, y, panelWidth, panelHeight);
-
         this.add(buttonsPanel);
     }
 
     private void addLedsPanel() {
-        JPanel ledsPanel = new JPanel();
+        ledsPanel = new JPanel();
         ledsPanel.setOpaque(false);
         ledsPanel.setLayout(new BoxLayout(ledsPanel, BoxLayout.Y_AXIS));
 
@@ -277,27 +310,56 @@ public class BatchSimulationScenePanel extends javax.swing.JPanel implements ISc
         ledsPanel.add(idleLed);
         ledsPanel.add(fullLed);
 
-        int panelWidth = 25;
-        int panelHeight = 65;
-        int x = 81 - 26 - panelWidth;
-        int y = getPreferredSize().height - panelHeight - 100;
-        ledsPanel.setBounds(x, y, panelWidth, panelHeight);
-
         this.add(ledsPanel);
     }
 
     private void addSensorIndicators() {
-        pump1Indicator.setBounds(125, 45, 30, 30);
-        mixerIndicator.setBounds(395, 40, 30, 30);
-        pump3Indicator.setBounds(550, 378, 30, 30);
-
-        hiLevelIndicator.setBounds(468, 60, 30, 30);
-        loLevelIndicator.setBounds(490, 90, 30, 30);
-
         this.add(pump1Indicator);
         this.add(mixerIndicator);
         this.add(pump3Indicator);
         this.add(hiLevelIndicator);
         this.add(loLevelIndicator);
+    }
+    
+    private void repositionComponents() {
+        int panelWidth = getWidth();
+        int panelHeight = getHeight();
+        double panelAspectRatio = (double) panelWidth / panelHeight;
+        
+        int drawWidth, drawHeight, drawX, drawY;
+        double scale;
+        
+        if (panelAspectRatio > imageAspectRatio) {
+            drawHeight = panelHeight;
+            drawWidth = (int) (panelHeight * imageAspectRatio);
+            drawX = (panelWidth - drawWidth) / 2;
+            drawY = 0;
+            scale = (double) drawHeight / BASE_HEIGHT;
+        } else {
+            drawWidth = panelWidth;
+            drawHeight = (int) (panelWidth / imageAspectRatio);
+            drawX = 0;
+            drawY = (panelHeight - drawHeight) / 2;
+            scale = (double) drawWidth / BASE_WIDTH;
+        }
+        
+        int buttonsPanelWidth = (int) (60 * scale);
+        int buttonsPanelHeight = (int) (65 * scale);
+        int buttonsX = drawX + (int) (81 * scale);
+        int buttonsY = drawY + drawHeight - buttonsPanelHeight - (int) (117 * scale);
+        buttonsPanel.setBounds(buttonsX, buttonsY, buttonsPanelWidth, buttonsPanelHeight);
+        
+        int ledsPanelWidth = (int) (25 * scale);
+        int ledsPanelHeight = (int) (65 * scale);
+        int ledsX = drawX + (int) ((81 - 26 - 25) * scale);
+        int ledsY = drawY + drawHeight - ledsPanelHeight - (int) (100 * scale);
+        ledsPanel.setBounds(ledsX, ledsY, ledsPanelWidth, ledsPanelHeight);
+        
+        int indicatorSize = (int) (30 * scale);
+        pump1Indicator.setBounds(drawX + (int) (125 * scale), drawY + (int) (45 * scale), indicatorSize, indicatorSize);
+        mixerIndicator.setBounds(drawX + (int) (395 * scale), drawY + (int) (40 * scale), indicatorSize, indicatorSize);
+        pump3Indicator.setBounds(drawX + (int) (550 * scale), drawY + (int) (378 * scale), indicatorSize, indicatorSize);
+        hiLevelIndicator.setBounds(drawX + (int) (468 * scale), drawY + (int) (60 * scale), indicatorSize, indicatorSize);
+        loLevelIndicator.setBounds(drawX + (int) (490 * scale), drawY + (int) (90 * scale), indicatorSize, indicatorSize);
     }
 }

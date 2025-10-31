@@ -16,7 +16,10 @@ import ilcompiler.output.OutputActions;
 import ilcompiler.uppercasedocumentfilter.UpperCaseDocumentFilter;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,12 +62,6 @@ public final class HomePg extends javax.swing.JFrame {
 
         initComponents();
 
-        ImageIcon iconCampo = new ImageIcon(getClass().getResource("/Assets/bloco_notas.png"));
-        iconCampo.setImage(iconCampo.getImage().getScaledInstance(Codigo_Camp.getWidth(), Codigo_Camp.getHeight(), 1));
-        Image_Camp.setIcon(iconCampo);
-
-        Codigo_Camp.setOpaque(false);
-
         // Carrega e redimensiona o ícone do temporizador
         ImageIcon iconTimer = new ImageIcon(getClass().getResource("/Assets/temporizador.png"));
         Image imgTimer = iconTimer.getImage().getScaledInstance(Timer_1.getWidth(), Timer_1.getHeight(),
@@ -90,7 +87,7 @@ public final class HomePg extends javax.swing.JFrame {
             contador.setIcon(iconCont);
         }
 
-        AbstractDocument doc = (AbstractDocument) Codigo_Camp.getDocument();
+        AbstractDocument doc = (AbstractDocument) Codigo_Camp.getTextArea().getDocument();
         doc.setDocumentFilter(new UpperCaseDocumentFilter());
 
         HomePageModel.setInputsType(InputActions.createType(new HashMap<>()));
@@ -116,9 +113,17 @@ public final class HomePg extends javax.swing.JFrame {
         sceneContainer.revalidate();
         sceneContainer.repaint();
 
-        this.setResizable(false);
+        this.setResizable(true);
 
         telaDataTable = new ListaDeVariaveisPg(HomePageModel.getInputs(), HomePageModel.getOutputs());
+
+        // Add component listener to handle resize for counters/timers panel
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                repositionCountersAndTimers();
+            }
+        });
 
         pack();
 
@@ -234,6 +239,81 @@ public final class HomePg extends javax.swing.JFrame {
                 HomePageModel.getInputs(),
                 HomePageModel.getOutputs());
         telaDataTable.updateDataTable(HomePageModel.getInputs(), HomePageModel.getOutputs());
+    }
+
+    private void repositionCountersAndTimers() {
+        if (jPanel2 == null) return;
+        
+        int panelWidth = jPanel2.getWidth();
+        int panelHeight = jPanel2.getHeight();
+        
+        if (panelWidth == 0 || panelHeight == 0) return;
+        
+        // Use actual panel size for calculations
+        int effectiveWidth = panelWidth;
+        int effectiveHeight = panelHeight;
+        
+        // Calculate scaling factors
+        double scaleX = effectiveWidth / 624.0;
+        double scaleY = effectiveHeight / 358.0;
+        double scale = Math.min(scaleX, scaleY); // Uniform scaling
+        
+        // Timer and counter components arrays
+        JLabel[] timers = {Timer_1, Timer_2, Timer_3, Timer_4, Timer_5, Timer_6, Timer_7, Timer_8, Timer_9, Timer_10};
+        JLabel[] contadores = {Contador_1, Contador_2, Contador_3, Contador_4, Contador_5, Contador_6, Contador_7, Contador_8, Contador_9, Contador_10};
+        JLabel[] tempAtual = {Temp_atual_1, Temp_atual_2, Temp_atual_3, Temp_atual_4, Temp_atual_5, Temp_atual_6, Temp_atual_7, Temp_atual_8, Temp_atual_9, Temp_atual_10};
+        JLabel[] tempParada = {Temp_parada_1, Temp_parada_2, Temp_parada_3, Temp_parada_4, Temp_parada_5, Temp_parada_6, Temp_parada_7, Temp_parada_8, Temp_parada_9, Temp_parada_10};
+        JLabel[] contagemAtual = {Contagem_atual_1, Contagem_atual_2, Contagem_atual_3, Contagem_atual_4, Contagem_atual_5, Contagem_atual_6, Contagem_atual_7, Contagem_atual_8, Contagem_atual_9, Contagem_atual_10};
+        JLabel[] contagemParada = {Contagem_parada_1, Contagem_parada_2, Contagem_parada_3, Contagem_parada_4, Contagem_parada_5, Contagem_parada_6, Contagem_parada_7, Contagem_parada_8, Contagem_parada_9, Contagem_parada_10};
+        JLabel[] labels = {label_1, label_2, label_3, label_4, label_5, label_6, label_7, label_8, label_9, label_10, label_11, label_12, label_13, label_14, label_15, label_16, label_17, label_18, label_19, label_20};
+        
+        // Icon sizes with uniform scaling
+        int iconWidth = (int)(130 * scale);
+        int iconHeight = (int)(60 * scale);
+        
+        // Calculate total width needed for one column (timer + counter)
+        int columnWidth = iconWidth * 2 + 10;
+        int gapBetweenColumns = (int)(30 * scale);
+        int totalContentWidth = columnWidth * 2 + gapBetweenColumns;
+        
+        // Center the content horizontally
+        int startX = (effectiveWidth - totalContentWidth) / 2;
+        int leftColStart = startX;
+        int rightColStart = startX + columnWidth + gapBetweenColumns;
+        
+        // Base Y positions for 5 rows - centered vertically
+        int totalContentHeight = (int)(340 * scale); // Approximate height for 5 rows
+        int startY = (effectiveHeight - totalContentHeight) / 2;
+        int rowSpacing = totalContentHeight / 5;
+        
+        // Position components for left column (1-5) and right column (6-10)
+        for (int i = 0; i < 5; i++) {
+            int y = startY + (i * rowSpacing);
+            
+            // Left column (items 1-5)
+            timers[i].setBounds(leftColStart, y, iconWidth, iconHeight);
+            contadores[i].setBounds(leftColStart + iconWidth + 10, y, iconWidth, iconHeight);
+            tempAtual[i].setBounds(leftColStart + (int)(70 * scale), y - 10, (int)(50 * scale), 20);
+            tempParada[i].setBounds(leftColStart + (int)(70 * scale), y + (int)(30 * scale), (int)(50 * scale), 20);
+            contagemAtual[i].setBounds(leftColStart + iconWidth + 10 + (int)(70 * scale), y - 10, (int)(50 * scale), 20);
+            contagemParada[i].setBounds(leftColStart + iconWidth + 10 + (int)(70 * scale), y + (int)(30 * scale), (int)(50 * scale), 20);
+            labels[i].setBounds(leftColStart + (int)(110 * scale), y + (int)(30 * scale), 30, 30);
+            labels[i + 10].setBounds(leftColStart + iconWidth + 10 + (int)(70 * scale), y + (int)(30 * scale), 30, 30);
+            
+            // Right column (items 6-10 in reverse order for timers 10,9,8,7,6)
+            int rightIdx = 9 - i; // 9,8,7,6,5 maps to timers 10,9,8,7,6
+            timers[rightIdx].setBounds(rightColStart, y, iconWidth, iconHeight);
+            contadores[rightIdx].setBounds(rightColStart + iconWidth + 10, y, iconWidth, iconHeight);
+            tempAtual[rightIdx].setBounds(rightColStart + (int)(70 * scale), y - 10, (int)(50 * scale), 20);
+            tempParada[rightIdx].setBounds(rightColStart + (int)(70 * scale), y + (int)(30 * scale), (int)(50 * scale), 20);
+            contagemAtual[rightIdx].setBounds(rightColStart + iconWidth + 10 + (int)(70 * scale), y - 10, (int)(50 * scale), 20);
+            contagemParada[rightIdx].setBounds(rightColStart + iconWidth + 10 + (int)(70 * scale), y + (int)(30 * scale), (int)(50 * scale), 20);
+            labels[i + 5].setBounds(rightColStart + (int)(110 * scale), y + (int)(30 * scale), 30, 30);
+            labels[i + 15].setBounds(rightColStart + iconWidth + 10 + (int)(70 * scale), y + (int)(30 * scale), 30, 30);
+        }
+        
+        jPanel2.revalidate();
+        jPanel2.repaint();
     }
 
     public void updateMode() {
@@ -414,8 +494,8 @@ public final class HomePg extends javax.swing.JFrame {
         label_19 = new javax.swing.JLabel();
         label_20 = new javax.swing.JLabel();
         Color_Camp = new javax.swing.JPanel();
-        Codigo_Camp = new javax.swing.JTextArea();
-        scrollCodigoCamp = new javax.swing.JScrollPane(Codigo_Camp);
+        Codigo_Camp = new LineNumberedTextArea();
+        scrollCodigoCamp = Codigo_Camp.getScrollPane();
         Image_Camp = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         simulationsComboBox = new javax.swing.JComboBox<>();
@@ -459,17 +539,15 @@ public final class HomePg extends javax.swing.JFrame {
         });
 
         sceneContainer.setBackground(new java.awt.Color(142, 177, 199));
-        sceneContainer.setMaximumSize(new java.awt.Dimension(624, 394));
-        sceneContainer.setMinimumSize(new java.awt.Dimension(624, 394));
 
         javax.swing.GroupLayout sceneContainerLayout = new javax.swing.GroupLayout(sceneContainer);
         sceneContainer.setLayout(sceneContainerLayout);
         sceneContainerLayout.setHorizontalGroup(
                 sceneContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 624, Short.MAX_VALUE));
+                        .addGap(0, 0, Short.MAX_VALUE));
         sceneContainerLayout.setVerticalGroup(
                 sceneContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 394, Short.MAX_VALUE));
+                        .addGap(0, 0, Short.MAX_VALUE));
 
         jPanel2.setBackground(new java.awt.Color(8, 94, 131));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -735,23 +813,19 @@ public final class HomePg extends javax.swing.JFrame {
         jPanel2.add(label_20, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 320, 30, 30));
 
         Color_Camp.setBackground(new java.awt.Color(0, 102, 204));
-        Color_Camp.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        Color_Camp.setLayout(new java.awt.BorderLayout());
 
-        Codigo_Camp.setColumns(20);
-        Codigo_Camp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Codigo_Camp.setFont(new java.awt.Font("Monospaced", 1, 14));
         Codigo_Camp.setForeground(new java.awt.Color(255, 255, 255));
-        Codigo_Camp.setRows(5);
-        Codigo_Camp.setLineWrap(true);
-        Codigo_Camp.setWrapStyleWord(true);
-        Codigo_Camp.setDisabledTextColor(new java.awt.Color(255, 255, 255));
-        Codigo_Camp.setDragEnabled(true);
-        Codigo_Camp.setSelectedTextColor(new java.awt.Color(0, 0, 0));
-        Codigo_Camp.setSelectionColor(new java.awt.Color(204, 204, 204));
-        scrollCodigoCamp.setOpaque(false);
-        scrollCodigoCamp.getViewport().setOpaque(false);
-        scrollCodigoCamp.setBorder(null);
-        Color_Camp.add(scrollCodigoCamp, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 350, 750));
-        Color_Camp.add(Image_Camp, new org.netbeans.lib.awtextra.AbsoluteConstraints(-3, 6, 370, 750));
+        Codigo_Camp.setBackground(new java.awt.Color(50, 50, 50));
+        Codigo_Camp.getTextArea().setLineWrap(true);
+        Codigo_Camp.getTextArea().setWrapStyleWord(true);
+        Codigo_Camp.getTextArea().setDisabledTextColor(new java.awt.Color(255, 255, 255));
+        Codigo_Camp.getTextArea().setDragEnabled(true);
+        Codigo_Camp.getTextArea().setSelectedTextColor(new java.awt.Color(0, 0, 0));
+        Codigo_Camp.getTextArea().setSelectionColor(new java.awt.Color(204, 204, 204));
+        Codigo_Camp.getTextArea().setCaretColor(new java.awt.Color(255, 255, 255));
+        Color_Camp.add(Codigo_Camp, java.awt.BorderLayout.CENTER);
 
         simulationsComboBox.setBackground(new java.awt.Color(8, 94, 131));
         simulationsComboBox.setModel(new DefaultComboBoxModel<>(ScenesEnum.values()));
@@ -821,12 +895,15 @@ public final class HomePg extends javax.swing.JFrame {
         });
         jPanel3.add(dataTableBt);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        // Create a main panel to hold all content
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(getBackground());
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
+                                .addContainerGap()
                                 .addComponent(Arquivar_BT, javax.swing.GroupLayout.PREFERRED_SIZE, 122,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(12, 12, 12)
@@ -837,30 +914,26 @@ public final class HomePg extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(Sobre_BT)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(43, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
-                                                                false)
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(sceneContainer,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
                                                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addGap(18, 18, 18)
-                                                .addComponent(Color_Camp, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(33, 33, 33)));
+                                                .addComponent(Color_Camp, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addContainerGap()));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGap(16, 16, 16)
+                                .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(Help_BT)
                                         .addComponent(Sobre_BT)
@@ -870,22 +943,35 @@ public final class HomePg extends javax.swing.JFrame {
                                         .addComponent(Arquivar_BT, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(5, 5, 5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(sceneContainer, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(sceneContainer, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        394, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 358,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(Color_Camp, javax.swing.GroupLayout.PREFERRED_SIZE, 764,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(35, 35, 35)));
+                                        .addComponent(Color_Camp, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap()));
 
+        // Set preferred size for main panel
+        mainPanel.setPreferredSize(new java.awt.Dimension(1280, 900));
+        
+        // Wrap main panel in a scroll pane for global scrolling
+        javax.swing.JScrollPane globalScrollPane = new javax.swing.JScrollPane(mainPanel);
+        globalScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        globalScrollPane.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        globalScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        globalScrollPane.getHorizontalScrollBar().setUnitIncrement(16);
+        
+        // Set the scroll pane as the content pane
+        setContentPane(globalScrollPane);
+        
+        setMinimumSize(new java.awt.Dimension(800, 600));
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -915,7 +1001,7 @@ public final class HomePg extends javax.swing.JFrame {
     }// GEN-LAST:event_Editar_BTActionPerformed
 
     private void Arquivar_BTActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Arquivar_BTActionPerformed
-        HomePageController.handleFileArchiveAction(Arquivar_BT, Codigo_Camp, this.updating, this);
+        HomePageController.handleFileArchiveAction(Arquivar_BT, Codigo_Camp.getTextArea(), this.updating, this);
     }// GEN-LAST:event_Arquivar_BTActionPerformed
 
     private void refreshBtActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshBtActionPerformed
@@ -997,7 +1083,7 @@ public final class HomePg extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> Arquivar_BT;
-    private javax.swing.JTextArea Codigo_Camp;
+    private LineNumberedTextArea Codigo_Camp;
     private javax.swing.JPanel Color_Camp;
     private javax.swing.JLabel Contador_1;
     private javax.swing.JLabel Contador_10;
