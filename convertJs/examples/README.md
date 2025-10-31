@@ -1,151 +1,147 @@
-# 📚 Exemplos de Programas IL
+# 📁 Exemplos de Código IL
 
-Estes são exemplos de programas em **Instruction List (IL)** para o Simulador CLP, convertidos do formato original `.txt` para `.json`.
+Esta pasta contém exemplos prontos para testar o Simulador CLP.
 
----
+## 🚀 Como Usar
 
-## 📄 Arquivos
-
-### 1. [example1-simple.json](./example1-simple.json)
-**Nível**: Iniciante
-**Conceitos**: LD, ST, AND, OR, ANDN, ORN, LDN
-
-**Descrição**: Programa básico demonstrando operações lógicas fundamentais. Usa entradas (I), saídas (Q) e operações booleanas.
-
-**Entradas usadas**: I0.0, I0.1, I1.0, I1.1
-**Saídas usadas**: Q0.1, Q0.3, Q0.5, Q1.0, Q1.1, Q1.2
+1. Abra o simulador em **http://localhost:5174**
+2. Clique em **📂 Carregar**
+3. Selecione um dos arquivos JSON desta pasta
+4. Clique em **▶ Start** para iniciar a simulação
+5. Interaja com as entradas (botões I0.0, I0.1, etc.)
 
 ---
 
-### 2. [example2-timer.json](./example2-timer.json)
-**Nível**: Intermediário
-**Conceitos**: TON (Timer ON Delay), Timers encadeados
+## 📚 Lista de Exemplos
 
-**Descrição**: Programa com temporizadores. Demonstra como usar `TON` para criar delays programáveis. Timer T1 ativa após 30 * 100ms = 3 segundos, e T2 após 50 * 100ms = 5 segundos.
+### 01 - Básico: Entradas → Saídas
+**Dificuldade:** 🟢 Iniciante  
+**Arquivo:** `01-basico-entradas-saidas.json`
 
-**Entradas usadas**: I0.0, I0.1, I1.0, I1.1
-**Saídas usadas**: Q0.1, Q0.2, Q0.3, Q0.5, Q1.0, Q1.1, Q1.2
-**Timers usados**: T1 (preset: 30), T2 (preset: 50)
+Exemplo simples onde cada entrada controla uma saída diretamente.
 
----
-
-### 3. [example3-counter.json](./example3-counter.json)
-**Nível**: Avançado
-**Conceitos**: CTU (Count Up), Timers + Contadores
-
-**Descrição**: Programa completo com contador e temporizadores. O contador C1 conta até 3 eventos (rising edges) e os timers controlam sequências temporais.
-
-**Entradas usadas**: I0.0, I0.1, I1.0, I1.1
-**Saídas usadas**: Q0.1, Q0.2, Q0.3, Q0.5, Q1.0, Q1.1, Q1.2
-**Timers usados**: T1 (preset: 30), T2 (preset: 50)
-**Contadores usados**: C1 (preset: 3)
+**Conceitos:** LD (Load), ST (Store)
 
 ---
 
-## 🔧 Como Usar
+### 02 - Lógica AND e OR
+**Dificuldade:** 🟢 Iniciante  
+**Arquivo:** `02-logica-AND-OR.json`
 
-### No Simulador TypeScript:
+Demonstra operadores lógicos AND e OR.
 
-```typescript
-import example1 from './examples/example1-simple.json'
-
-// Carregar no editor
-setCode(example1.code)
-
-// Ou programaticamente
-const saveFile: SaveFile = example1
-loadProgram(saveFile)
-```
-
-### Formato do JSON:
-
-```json
-{
-  "version": "1.0",
-  "metadata": {
-    "name": "Nome do programa",
-    "description": "Descrição breve",
-    "createdAt": "2025-10-31T00:00:00.000Z",
-    "author": "Autor"
-  },
-  "code": "LD I0.0\nST Q0.0\n..."
-}
-```
+**Conceitos:** AND, OR, múltiplas condições
 
 ---
 
-## 📖 Referência Rápida
+### 03 - Timer TON
+**Dificuldade:** 🟡 Intermediário  
+**Arquivo:** `03-timer-TON.json`
 
-### Operadores
+Timer que ativa a saída após 3 segundos.
+
+**Conceitos:** TON, delays, temporização
+
+---
+
+### 04 - Timer TOFF
+**Dificuldade:** 🟡 Intermediário  
+**Arquivo:** `04-timer-TOFF.json`
+
+Timer que desliga a saída após 2 segundos.
+
+**Conceitos:** TOFF, delay no desligamento
+
+---
+
+### 05 - Contador CTU
+**Dificuldade:** 🟡 Intermediário  
+**Arquivo:** `05-contador-CTU.json`
+
+Contador que ativa após 5 pulsos.
+
+**Conceitos:** CTU, rising edge, contagem
+
+---
+
+### 06 - Semáforo
+**Dificuldade:** 🟡 Intermediário  
+**Arquivo:** `06-semaforo.json`
+
+Simula um semáforo com 3 LEDs (vermelho, amarelo, verde).
+
+**Conceitos:** Múltiplos timers, sequência automática
+
+---
+
+### 07 - Latch (Auto-Retenção)
+**Dificuldade:** 🟡 Intermediário  
+**Arquivo:** `07-latch-auto-retencao.json`
+
+Circuito liga/desliga com memória de estado.
+
+**Conceitos:** OR com feedback, auto-retenção
+
+---
+
+### 08 - Timer + Contador
+**Dificuldade:** 🔴 Avançado  
+**Arquivo:** `08-timer-contador-completo.json`
+
+Combina timer e contador em sequência.
+
+**Conceitos:** Combinação de timer e contador
+
+---
+
+### 09 - Pisca-Pisca
+**Dificuldade:** 🔴 Avançado  
+**Arquivo:** `09-pisca-pisca.json`
+
+LED que pisca automaticamente (1s on, 1s off).
+
+**Conceitos:** TON + TOFF em loop, oscilador
+
+---
+
+### 10 - Portão Automático
+**Dificuldade:** 🔴 Avançado  
+**Arquivo:** `10-portao-automatico.json`
+
+Sistema completo de portão com sensor de obstáculo.
+
+**Conceitos:** Sistema completo, segurança, múltiplas entradas
+
+---
+
+## 🎯 Operadores IL Disponíveis
 
 | Operador | Descrição | Exemplo |
 |----------|-----------|---------|
-| **LD** | Load (carrega valor para acumulador) | `LD I0.0` |
-| **LDN** | Load Negado | `LDN I0.1` |
-| **ST** | Store (armazena acumulador) | `ST Q0.0` |
-| **STN** | Store Negado | `STN Q0.1` |
-| **AND** | AND lógico | `AND I0.2` |
-| **ANDN** | AND Negado | `ANDN I1.0` |
-| **OR** | OR lógico | `OR Q0.5` |
-| **ORN** | OR Negado | `ORN I0.3` |
-| **TON** | Timer ON Delay | `TON T1,30` |
-| **TOFF** | Timer OFF Delay | `TOFF T2,50` |
-| **CTU** | Counter Up | `CTU C1,5` |
-| **CTD** | Counter Down | `CTD C2,10` |
-
-### Variáveis
-
-| Tipo | Formato | Exemplo | Descrição |
-|------|---------|---------|-----------|
-| **Entrada** | I[byte].[bit] | I0.0 a I7.7 | Entradas físicas |
-| **Saída** | Q[byte].[bit] | Q0.0 a Q7.7 | Saídas físicas |
-| **Memória** | M[número] | M1, M2... | Memória booleana |
-| **Timer** | T[número] | T1, T2... | Temporizador |
-| **Contador** | C[número] | C1, C2... | Contador |
+| LD | Load (carrega valor) | LD I0.0 |
+| LDN | Load negado | LDN I0.1 |
+| ST | Store (armazena) | ST Q0.0 |
+| STN | Store negado | STN Q0.1 |
+| AND | E lógico | AND I0.2 |
+| ANDN | E lógico negado | ANDN I0.3 |
+| OR | OU lógico | OR I0.4 |
+| ORN | OU lógico negado | ORN I0.5 |
+| TON | Timer ON delay | TON T1,30 |
+| TOFF | Timer OFF delay | TOFF T2,20 |
+| CTU | Counter UP | CTU C1,5 |
+| CTD | Counter DOWN | CTD C2,10 |
 
 ---
 
-## 🎓 Aprendendo IL
+## 📌 Dicas
 
-### Exemplo Mínimo:
-
-```
-LD I0.0    ; Carrega entrada I0.0 para acumulador
-ST Q0.0    ; Armazena acumulador na saída Q0.0
-```
-
-**Resultado**: Q0.0 = I0.0 (copia entrada para saída)
-
-### Com Lógica AND:
-
-```
-LD I0.0    ; Acumulador = I0.0
-AND I0.1   ; Acumulador = I0.0 AND I0.1
-ST Q0.0    ; Q0.0 = (I0.0 AND I0.1)
-```
-
-**Resultado**: Q0.0 só ativa se I0.0 E I0.1 estiverem ativos
-
-### Com Timer:
-
-```
-TON T1,10  ; Configurar timer T1 com preset 10 (1 segundo)
-LD I0.0    ; Carrega entrada
-ST T1      ; Ativa timer quando I0.0 = true
-LD T1      ; Carrega estado do timer (DN bit)
-ST Q0.0    ; Q0.0 = estado do timer
-```
-
-**Resultado**: Q0.0 ativa 1 segundo após I0.0 ser ativado
+- **Timer preset:** Valor em décimos de segundo (30 = 3 segundos)
+- **Rising edge:** Transição OFF → ON detecta pulso
+- **Memórias:** Use M1, M2, etc. para estados intermediários
+- **Refresh:** Reseta todos os timers e contadores
 
 ---
 
-## 🔗 Links Úteis
-
-- [Documentação do Projeto](../../README.md)
-- [Arquitetura](../docs/ARCHITECTURE.md)
-- [Tutorial de IL (PDF)](../../docs/)
-
----
-
-**Converta seus próprios programas**: Use o formato JSON acima como template!
+**Data:** 2025-10-31  
+**Versão:** 1.0  
+**Simulador:** PLC Simulator TypeScript

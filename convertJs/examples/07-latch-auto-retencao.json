@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "name": "Exemplo 7 - Latch (Auto-Retenção)",
+    "date": "2025-10-31",
+    "description": "Circuito de auto-retenção: liga com I0.0, desliga com I0.1",
+    "author": "Claude Code",
+    "difficulty": "Intermediário"
+  },
+  "code": "LD I0.0\nOR Q0.0\nANDN I0.1\nST Q0.0",
+  "instructions": [
+    "1. Clique Start",
+    "2. Clique em I0.0 para LIGAR Q0.0",
+    "3. Q0.0 permanece ligada mesmo soltando I0.0",
+    "4. Clique em I0.1 para DESLIGAR Q0.0",
+    "5. Isso simula um botão liga/desliga"
+  ]
+}

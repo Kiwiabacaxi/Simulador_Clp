@@ -1,0 +1,146 @@
+.control-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 20px;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.control-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.control-btn .btn-icon {
+  font-size: 18px;
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.control-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.control-btn:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Botão Start */
+.control-btn.start {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+}
+
+.control-btn.start:not(:disabled):hover {
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+}
+
+/* Botão Stop */
+.control-btn.stop {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+}
+
+.control-btn.stop:not(:disabled):hover {
+  background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);
+}
+
+/* Botão Refresh */
+.control-btn.refresh {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+  color: white;
+}
+
+.control-btn.refresh:not(:disabled):hover {
+  background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+}
+
+/* Status Indicator */
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.status-dot.running {
+  background: #4CAF50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.8);
+  animation: blink 1.5s infinite;
+}
+
+.status-dot.stopped {
+  background: #ff4444;
+}
+
+.status-text {
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .control-bar {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .control-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .control-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .control-btn .btn-text {
+    display: none;
+  }
+
+  .control-btn .btn-icon {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,60 @@
+.file-menu {
+  display: flex;
+  gap: 12px;
+}
+
+.file-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 2px solid white;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  backdrop-filter: blur(10px);
+}
+
+.file-btn:not(.disabled):hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.file-btn:not(.disabled):active {
+  transform: translateY(0);
+}
+
+.file-btn.disabled,
+.file-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.file-btn .btn-icon {
+  font-size: 18px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .file-menu {
+    flex-wrap: wrap;
+  }
+
+  .file-btn .btn-text {
+    display: none;
+  }
+
+  .file-btn {
+    padding: 10px;
+  }
+
+  .file-btn .btn-icon {
+    font-size: 24px;
+  }
+}

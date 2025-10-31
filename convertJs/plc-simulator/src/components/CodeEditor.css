@@ -1,0 +1,51 @@
+.code-editor {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  height: 100%;
+}
+
+.editor-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 16px;
+  border-bottom: 2px solid #5a67d8;
+}
+
+.editor-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.code-textarea {
+  flex: 1;
+  padding: 16px;
+  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  border: none;
+  resize: none;
+  min-height: 400px;
+  background: #fafafa;
+  color: #333;
+}
+
+.code-textarea:focus {
+  outline: none;
+  background: #fff;
+}
+
+.code-textarea:disabled {
+  background: #f0f0f0;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.code-textarea::placeholder {
+  color: #999;
+  font-style: italic;
+}

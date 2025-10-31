@@ -6,6 +6,48 @@ Todas as mudanças notáveis do projeto serão documentadas aqui.
 
 ## [Unreleased]
 
+### ✅ 2025-10-31 - TICKET-04: UI Components
+
+**Implementado:**
+- ✅ CodeEditor component (CodeEditor.tsx + CSS)
+  - Editor de código IL com maiúsculas automáticas
+  - Textarea com fonte monospace
+  - Placeholder com exemplos
+- ✅ IOPanel component (IOPanel.tsx + CSS)
+  - Botões para entradas (I0.0 - I1.7)
+  - LEDs para saídas (Q0.0 - Q1.7)
+  - Estados visuais (on/off com animações)
+- ✅ ControlBar component (ControlBar.tsx + CSS)
+  - Botão Start (inicia simulação)
+  - Botão Stop (para simulação)
+  - Botão Refresh (reseta memória)
+  - Indicador de status (rodando/parado)
+- ✅ FileMenu component (FileMenu.tsx + CSS)
+  - Salvar código em JSON
+  - Carregar código de JSON
+  - Serialização de memória
+- ✅ Hook usePLCCycle
+  - Gerencia ciclo do PLC (100ms)
+  - Controla inputs/outputs
+  - Integra com timers
+- ✅ App.tsx redesenhado
+  - Layout grid responsivo
+  - Header com gradiente
+  - Footer com info dos tickets
+  - Save/Load funcionais
+
+**Funcionalidades:**
+- ✅ Interface completa e funcional
+- ✅ Layout responsivo (desktop e mobile)
+- ✅ Animações e transições suaves
+- ✅ Gradientes roxo/violeta
+- ✅ LEDs com efeito pulse
+- ✅ Botões com hover e disabled states
+
+**Total TICKET-04:** ~650 linhas (componentes + estilos)
+
+---
+
 ### ✅ 2025-10-31 - TICKET-03: Timers e Contadores
 
 **Implementado:**

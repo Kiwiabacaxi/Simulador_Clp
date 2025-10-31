@@ -4,3 +4,4 @@
  */
 
 export * from './useTimerUpdate'
+export * from './usePLCCycle'
