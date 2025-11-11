@@ -6,6 +6,97 @@ Todas as mudanças notáveis do projeto serão documentadas aqui.
 
 ## [Unreleased]
 
+### ✅ 2025-10-31 - Scene System Refactoring
+
+**Implementado:**
+- ✅ Scene system refactoring
+  - Transformou painéis em "Scenes" contextuais
+  - SceneType: 'default' | 'batch' | 'gate' | 'traffic-light' | 'conveyor'
+  - Auto-selection de cenas baseada em metadata dos exemplos
+- ✅ GateScene component (GateScene.tsx + CSS - 330 linhas)
+  - Portão automático com animação SVG
+  - Posição animada 0-100% com requestAnimationFrame
+  - Sensores automáticos: FC Open (I1.0), FC Closed (I1.1)
+  - Controles: ABRIR (I0.0), FECHAR (I0.1), PARAR (I0.2)
+  - Motores: Q0.0 (abrindo), Q0.1 (fechando)
+- ✅ TrafficLightScene component (TrafficLightScene.tsx + CSS - 518 linhas)
+  - Semáforo com 2 vias (Norte-Sul, Leste-Oeste)
+  - COMPLETAMENTE REESCRITO com melhor escala
+  - Bulbos 80px com radial-gradient para efeito realista
+  - Animações pulse para luzes ativas
+  - Glow effects com box-shadow
+  - Grid layout 3 colunas: 250px | 1fr | 250px
+  - Controles: LIGAR SISTEMA (I0.0), MODO NOTURNO (I0.1)
+  - Saídas: Q0.0-Q0.2 (Via N-S), Q1.0-Q1.2 (Via L-O)
+- ✅ SceneSelector refactored (SceneSelector.tsx + CSS)
+  - Agora suporta 4 cenas: default, batch, gate, traffic-light
+  - Cada cena com ícone e descrição
+- ✅ fileHandler.ts extended
+  - SaveFile interface agora inclui scene?: SceneType
+  - SaveFile interface agora inclui instructions?: string
+- ✅ App.tsx auto-selection logic
+  - Carrega cena automaticamente de metadata.scene
+  - Mostra instruções no console quando disponível
+- ✅ All 10 example JSONs updated
+  - Todos os 10 exemplos agora têm metadata.scene
+  - Todos os 10 exemplos agora têm metadata.instructions
+  - 06-semaforo.json → scene: "traffic-light"
+  - 10-portao-automatico.json → scene: "gate"
+  - Demais exemplos → scene: "default"
+
+**Funcionalidades:**
+- ✅ Cenas auto-selecionam quando exemplos são carregados
+- ✅ Instruções aparecem no console para guiar o usuário
+- ✅ Animações suaves (60 FPS) para portão e semáforo
+- ✅ Sensores automáticos baseados em posição/estado
+- ✅ Layout responsivo em todas as cenas
+- ✅ CSS radial-gradient para luzes realistas
+
+**Total Scene System:** ~1,348 linhas (GateScene + TrafficLightScene + updates)
+
+---
+
+### ✅ 2025-10-31 - TICKET-05: Simulation Panels
+
+**Implementado:**
+- ✅ SceneSelector component (SceneSelector.tsx + CSS - 100 linhas)
+  - Seletor de cenas (Painel Padrão / Simulação Batch)
+  - Botões visuais com ícones
+  - Desabilitado durante execução
+- ✅ DefaultScenePanel (DefaultScenePanel.tsx + CSS - 250 linhas)
+  - Painel visual com imagens PNG
+  - 8 entradas (I0.0-I0.7) - switches clicáveis
+  - 8 saídas (Q0.0-Q0.7) - LEDs on/off
+  - Grid responsivo 2 colunas
+  - Animações de hover e pulse
+- ✅ BatchSimulationPanel (BatchSimulationPanel.tsx + CSS - 480 linhas)
+  - Simulação de tanque com SVG
+  - Animação de nível de líquido (0-100%)
+  - Botões START (I0.0) e STOP (I0.1)
+  - Bombas: Pump1 (Q0.1), Pump3 (Q0.3)
+  - Mixer (Q0.2)
+  - Sensores: HI (I1.0 - 80%), LO (I1.1 - 20%)
+  - LEDs de status: RUN (Q1.0), IDLE (Q1.1), FULL (Q1.2)
+  - Taxa de enchimento: 2%/s, esvaziamento: 1.5%/s
+  - Background image do Java original
+- ✅ Assets PNG copiados (21 arquivos)
+  - chave_aberta/fechada.png
+  - led_ligado/desligado.png
+  - batch_bg.png
+  - botoes, switches, etc.
+
+**Funcionalidades:**
+- ✅ Alternância entre cenas (Default/Batch)
+- ✅ Animação suave do tanque (requestAnimationFrame)
+- ✅ Sensores de nível automáticos (HI/LO)
+- ✅ Controles interativos por cena
+- ✅ Responsive design para mobile
+- ✅ Integrado com PLC cycle
+
+**Total TICKET-05:** ~830 linhas (3 componentes + 3 CSS)
+
+---
+
 ### ✅ 2025-10-31 - TICKET-07: File Handler (Save/Load)
 
 **Implementado:**

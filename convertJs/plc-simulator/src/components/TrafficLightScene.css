@@ -1,0 +1,381 @@
+/* Traffic Light Scene - Cena de Semáforo Simplificada */
+
+.traffic-light-scene {
+  display: grid;
+  grid-template-columns: 250px 1fr 250px;
+  gap: 24px;
+  padding: 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  min-height: 500px;
+}
+
+/* Controles */
+.traffic-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #f5f7fa;
+  padding: 20px;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.controls-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 8px;
+}
+
+.traffic-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 8px;
+  border: 2px solid #ced4da;
+  background: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #333;
+}
+
+.traffic-button:hover:not(:disabled) {
+  border-color: #667eea;
+  background: #e0e7ff;
+  transform: translateY(-2px);
+}
+
+.traffic-button.active {
+  border-color: #51cf66;
+  background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+  color: white;
+}
+
+.traffic-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-icon {
+  font-size: 24px;
+}
+
+.button-label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.button-id {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+/* Visualização */
+.traffic-visualization {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  padding: 40px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e0e7ff 100%);
+  border-radius: 12px;
+}
+
+.traffic-light-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  background: #1a202c;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  min-width: 150px;
+}
+
+.traffic-light-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.traffic-icon {
+  font-size: 32px;
+}
+
+.traffic-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #cbd5e0;
+  text-align: center;
+}
+
+.lights-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: #2d3748;
+  border-radius: 12px;
+}
+
+.traffic-light-bulb {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #1a202c;
+  border: 4px solid #4a5568;
+  position: relative;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.traffic-light-bulb.red.on {
+  background: radial-gradient(circle, #ff6b6b 0%, #f03e3e 70%);
+  border-color: #c92a2a;
+  box-shadow:
+    0 0 20px #f03e3e,
+    0 0 40px #f03e3e,
+    inset 0 0 10px rgba(255, 255, 255, 0.3);
+  animation: pulse-red 1.5s infinite;
+}
+
+.traffic-light-bulb.yellow.on {
+  background: radial-gradient(circle, #ffd43b 0%, #fab005 70%);
+  border-color: #f08c00;
+  box-shadow:
+    0 0 20px #fab005,
+    0 0 40px #fab005,
+    inset 0 0 10px rgba(255, 255, 255, 0.3);
+  animation: pulse-yellow 1.5s infinite;
+}
+
+.traffic-light-bulb.green.on {
+  background: radial-gradient(circle, #51cf66 0%, #37b24d 70%);
+  border-color: #2b8a3e;
+  box-shadow:
+    0 0 20px #37b24d,
+    0 0 40px #37b24d,
+    inset 0 0 10px rgba(255, 255, 255, 0.3);
+  animation: pulse-green 1.5s infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes pulse-yellow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+.bulb-shine {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.traffic-light-bulb.on .bulb-shine {
+  opacity: 1;
+}
+
+/* Indicadores */
+.traffic-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: #f5f7fa;
+  padding: 20px;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.indicators-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 8px;
+}
+
+.indicator-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #666;
+  text-align: center;
+  margin-bottom: 6px;
+  padding: 6px;
+  background: white;
+  border-radius: 4px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.status-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #999;
+  background: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.status-dot.red {
+  background: #f8d7da;
+  border-color: #f5c2c7;
+}
+
+.status-dot.yellow {
+  background: #fff3cd;
+  border-color: #ffecb5;
+}
+
+.status-dot.green {
+  background: #d1e7dd;
+  border-color: #badbcc;
+}
+
+.status-indicator.red-active {
+  background: #ffe0e0;
+  border-color: #f03e3e;
+}
+
+.status-indicator.red-active .status-dot.red {
+  background: #f03e3e;
+  border-color: #c92a2a;
+  box-shadow: 0 0 8px #f03e3e;
+}
+
+.status-indicator.yellow-active {
+  background: #fff3bf;
+  border-color: #fab005;
+}
+
+.status-indicator.yellow-active .status-dot.yellow {
+  background: #fab005;
+  border-color: #f08c00;
+  box-shadow: 0 0 8px #fab005;
+}
+
+.status-indicator.green-active {
+  background: #d3f9d8;
+  border-color: #37b24d;
+}
+
+.status-indicator.green-active .status-dot.green {
+  background: #37b24d;
+  border-color: #2b8a3e;
+  box-shadow: 0 0 8px #37b24d;
+}
+
+.status-label {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.status-id {
+  font-size: 10px;
+  color: #666;
+  font-weight: 700;
+  background: #e0e0e0;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .traffic-light-scene {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .traffic-visualization {
+    padding: 30px;
+    gap: 32px;
+  }
+
+  .traffic-controls {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .traffic-indicators {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .indicator-section {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .traffic-light-scene {
+    padding: 16px;
+  }
+
+  .traffic-visualization {
+    flex-direction: column;
+    gap: 24px;
+    padding: 20px;
+  }
+
+  .traffic-light-bulb {
+    width: 60px;
+    height: 60px;
+  }
+
+  .bulb-shine {
+    width: 30px;
+    height: 30px;
+  }
+
+  .traffic-controls {
+    flex-direction: column;
+  }
+
+  .indicator-section {
+    min-width: 100%;
+  }
+}

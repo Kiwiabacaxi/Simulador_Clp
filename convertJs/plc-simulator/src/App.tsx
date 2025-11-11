@@ -4,13 +4,25 @@
  */
 
 import { useState } from 'react'
-import { CodeEditor, IOPanel, ControlBar, FileMenu, DataTable, ExamplesMenu } from './components'
+import {
+  CodeEditor,
+  ControlBar,
+  FileMenu,
+  DataTable,
+  ExamplesMenu,
+  SceneSelector,
+  DefaultScenePanel,
+  BatchSimulationPanel,
+  GateScene,
+  TrafficLightScene,
+} from './components'
 import { usePLCCycle } from './hooks'
-import { saveProgram, loadProgram } from './utils'
+import { saveProgram, loadProgram, type SceneType } from './utils'
 import './App.css'
 
 function App() {
   const [code, setCode] = useState('')
+  const [currentScene, setCurrentScene] = useState<SceneType>('default')
   const {
     inputs,
     outputs,
@@ -36,6 +48,17 @@ function App() {
     try {
       const data = await loadProgram(file)
       setCode(data.code)
+
+      // Carrega a cena recomendada se disponível
+      if (data.metadata?.scene) {
+        setCurrentScene(data.metadata.scene)
+        console.log(`📌 Cena auto-selecionada: ${data.metadata.scene}`)
+      }
+
+      // Mostra instruções se disponível
+      if (data.metadata?.instructions) {
+        console.log(`📋 Instruções: ${data.metadata.instructions}`)
+      }
 
       // Restaura memória se disponível
       if (data.memory) {
@@ -85,12 +108,46 @@ function App() {
             onStop={stop}
             onRefresh={refresh}
           />
-          <IOPanel
-            inputs={inputs}
-            outputs={outputs}
-            onInputChange={updateInput}
+
+          <SceneSelector
+            currentScene={currentScene}
+            onSceneChange={setCurrentScene}
             disabled={isRunning}
           />
+
+          {/* Renderiza o painel de cena apropriado */}
+          {currentScene === 'default' && (
+            <DefaultScenePanel
+              inputs={inputs}
+              outputs={outputs}
+              onInputChange={updateInput}
+              disabled={isRunning}
+            />
+          )}
+          {currentScene === 'batch' && (
+            <BatchSimulationPanel
+              inputs={inputs}
+              outputs={outputs}
+              onInputChange={updateInput}
+              disabled={isRunning}
+            />
+          )}
+          {currentScene === 'gate' && (
+            <GateScene
+              inputs={inputs}
+              outputs={outputs}
+              onInputChange={updateInput}
+              disabled={isRunning}
+            />
+          )}
+          {currentScene === 'traffic-light' && (
+            <TrafficLightScene
+              inputs={inputs}
+              outputs={outputs}
+              onInputChange={updateInput}
+              disabled={isRunning}
+            />
+          )}
         </section>
 
         <aside className="data-section">
@@ -104,7 +161,7 @@ function App() {
 
       <footer className="app-footer">
         <p>
-          ✅ TICKET-01 | TICKET-02 | TICKET-03 | TICKET-04 | TICKET-06 | TICKET-07
+          ✅ TICKET-01 | TICKET-02 | TICKET-03 | TICKET-04 | TICKET-05 | TICKET-06 | TICKET-07
           <span className="footer-separator">•</span>
           TypeScript {import.meta.env.MODE === 'development' ? 'DEV' : 'PROD'}
         </p>

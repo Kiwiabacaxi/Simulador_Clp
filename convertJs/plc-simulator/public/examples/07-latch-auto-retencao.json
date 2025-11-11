@@ -5,7 +5,9 @@
     "date": "2025-10-31",
     "description": "Circuito de auto-retenção: liga com I0.0, desliga com I0.1",
     "author": "Claude Code",
-    "difficulty": "Intermediário"
+    "difficulty": "Intermediário",
+    "scene": "default",
+    "instructions": "Clique START. Ligue I0.0 (Q0.0 liga e fica retida). Desligue I0.0 (Q0.0 continua ligada). Ligue I0.1 para desligar Q0.0."
   },
   "code": "LD I0.0\nOR Q0.0\nANDN I0.1\nST Q0.0",
   "instructions": [

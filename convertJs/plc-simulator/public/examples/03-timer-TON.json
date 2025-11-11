@@ -5,7 +5,9 @@
     "date": "2025-10-31",
     "description": "Timer que ativa a saída após 3 segundos (preset = 30 x 100ms)",
     "author": "Claude Code",
-    "difficulty": "Intermediário"
+    "difficulty": "Intermediário",
+    "scene": "default",
+    "instructions": "Clique START, depois ligue I0.0. Aguarde 3 segundos e Q0.0 acenderá automaticamente. Timer ON Delay."
   },
   "code": "TON T1,30\n\nLD I0.0\nST T1\n\nLD T1\nST Q0.0",
   "instructions": [

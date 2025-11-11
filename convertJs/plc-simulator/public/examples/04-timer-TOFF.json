@@ -5,7 +5,9 @@
     "date": "2025-10-31",
     "description": "Timer que desliga a saída após 2 segundos quando entrada é desligada",
     "author": "Claude Code",
-    "difficulty": "Intermediário"
+    "difficulty": "Intermediário",
+    "scene": "default",
+    "instructions": "Clique START, ligue I0.0 (Q0.0 acende imediatamente). Depois desligue I0.0 e aguarde 2s para Q0.0 apagar. Timer OFF Delay."
   },
   "code": "TOFF T2,20\n\nLD I0.0\nST T2\n\nLD T2\nST Q0.0",
   "instructions": [

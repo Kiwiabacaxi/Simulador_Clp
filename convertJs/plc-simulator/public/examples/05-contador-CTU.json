@@ -5,7 +5,9 @@
     "date": "2025-10-31",
     "description": "Contador que ativa saída após 5 pulsos na entrada",
     "author": "Claude Code",
-    "difficulty": "Intermediário"
+    "difficulty": "Intermediário",
+    "scene": "default",
+    "instructions": "Clique START. Dê 5 pulsos em I0.0 (ligar e desligar = 1 pulso). Após 5 pulsos, Q0.0 acende."
   },
   "code": "CTU C1,5\n\nLD I0.0\nST C1\n\nLD C1\nST Q0.0",
   "instructions": [

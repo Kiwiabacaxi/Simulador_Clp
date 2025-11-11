@@ -5,7 +5,9 @@
     "date": "2025-10-31",
     "description": "Demonstra operadores lógicos AND e OR entre múltiplas entradas",
     "author": "Claude Code",
-    "difficulty": "Iniciante"
+    "difficulty": "Iniciante",
+    "scene": "default",
+    "instructions": "Clique START. Q0.0 acende apenas se I0.0 E I0.1 estiverem ligadas. Q0.1 acende se I0.2 OU I0.3 estiverem ligadas."
   },
   "code": "LD I0.0\nAND I0.1\nST Q0.0\n\nLD I0.2\nOR I0.3\nST Q0.1\n\nLD I0.4\nAND I0.5\nAND I0.6\nST Q0.2",
   "instructions": [

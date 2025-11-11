@@ -5,7 +5,9 @@
     "date": "2025-10-31",
     "description": "LED que pisca automaticamente a cada 1 segundo",
     "author": "Claude Code",
-    "difficulty": "Avançado"
+    "difficulty": "Avançado",
+    "scene": "default",
+    "instructions": "Clique START, depois ligue I0.0. Q0.0 começará a piscar automaticamente (1s ligado, 1s desligado)."
   },
   "code": "TON T1,10\nTOFF T2,10\n\nLD I0.0\nST M1\n\nLD M1\nST T1\n\nLD T1\nST T2\n\nLD T2\nST M1\n\nLD T1\nST Q0.0",
   "instructions": [

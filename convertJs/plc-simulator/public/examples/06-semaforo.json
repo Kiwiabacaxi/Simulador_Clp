@@ -5,7 +5,9 @@
     "date": "2025-10-31",
     "description": "Simula um semáforo com 3 LEDs (vermelho, amarelo, verde)",
     "author": "Claude Code",
-    "difficulty": "Intermediário"
+    "difficulty": "Intermediário",
+    "scene": "traffic-light",
+    "instructions": "Clique START e depois ligue I0.0 (Ligar Sistema). O semáforo Norte-Sul começará o ciclo: Vermelho (3s) → Amarelo (0.5s) → Verde (3s)"
   },
   "code": "TON T1,30\nTON T2,5\nTON T3,30\n\nLD I0.0\nST M1\n\nLD M1\nANDN T1\nST Q0.0\n\nLD T1\nANDN T2\nST Q0.1\n\nLD T2\nST T3\n\nLD T3\nST Q0.2\n\nLD T3\nST M1",
   "instructions": [

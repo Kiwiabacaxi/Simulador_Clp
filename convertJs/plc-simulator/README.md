@@ -1,6 +1,6 @@
 # 🤖 PLC Simulator - Web App
 
-**Status**: ✅ UI Completa + File Handler (TICKET-01 ✅ + TICKET-02 ✅ + TICKET-03 ✅ + TICKET-04 ✅ + TICKET-06 ✅ + TICKET-07 ✅)
+**Status**: ✅ UI Completa + Scene System (TICKET-01 ✅ + TICKET-02 ✅ + TICKET-03 ✅ + TICKET-04 ✅ + TICKET-05 ✅ + TICKET-06 ✅ + TICKET-07 ✅ + Scene System ✅)
 
 ---
 
@@ -112,6 +112,39 @@ plc-simulator/
 - ✅ Layout 3 colunas (código | simulação | tabela)
 - ✅ **Total: ~270 linhas (componente + estilos)**
 
+### ✅ TICKET-05 Concluído + Scene System
+
+- ✅ SceneSelector component (~100 linhas)
+  - 4 cenas disponíveis: default, batch, gate, traffic-light
+  - Botões visuais com ícones e descrições
+- ✅ DefaultScenePanel (~250 linhas)
+  - Painel visual com imagens PNG
+  - 8 entradas (switches clicáveis)
+  - 8 saídas (LEDs on/off)
+  - Grid responsivo 2 colunas
+- ✅ BatchSimulationPanel (~480 linhas)
+  - Tanque animado com SVG
+  - Bomba 1 (enche 2%/s), Bomba 3 (esvazia 1.5%/s)
+  - Sensores HI (80%) e LO (20%) automáticos
+  - Botões START/STOP
+  - LEDs de status (RUN/IDLE/FULL)
+- ✅ GateScene component (~330 linhas)
+  - Portão automático com animação SVG (0-100%)
+  - Sensores automáticos: FC Open (I1.0), FC Closed (I1.1)
+  - Controles: ABRIR (I0.0), FECHAR (I0.1), PARAR (I0.2)
+  - Motores: Q0.0 (abrindo), Q0.1 (fechando)
+- ✅ TrafficLightScene component (~518 linhas)
+  - Semáforo com 2 vias (Norte-Sul, Leste-Oeste)
+  - Bulbos 80px com radial-gradient realista
+  - Animações pulse e glow effects
+  - Controles: LIGAR SISTEMA (I0.0), MODO NOTURNO (I0.1)
+- ✅ Scene Auto-Selection
+  - Exemplos carregam cena automaticamente via metadata
+  - Instruções exibidas no console
+  - 10 exemplos atualizados com scene + instructions
+- ✅ 21 assets PNG copiados
+- ✅ **Total: ~2,178 linhas (5 componentes + 5 CSS + scene system)**
+
 ### ✅ TICKET-07 Concluído
 
 - ✅ fileHandler.ts utility (~220 linhas)
@@ -131,11 +164,15 @@ plc-simulator/
 
 ## 🎯 Próximos Passos
 
-**TICKET-05**: Simulation Panels
-- Painéis interativos de simulação
-- Visualização de timers e contadores
-- Tabela de variáveis de memória
-- Exportar/importar estados
+**TICKET-08**: Electron Desktop App
+- Empacotamento Electron
+- Menu nativo
+- File system nativo
+
+**TICKET-10**: GitHub Pages Deploy
+- Deploy automático
+- CI/CD pipeline
+- Site público
 
 ---
 
@@ -143,10 +180,10 @@ plc-simulator/
 
 ```bash
 $ npm run build
-✓ 56 modules transformed.
-dist/assets/index-BTzYvsMo.css   14.64 kB │ gzip:  3.54 kB
-dist/assets/index-gtxHuldA.js   213.50 kB │ gzip: 66.47 kB
-✓ built in 747ms
+✓ 62 modules transformed.
+dist/assets/index-CmU9UgKE.css   21.38 kB │ gzip:  4.61 kB
+dist/assets/index-OeQ0xyin.js   218.64 kB │ gzip: 67.76 kB
+✓ built in 842ms
 ```
 
 **Status**: ✅ Sem erros de compilação!
@@ -177,5 +214,5 @@ Quando rodar `npm run dev`, acesse:
 ---
 
 **Data**: 2025-10-31
-**Tickets**: TICKET-01 ✅ | TICKET-02 ✅ | TICKET-03 ✅ | TICKET-04 ✅ | TICKET-06 ✅ | TICKET-07 ✅
-**Próximo**: TICKET-10 (GitHub Pages Deploy) ou TICKET-05 (Simulation Panels)
+**Tickets**: TICKET-01 ✅ | TICKET-02 ✅ | TICKET-03 ✅ | TICKET-04 ✅ | TICKET-05 ✅ | TICKET-06 ✅ | TICKET-07 ✅
+**Próximo**: TICKET-08 (Electron) ou TICKET-10 (GitHub Pages Deploy)

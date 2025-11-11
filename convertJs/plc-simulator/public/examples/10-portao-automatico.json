@@ -5,7 +5,9 @@
     "date": "2025-10-31",
     "description": "Simula controle de portão: abre, espera 5s, fecha automaticamente",
     "author": "Claude Code",
-    "difficulty": "Avançado"
+    "difficulty": "Avançado",
+    "scene": "gate",
+    "instructions": "Clique em START, depois no botão ABRIR (I0.0). O portão abrirá e fechará automaticamente após 5 segundos. Use PARAR (I0.2) para interromper."
   },
   "code": "TON T1,50\nTOFF T2,30\n\nLD I0.0\nOR M1\nANDN I0.1\nANDN M2\nST M1\n\nLD M1\nST Q0.0\n\nLD M1\nST T1\n\nLD T1\nST M2\n\nLD M2\nST T2\n\nLD T2\nSTN Q0.0\n\nLD T2\nSTN M1",
   "instructions": [

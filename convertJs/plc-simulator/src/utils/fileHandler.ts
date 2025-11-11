@@ -5,6 +5,9 @@
 
 import type { MemoryVariable } from '../core'
 
+// Tipos de cena disponíveis
+export type SceneType = 'default' | 'batch' | 'gate' | 'traffic-light' | 'conveyor'
+
 // Interface do arquivo salvo
 export interface SaveFile {
   version: '1.0'
@@ -13,6 +16,8 @@ export interface SaveFile {
     description: string
     createdAt: string
     updatedAt?: string
+    scene?: SceneType  // Cena recomendada para este programa
+    instructions?: string  // Instruções de uso
   }
   code: string
   memory?: Record<string, any>

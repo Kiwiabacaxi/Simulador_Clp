@@ -1,0 +1,320 @@
+/* Batch Simulation Panel - Simulação de processo batch */
+
+.batch-simulation-panel {
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.batch-background {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 24px;
+  padding: 24px;
+  min-height: 600px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.batch-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.85);
+  z-index: 0;
+}
+
+.batch-background > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Controles */
+.batch-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.controls-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 8px;
+}
+
+.batch-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.start-button {
+  background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+  color: white;
+}
+
+.start-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #37b24d 0%, #2b8a3e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(55, 178, 77, 0.4);
+}
+
+.start-button.active {
+  border-color: #2b8a3e;
+  animation: pulse-green 1s infinite;
+}
+
+.stop-button {
+  background: linear-gradient(135deg, #ff6b6b 0%, #f03e3e 100%);
+  color: white;
+}
+
+.stop-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f03e3e 0%, #c92a2a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(240, 62, 62, 0.4);
+}
+
+.stop-button.active {
+  border-color: #c92a2a;
+  animation: pulse-red 1s infinite;
+}
+
+.batch-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-label {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.button-id {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(55, 178, 77, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(55, 178, 77, 0.7);
+  }
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(240, 62, 62, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(240, 62, 62, 0.7);
+  }
+}
+
+/* Tanque */
+.tank-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.tank-svg {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+}
+
+/* Indicadores */
+.batch-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.indicators-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 8px;
+}
+
+.led-group,
+.equipment-group,
+.sensor-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.led {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border-radius: 6px;
+  background: #f5f7fa;
+  transition: all 0.2s ease;
+}
+
+.led-off {
+  border: 2px solid #ced4da;
+}
+
+.led-on {
+  border: 2px solid #51cf66;
+  background: #d3f9d8;
+  animation: led-pulse 1s infinite;
+}
+
+@keyframes led-pulse {
+  0%, 100% {
+    background: #d3f9d8;
+  }
+  50% {
+    background: #b2f2bb;
+  }
+}
+
+.led-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.led-id {
+  font-size: 10px;
+  color: #666;
+}
+
+.equipment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border-radius: 6px;
+  background: #f5f7fa;
+  border: 2px solid #ced4da;
+  transition: all 0.2s ease;
+}
+
+.equipment-on {
+  border-color: #4dabf7;
+  background: #d0ebff;
+}
+
+.equipment-icon {
+  font-size: 18px;
+}
+
+.equipment-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #333;
+}
+
+.equipment-id {
+  font-size: 9px;
+  color: #666;
+}
+
+.sensor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border-radius: 6px;
+  background: #f5f7fa;
+  border: 2px solid #ced4da;
+  transition: all 0.2s ease;
+}
+
+.sensor-active {
+  border-color: #ffa94d;
+  background: #ffe8cc;
+}
+
+.sensor-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #333;
+}
+
+.sensor-id {
+  font-size: 9px;
+  color: #666;
+}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .batch-background {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .tank-container {
+    order: 2;
+  }
+
+  .batch-controls {
+    order: 1;
+  }
+
+  .batch-indicators {
+    order: 3;
+  }
+
+  .batch-controls,
+  .batch-indicators {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .batch-background {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .batch-controls,
+  .batch-indicators {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,248 @@
+/* Gate Scene - Cena de Portão Automático */
+
+.gate-scene {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 24px;
+  padding: 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  min-height: 500px;
+}
+
+/* Controles */
+.gate-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #f5f7fa;
+  padding: 20px;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.controls-title {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 8px;
+}
+
+.gate-control-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.open-button {
+  background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+  color: white;
+}
+
+.open-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #37b24d 0%, #2b8a3e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(55, 178, 77, 0.4);
+}
+
+.close-button {
+  background: linear-gradient(135deg, #ff8787 0%, #ff6b6b 100%);
+  color: white;
+}
+
+.close-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ff6b6b 0%, #f03e3e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+}
+
+.stop-button {
+  background: linear-gradient(135deg, #ffd43b 0%, #fab005 100%);
+  color: #333;
+}
+
+.stop-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #fab005 0%, #f08c00 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(250, 176, 5, 0.4);
+}
+
+.gate-control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-icon {
+  font-size: 24px;
+}
+
+.button-label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.button-id {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+/* Visualização */
+.gate-visualization {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7fa;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.gate-svg {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+/* Indicadores */
+.gate-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #f5f7fa;
+  padding: 20px;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.indicators-title {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 8px;
+}
+
+.indicator-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  background: white;
+  border: 2px solid #ced4da;
+  transition: all 0.2s ease;
+}
+
+.indicator-on {
+  border-color: #4dabf7;
+  background: #d0ebff;
+  animation: indicator-pulse 1s infinite;
+}
+
+.sensor-active {
+  border-color: #f03e3e;
+  background: #ffe0e0;
+}
+
+.led-on {
+  border-color: #51cf66;
+  background: #d3f9d8;
+  animation: led-pulse 1s infinite;
+}
+
+@keyframes indicator-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 rgba(77, 171, 247, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(77, 171, 247, 0.7);
+  }
+}
+
+@keyframes led-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 rgba(81, 207, 102, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(81, 207, 102, 0.7);
+  }
+}
+
+.indicator-icon {
+  font-size: 20px;
+}
+
+.indicator-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.indicator-id {
+  font-size: 10px;
+  color: #666;
+}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .gate-scene {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .gate-visualization {
+    order: 2;
+  }
+
+  .gate-controls {
+    order: 1;
+  }
+
+  .gate-indicators {
+    order: 3;
+  }
+
+  .gate-controls,
+  .gate-indicators {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .indicator-group {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 768px) {
+  .gate-scene {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .gate-controls,
+  .gate-indicators {
+    flex-direction: column;
+  }
+
+  .indicator-group {
+    flex-direction: column;
+  }
+}
