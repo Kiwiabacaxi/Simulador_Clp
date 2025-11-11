@@ -22,8 +22,10 @@ This is the web conversion of the **Simulador de CLP** (PLC Simulator) - an educ
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ (LTS)
+- **Node.js 18.0.0 or higher** (18.x, 20.x, 21.x, or 22.x)
 - npm 9+
+
+> ⚠️ **Node.js Version Issues?** See [NODE_VERSION_GUIDE.md](NODE_VERSION_GUIDE.md) for troubleshooting
 
 ### Installation
 
