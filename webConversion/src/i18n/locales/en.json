@@ -1,0 +1,87 @@
+{
+  "menu": {
+    "file": "File",
+    "save": "Save",
+    "load": "Load",
+    "edit": "Edit",
+    "theme": "Theme",
+    "language": "Language",
+    "help": "Help",
+    "about": "About",
+    "simulation": "Simulation"
+  },
+  "scenes": {
+    "default": "Panel (default)",
+    "batch": "Batch Simulation"
+  },
+  "labels": {
+    "delay": "Time delay (ms):",
+    "inputs": "Inputs",
+    "outputs": "Outputs",
+    "code": "Code",
+    "value": "Value:",
+    "type": "Type:",
+    "preset": "Preset:",
+    "accumulated": "Accumulated:",
+    "done": "DN:",
+    "enabled": "EN:"
+  },
+  "modes": {
+    "program": "PROGRAM",
+    "stop": "STOP",
+    "run": "RUN",
+    "idle": "Idle",
+    "stopped": "Stopped",
+    "running": "Running"
+  },
+  "dataTable": {
+    "title": "Variables List",
+    "variable": "Variable",
+    "value": "Value",
+    "type": "Type",
+    "preset": "Preset",
+    "accumulated": "Accum",
+    "done": "DN"
+  },
+  "messages": {
+    "programSaved": "Program saved successfully",
+    "programLoaded": "Program loaded successfully",
+    "error": "Error",
+    "success": "Success",
+    "emptyProgram": "Please enter instructions for the PLC!",
+    "invalidSyntax": "Incorrect syntax!",
+    "invalidOperator": "Operator does not exist!",
+    "invalidVariable": "Variable does not exist!",
+    "accumulatorEmpty": "Accumulator empty! First load the desired variable with LD or LDN!",
+    "cannotModifyInputs": "Inputs cannot be modified! ST and STN are only valid for outputs!"
+  },
+  "help": {
+    "title": "Help - PLC Simulator",
+    "instructions": "Available Instructions",
+    "ld": "LD - Load value to accumulator",
+    "ldn": "LDN - Load negated value to accumulator",
+    "st": "ST - Store accumulator to output",
+    "stn": "STN - Store negated accumulator to output",
+    "and": "AND - Logical AND with accumulator",
+    "andn": "ANDN - Logical AND with negated value",
+    "or": "OR - Logical OR with accumulator",
+    "orn": "ORN - Logical OR with negated value",
+    "ton": "TON - Timer on-delay",
+    "toff": "TOFF - Timer off-delay",
+    "ctu": "CTU - Count up",
+    "ctd": "CTD - Count down"
+  },
+  "about": {
+    "title": "About",
+    "version": "Version",
+    "description": "PLC Simulator - Web Version",
+    "credits": "Developed as an academic project"
+  },
+  "buttons": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No"
+  }
+}

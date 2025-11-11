@@ -1,0 +1,87 @@
+{
+  "menu": {
+    "file": "Datei",
+    "save": "Speichern",
+    "load": "Zum Laden",
+    "edit": "Bearbeiten",
+    "theme": "Thema",
+    "language": "Sprache",
+    "help": "Helfen",
+    "about": "Um",
+    "simulation": "Simulation"
+  },
+  "scenes": {
+    "default": "Panel",
+    "batch": "Simulation 1"
+  },
+  "labels": {
+    "delay": "Zeitverzögerung (ms):",
+    "inputs": "Eingaben",
+    "outputs": "Ausgänge",
+    "code": "Code",
+    "value": "Wert:",
+    "type": "Typ:",
+    "preset": "Voreingestellt:",
+    "accumulated": "Akkumuliert:",
+    "done": "DN:",
+    "enabled": "EN:"
+  },
+  "modes": {
+    "program": "PROGRAMM",
+    "stop": "STOPPEN",
+    "run": "LAUF",
+    "idle": "Leerlauf",
+    "stopped": "Gestoppt",
+    "running": "Läuft"
+  },
+  "dataTable": {
+    "title": "Variablenliste",
+    "variable": "Variable",
+    "value": "Wert",
+    "type": "Typ",
+    "preset": "Voreingestellt",
+    "accumulated": "Akkum",
+    "done": "DN"
+  },
+  "messages": {
+    "programSaved": "Programm erfolgreich gespeichert",
+    "programLoaded": "Programm erfolgreich geladen",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "emptyProgram": "Bitte geben Sie Anweisungen für die SPS ein!",
+    "invalidSyntax": "Falsche Syntax!",
+    "invalidOperator": "Operator existiert nicht!",
+    "invalidVariable": "Variable existiert nicht!",
+    "accumulatorEmpty": "Akkumulator leer! Laden Sie zuerst die gewünschte Variable mit LD oder LDN!",
+    "cannotModifyInputs": "Eingänge können nicht geändert werden! ST und STN sind nur für Ausgänge gültig!"
+  },
+  "help": {
+    "title": "Hilfe - SPS-Simulator",
+    "instructions": "Verfügbare Anweisungen",
+    "ld": "LD - Wert in Akkumulator laden",
+    "ldn": "LDN - Negierten Wert in Akkumulator laden",
+    "st": "ST - Akkumulator in Ausgang speichern",
+    "stn": "STN - Negierten Akkumulator in Ausgang speichern",
+    "and": "AND - Logisches UND mit Akkumulator",
+    "andn": "ANDN - Logisches UND mit negiertem Wert",
+    "or": "OR - Logisches ODER mit Akkumulator",
+    "orn": "ORN - Logisches ODER mit negiertem Wert",
+    "ton": "TON - Timer mit Einschaltverzögerung",
+    "toff": "TOFF - Timer mit Ausschaltverzögerung",
+    "ctu": "CTU - Hochzählen",
+    "ctd": "CTD - Runterzählen"
+  },
+  "about": {
+    "title": "Über",
+    "version": "Version",
+    "description": "SPS-Simulator - Webversion",
+    "credits": "Als akademisches Projekt entwickelt"
+  },
+  "buttons": {
+    "ok": "OK",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "yes": "Ja",
+    "no": "Nein"
+  }
+}

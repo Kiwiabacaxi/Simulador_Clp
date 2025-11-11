@@ -1,0 +1,87 @@
+{
+  "menu": {
+    "file": "Arquivo",
+    "save": "Salvar",
+    "load": "Carregar",
+    "edit": "Editar",
+    "theme": "Tema",
+    "language": "Idioma",
+    "help": "Ajuda",
+    "about": "Sobre",
+    "simulation": "Simulação"
+  },
+  "scenes": {
+    "default": "Painel (padrão)",
+    "batch": "Simulação Batch"
+  },
+  "labels": {
+    "delay": "Tempo de delay (ms):",
+    "inputs": "Entradas",
+    "outputs": "Saídas",
+    "code": "Código",
+    "value": "Valor:",
+    "type": "Tipo:",
+    "preset": "Predefinição:",
+    "accumulated": "Acumulado:",
+    "done": "DN:",
+    "enabled": "EN:"
+  },
+  "modes": {
+    "program": "PROGRAMA",
+    "stop": "PARAR",
+    "run": "EXECUTAR",
+    "idle": "Parado",
+    "stopped": "Parado",
+    "running": "Executando"
+  },
+  "dataTable": {
+    "title": "Lista de Variáveis",
+    "variable": "Variável",
+    "value": "Valor",
+    "type": "Tipo",
+    "preset": "Preset",
+    "accumulated": "Acum",
+    "done": "DN"
+  },
+  "messages": {
+    "programSaved": "Programa salvo com sucesso",
+    "programLoaded": "Programa carregado com sucesso",
+    "error": "Erro",
+    "success": "Sucesso",
+    "emptyProgram": "Insira as instruções para o CLP!",
+    "invalidSyntax": "Sintaxe incorreta!",
+    "invalidOperator": "Operador não existe!",
+    "invalidVariable": "Variável não existe!",
+    "accumulatorEmpty": "Acumulador vazio! Carregue inicialmente a variável desejada com LD ou LDN!",
+    "cannotModifyInputs": "Entradas não podem ser modificadas! ST e STN são válidos apenas para saídas!"
+  },
+  "help": {
+    "title": "Ajuda - Simulador de CLP",
+    "instructions": "Instruções Disponíveis",
+    "ld": "LD - Carrega valor para o acumulador",
+    "ldn": "LDN - Carrega valor negado para o acumulador",
+    "st": "ST - Armazena acumulador na saída",
+    "stn": "STN - Armazena acumulador negado na saída",
+    "and": "AND - E lógico com acumulador",
+    "andn": "ANDN - E lógico com valor negado",
+    "or": "OR - OU lógico com acumulador",
+    "orn": "ORN - OU lógico com valor negado",
+    "ton": "TON - Temporizador com atraso na ativação",
+    "toff": "TOFF - Temporizador com atraso na desativação",
+    "ctu": "CTU - Contador progressivo",
+    "ctd": "CTD - Contador regressivo"
+  },
+  "about": {
+    "title": "Sobre",
+    "version": "Versão",
+    "description": "Simulador de CLP - Versão Web",
+    "credits": "Desenvolvido como projeto acadêmico"
+  },
+  "buttons": {
+    "ok": "OK",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "yes": "Sim",
+    "no": "Não"
+  }
+}
