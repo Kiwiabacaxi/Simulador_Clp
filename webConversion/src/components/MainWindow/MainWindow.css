@@ -1,0 +1,137 @@
+/**
+ * Main Window Styles
+ */
+
+.main-window {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background);
+  overflow: hidden;
+}
+
+/* Top Bar */
+.main-window__top-bar {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-primary);
+  border-bottom: 2px solid var(--color-primary-dark);
+}
+
+.main-window__menu {
+  padding: var(--spacing-sm);
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  border-bottom: 1px solid var(--color-primary-dark);
+}
+
+.main-window__controls {
+  padding: var(--spacing-md);
+  background-color: var(--color-secondary);
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+/* Main Content */
+.main-window__content {
+  flex: 1;
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Code Editor Side */
+.main-window__editor {
+  flex: 1;
+  min-width: 300px;
+  background-color: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Right Side */
+.main-window__right {
+  flex: 1;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  overflow: hidden;
+}
+
+/* Scene Area */
+.main-window__scene {
+  flex: 1;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: auto;
+  min-height: 0;
+}
+
+/* Status Panel */
+.main-window__status {
+  height: 150px;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: auto;
+  padding: var(--spacing-sm);
+}
+
+/* Footer */
+.main-window__footer {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-sm);
+  border-top: 1px solid var(--color-primary-dark);
+}
+
+/* Placeholder styles (remove when implementing components) */
+.placeholder {
+  padding: var(--spacing-lg);
+  color: var(--color-gray-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .main-window__content {
+    flex-direction: column;
+  }
+
+  .main-window__right {
+    min-width: 100%;
+  }
+
+  .main-window__editor {
+    min-width: 100%;
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-window__controls {
+    flex-wrap: wrap;
+  }
+
+  .main-window__status {
+    height: 100px;
+  }
+}
