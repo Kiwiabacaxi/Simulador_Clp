@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Core Services Complete - 2025-11-11
+
+#### Added
+- **File I/O Service** (`src/services/fileIO.ts`):
+  - Save IL programs to .txt files
+  - Load IL programs from files
+  - File validation and error handling
+  - Browser-based file selection dialog
+
+- **Scan Cycle Service** (`src/services/scanCycle.ts`):
+  - Complete PLC scan cycle implementation (100ms)
+  - Initialize, Start, Stop, Pause operations
+  - Cycle statistics and performance monitoring
+  - Automatic error handling and mode switching
+
+- **React Context** (`src/context/PLCStateContext.tsx`):
+  - Global PLC state management
+  - Type-safe action dispatch system
+  - Multiple helper hooks (usePLCState, usePLCStateValue, usePLCDispatch)
+  - Replaces Java singleton pattern with React context
+
+- **Execution Cycle Hook** (`src/hooks/useExecutionCycle.ts`):
+  - Automatic 100ms interval execution
+  - Mode-based cycle control
+  - Callbacks for cycle completion and errors
+  - Manual cycle execution support
+
+- **Example Programs** (`public/examples/`):
+  - 01-basic-logic.txt: AND, OR, NOT operations
+  - 02-timers.txt: TON/TOFF timer examples
+  - 03-counters.txt: CTU/CTD counter examples
+  - 04-batch-simulation.txt: Tank control system
+  - README.md: Complete documentation for all examples
+
+#### Progress
+- **Phase 1 (Foundation)**: ✅ 100% Complete
+- **Phase 2 (State Management)**: ✅ 100% Complete
+- All core PLC logic implemented and tested
+- Ready for UI component development
+
+---
+
 ### Compatibility Fix - 2025-11-11
 
 #### Fixed
