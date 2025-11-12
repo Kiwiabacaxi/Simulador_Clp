@@ -20,36 +20,34 @@ export function BatchScene() {
   const [tankLevel, setTankLevel] = useState(0); // 0-100%
   const animationRef = useRef<number>();
 
-  // Map PLC I/O to batch simulation (matching Java BatchSimulatorController)
+  // Map PLC I/O to batch simulation (matching Java BatchSimulationScenePanel)
   // Inputs:
-  // I0.0 = Start button
-  // I0.1 = Stop button
-  // I0.2 = Level sensor LOW (tankLevel > 10%)
-  // I0.3 = Level sensor MID (tankLevel > 50%)
-  // I0.4 = Level sensor HIGH (tankLevel > 90%)
-  // I0.5 = Emergency stop
+  // I0.0 = Start button (NO - Normally Open)
+  // I0.1 = Stop button (NC - Normally Closed)
+  // I1.0 = HI-LEVEL sensor (active when tankLevel >= 100%)
+  // I1.1 = LO-LEVEL sensor (active when tankLevel > 1%)
 
   // Outputs:
-  // Q0.1 = Fill valve/pump (pump1 - opens to fill tank)
-  // Q0.3 = Drain valve/pump (pump3 - opens to drain tank)
-  // Q0.2 = Mixer motor indicator
-  // Q0.0 = Other indicator
+  // Q0.1 = Pump1 (fill valve - opens to fill tank)
+  // Q0.2 = Mixer motor
+  // Q0.3 = Pump3 (drain valve - opens to drain tank)
+  // Q1.0 = RUN LED (system running indicator)
+  // Q1.1 = IDLE LED (system idle indicator)
+  // Q1.2 = FULL LED (tank full indicator)
 
   // Update level sensors based on tank level
   useEffect(() => {
-    const lowSensor = tankLevel > 10;
-    const midSensor = tankLevel > 50;
-    const highSensor = tankLevel > 90;
+    // HIGH sensor: active at 100% (matching Java isAtHighLevel: value >= MAX_VALUE)
+    const hiLevelSensor = tankLevel >= 100;
+    // LOW sensor: active above ~1% (matching Java isAtLowLevel: value >= 3)
+    const loLevelSensor = tankLevel > 1;
 
-    // Update input sensors
-    if (state.inputs['I0.2'] !== lowSensor) {
-      dispatch({ type: 'SET_INPUT', key: 'I0.2', value: lowSensor });
+    // Update input sensors I1.0 and I1.1
+    if (state.inputs['I1.0'] !== hiLevelSensor) {
+      dispatch({ type: 'SET_INPUT', key: 'I1.0', value: hiLevelSensor });
     }
-    if (state.inputs['I0.3'] !== midSensor) {
-      dispatch({ type: 'SET_INPUT', key: 'I0.3', value: midSensor });
-    }
-    if (state.inputs['I0.4'] !== highSensor) {
-      dispatch({ type: 'SET_INPUT', key: 'I0.4', value: highSensor });
+    if (state.inputs['I1.1'] !== loLevelSensor) {
+      dispatch({ type: 'SET_INPUT', key: 'I1.1', value: loLevelSensor });
     }
   }, [tankLevel, state.inputs, dispatch]);
 
@@ -140,46 +138,66 @@ export function BatchScene() {
               <span className="batch-button__label">STOP (I0.1)</span>
               <span className="batch-button__status">{state.inputs['I0.1'] ? '1' : '0'}</span>
             </button>
-
-            {/* Emergency Stop (I0.5) */}
-            <button
-              className={`batch-button batch-button--emergency ${state.inputs['I0.5'] ? 'active' : ''}`}
-              onClick={() => toggleInput(5)}
-            >
-              <span className="batch-button__label">E-STOP (I0.5)</span>
-              <span className="batch-button__status">{state.inputs['I0.5'] ? '1' : '0'}</span>
-            </button>
           </div>
 
           <div className="batch-scene__control-group">
             <h3 className="batch-scene__control-title">{t('labels.outputs')}</h3>
 
-            {/* Pump Motor (Q0.2) */}
+            {/* Pump1 (Q0.1) */}
+            <div className={`batch-indicator ${state.outputs['Q0.1'] ? 'active' : ''}`}>
+              <span className="batch-indicator__label">PUMP1 (Q0.1)</span>
+              <div className="batch-indicator__led" />
+              <span className="batch-indicator__status">{state.outputs['Q0.1'] ? 'ON' : 'OFF'}</span>
+            </div>
+
+            {/* Mixer (Q0.2) */}
             <div className={`batch-indicator ${state.outputs['Q0.2'] ? 'active' : ''}`}>
-              <span className="batch-indicator__label">PUMP (Q0.2)</span>
+              <span className="batch-indicator__label">MIXER (Q0.2)</span>
               <div className="batch-indicator__led" />
               <span className="batch-indicator__status">{state.outputs['Q0.2'] ? 'ON' : 'OFF'}</span>
             </div>
 
-            {/* Alarm (Q0.3) */}
-            <div className={`batch-indicator batch-indicator--alarm ${state.outputs['Q0.3'] ? 'active' : ''}`}>
-              <span className="batch-indicator__label">ALARM (Q0.3)</span>
+            {/* Pump3 (Q0.3) */}
+            <div className={`batch-indicator ${state.outputs['Q0.3'] ? 'active' : ''}`}>
+              <span className="batch-indicator__label">PUMP3 (Q0.3)</span>
               <div className="batch-indicator__led" />
               <span className="batch-indicator__status">{state.outputs['Q0.3'] ? 'ON' : 'OFF'}</span>
+            </div>
+          </div>
+
+          <div className="batch-scene__control-group">
+            <h3 className="batch-scene__control-title">Status LEDs</h3>
+
+            {/* Run LED (Q1.0) */}
+            <div className={`batch-indicator ${state.outputs['Q1.0'] ? 'active' : ''}`}>
+              <span className="batch-indicator__label">RUN (Q1.0)</span>
+              <div className="batch-indicator__led" />
+              <span className="batch-indicator__status">{state.outputs['Q1.0'] ? 'ON' : 'OFF'}</span>
+            </div>
+
+            {/* Idle LED (Q1.1) */}
+            <div className={`batch-indicator ${state.outputs['Q1.1'] ? 'active' : ''}`}>
+              <span className="batch-indicator__label">IDLE (Q1.1)</span>
+              <div className="batch-indicator__led" />
+              <span className="batch-indicator__status">{state.outputs['Q1.1'] ? 'ON' : 'OFF'}</span>
+            </div>
+
+            {/* Full LED (Q1.2) */}
+            <div className={`batch-indicator ${state.outputs['Q1.2'] ? 'active' : ''}`}>
+              <span className="batch-indicator__label">FULL (Q1.2)</span>
+              <div className="batch-indicator__led" />
+              <span className="batch-indicator__status">{state.outputs['Q1.2'] ? 'ON' : 'OFF'}</span>
             </div>
           </div>
 
           <div className="batch-scene__sensors">
             <h3 className="batch-scene__control-title">{t('batch.sensors')}</h3>
             <div className="sensor-list">
-              <div className={`sensor-item ${state.inputs['I0.2'] ? 'active' : ''}`}>
-                LOW (I0.2): {state.inputs['I0.2'] ? '1' : '0'}
+              <div className={`sensor-item ${state.inputs['I1.0'] ? 'active' : ''}`}>
+                HI-LEVEL (I1.0): {state.inputs['I1.0'] ? '1' : '0'}
               </div>
-              <div className={`sensor-item ${state.inputs['I0.3'] ? 'active' : ''}`}>
-                MID (I0.3): {state.inputs['I0.3'] ? '1' : '0'}
-              </div>
-              <div className={`sensor-item ${state.inputs['I0.4'] ? 'active' : ''}`}>
-                HIGH (I0.4): {state.inputs['I0.4'] ? '1' : '0'}
+              <div className={`sensor-item ${state.inputs['I1.1'] ? 'active' : ''}`}>
+                LO-LEVEL (I1.1): {state.inputs['I1.1'] ? '1' : '0'}
               </div>
             </div>
           </div>
