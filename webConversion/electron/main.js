@@ -14,7 +14,6 @@ function createWindow() {
     minHeight: 700,
     backgroundColor: '#1e1e1e',
     title: 'PLC Simulator',
-    icon: path.join(__dirname, '../public/assets/icone.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,

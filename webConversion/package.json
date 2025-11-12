@@ -83,8 +83,7 @@
           "target": "nsis",
           "arch": ["x64", "ia32"]
         }
-      ],
-      "icon": "public/assets/icone.png"
+      ]
     },
     "nsis": {
       "oneClick": false,
@@ -95,13 +94,11 @@
     },
     "mac": {
       "target": ["dmg", "zip"],
-      "category": "public.app-category.education",
-      "icon": "public/assets/icone.png"
+      "category": "public.app-category.education"
     },
     "linux": {
       "target": ["AppImage", "deb"],
-      "category": "Education",
-      "icon": "public/assets/icone.png"
+      "category": "Education"
     }
   }
 }
