@@ -543,8 +543,13 @@ export class Interpreter {
   /**
    * CTU - Counter Up
    * Format: CTU C0, 10 (Counter C0, count up to 10)
+   * Counts on rising edge of accumulator (false -> true transition)
    */
   private static executeCTU(variable: string, presetStr: string, state: PLCState): void {
+    if (this.accumulator === null) {
+      throw new Error('Accumulator is empty. Use LD or LDN before CTU.');
+    }
+
     const varType = getVariableType(variable);
 
     if (varType !== 'COUNTER') {
@@ -564,14 +569,42 @@ export class Interpreter {
       const counter = state.memoryVariables[variable];
       counter.counterType = 'CTU';
       counter.preset = preset;
+      // Initialize previousEnable if not set
+      if (counter.previousEnable === undefined) {
+        counter.previousEnable = false;
+      }
     }
+
+    const counter = state.memoryVariables[variable];
+
+    // Detect rising edge (previousEnable was false, accumulator is now true)
+    const risingEdge = !counter.previousEnable && this.accumulator;
+
+    if (risingEdge) {
+      // Increment counter on rising edge
+      MemoryService.incrementCounter(counter);
+    }
+
+    // Update previousEnable for next scan
+    counter.previousEnable = this.accumulator;
+
+    // Update currentValue to reflect done bit (for LD C0)
+    counter.currentValue = counter.done;
+
+    // Update accumulator to counter done bit
+    this.accumulator = counter.done;
   }
 
   /**
    * CTD - Counter Down
    * Format: CTD C0, 10 (Counter C0, count down from 10)
+   * Counts on rising edge of accumulator (false -> true transition)
    */
   private static executeCTD(variable: string, presetStr: string, state: PLCState): void {
+    if (this.accumulator === null) {
+      throw new Error('Accumulator is empty. Use LD or LDN before CTD.');
+    }
+
     const varType = getVariableType(variable);
 
     if (varType !== 'COUNTER') {
@@ -586,18 +619,42 @@ export class Interpreter {
     // Create counter if it doesn't exist
     if (!state.memoryVariables[variable]) {
       state.memoryVariables[variable] = MemoryService.createCounter(variable, 'CTD', preset);
+      state.memoryVariables[variable].accumulated = preset; // CTD starts at preset
     } else {
       // Update existing counter
       const counter = state.memoryVariables[variable];
       counter.counterType = 'CTD';
       counter.preset = preset;
+      // Initialize previousEnable if not set
+      if (counter.previousEnable === undefined) {
+        counter.previousEnable = false;
+      }
     }
+
+    const counter = state.memoryVariables[variable];
+
+    // Detect rising edge (previousEnable was false, accumulator is now true)
+    const risingEdge = !counter.previousEnable && this.accumulator;
+
+    if (risingEdge) {
+      // Decrement counter on rising edge
+      MemoryService.decrementCounter(counter);
+    }
+
+    // Update previousEnable for next scan
+    counter.previousEnable = this.accumulator;
+
+    // Update currentValue to reflect done bit (for LD C0)
+    counter.currentValue = counter.done;
+
+    // Update accumulator to counter done bit
+    this.accumulator = counter.done;
   }
 
   /**
    * CTR - Counter Reset
    * Format: CTR C0 (Resets counter C0)
-   * Resets counter accumulated value to 0
+   * Resets counter accumulated value to 0 (CTU) or preset (CTD)
    */
   private static executeCTR(variable: string, state: PLCState): void {
     const varType = getVariableType(variable);
@@ -608,8 +665,8 @@ export class Interpreter {
 
     const counter = state.memoryVariables[variable];
     if (counter) {
-      counter.accumulated = 0;
-      counter.done = false;
+      MemoryService.resetCounter(counter);
+      counter.previousEnable = false; // Reset edge detection
     }
   }
 

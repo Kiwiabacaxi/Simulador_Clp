@@ -68,6 +68,7 @@ export class MemoryService {
       accumulated: 0,
       enabled: false,
       done: false,
+      previousEnable: false, // Initialize for edge detection
     };
   }
 

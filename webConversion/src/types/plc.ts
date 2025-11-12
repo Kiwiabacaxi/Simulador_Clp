@@ -139,6 +139,7 @@ export interface MemoryVariable {
 
   // Counter-specific
   counterType?: 'CTU' | 'CTD'; // Counter type (up or down)
+  previousEnable?: boolean;   // Previous enable state for edge detection
 }
 
 /**
