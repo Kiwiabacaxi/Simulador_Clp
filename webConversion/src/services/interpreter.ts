@@ -543,9 +543,10 @@ export class Interpreter {
   /**
    * CTU - Counter Up
    * Format: CTU C0, 10 (Counter C0, count up to 10)
+   * OR: CTU C0 (uses existing preset from CTL)
    * Counts on rising edge of accumulator (false -> true transition)
    */
-  private static executeCTU(variable: string, presetStr: string, state: PLCState): void {
+  private static executeCTU(variable: string, presetStr: string | undefined, state: PLCState): void {
     if (this.accumulator === null) {
       throw new Error('Accumulator is empty. Use LD or LDN before CTU.');
     }
@@ -556,19 +557,29 @@ export class Interpreter {
       throw new Error(`CTU requires a counter variable (C0-Cn), got: ${variable}`);
     }
 
-    const preset = parseInt(presetStr, 10);
-    if (isNaN(preset) || preset <= 0) {
-      throw new Error(`Invalid preset value: ${presetStr}`);
+    // Parse preset if provided
+    let preset: number | undefined;
+    if (presetStr !== undefined) {
+      preset = parseInt(presetStr, 10);
+      if (isNaN(preset) || preset <= 0) {
+        throw new Error(`Invalid preset value: ${presetStr}`);
+      }
     }
 
     // Create counter if it doesn't exist
     if (!state.memoryVariables[variable]) {
+      if (preset === undefined) {
+        throw new Error(`CTU ${variable}: preset value required when counter doesn't exist. Use CTL first or provide preset (e.g., CTU ${variable} 10)`);
+      }
       state.memoryVariables[variable] = MemoryService.createCounter(variable, 'CTU', preset);
     } else {
       // Update existing counter
       const counter = state.memoryVariables[variable];
       counter.counterType = 'CTU';
-      counter.preset = preset;
+      // Update preset only if provided, otherwise keep existing
+      if (preset !== undefined) {
+        counter.preset = preset;
+      }
       // Initialize previousEnable if not set
       if (counter.previousEnable === undefined) {
         counter.previousEnable = false;
@@ -607,9 +618,10 @@ export class Interpreter {
   /**
    * CTD - Counter Down
    * Format: CTD C0, 10 (Counter C0, count down from 10)
+   * OR: CTD C0 (uses existing preset from CTL)
    * Counts on rising edge of accumulator (false -> true transition)
    */
-  private static executeCTD(variable: string, presetStr: string, state: PLCState): void {
+  private static executeCTD(variable: string, presetStr: string | undefined, state: PLCState): void {
     if (this.accumulator === null) {
       throw new Error('Accumulator is empty. Use LD or LDN before CTD.');
     }
@@ -620,20 +632,30 @@ export class Interpreter {
       throw new Error(`CTD requires a counter variable (C0-Cn), got: ${variable}`);
     }
 
-    const preset = parseInt(presetStr, 10);
-    if (isNaN(preset) || preset <= 0) {
-      throw new Error(`Invalid preset value: ${presetStr}`);
+    // Parse preset if provided
+    let preset: number | undefined;
+    if (presetStr !== undefined) {
+      preset = parseInt(presetStr, 10);
+      if (isNaN(preset) || preset <= 0) {
+        throw new Error(`Invalid preset value: ${presetStr}`);
+      }
     }
 
     // Create counter if it doesn't exist
     if (!state.memoryVariables[variable]) {
+      if (preset === undefined) {
+        throw new Error(`CTD ${variable}: preset value required when counter doesn't exist. Use CTL first or provide preset (e.g., CTD ${variable} 10)`);
+      }
       state.memoryVariables[variable] = MemoryService.createCounter(variable, 'CTD', preset);
       state.memoryVariables[variable].accumulated = preset; // CTD starts at preset
     } else {
       // Update existing counter
       const counter = state.memoryVariables[variable];
       counter.counterType = 'CTD';
-      counter.preset = preset;
+      // Update preset only if provided, otherwise keep existing
+      if (preset !== undefined) {
+        counter.preset = preset;
+      }
       // Initialize previousEnable if not set
       if (counter.previousEnable === undefined) {
         counter.previousEnable = false;
@@ -699,8 +721,13 @@ export class Interpreter {
    * CTL - Counter Load
    * Format: CTL C0, 10 (Loads counter C0 with value 10)
    * Sets the counter accumulated value to the specified value
+   * Only loads when accumulator is TRUE
    */
   private static executeCTL(variable: string, valueStr: string, state: PLCState): void {
+    if (this.accumulator === null) {
+      throw new Error('Accumulator is empty. Use LD or LDN before CTL.');
+    }
+
     const varType = getVariableType(variable);
 
     if (varType !== 'COUNTER') {
@@ -714,13 +741,25 @@ export class Interpreter {
 
     // Create counter if it doesn't exist
     if (!state.memoryVariables[variable]) {
-      state.memoryVariables[variable] = MemoryService.createCounter(variable, 'CTU', value);
+      // Create with 'CTD' type and use value as both preset and accumulated
+      state.memoryVariables[variable] = MemoryService.createCounter(variable, 'CTD', value);
       state.memoryVariables[variable].accumulated = value;
-    } else {
-      // Update existing counter
+      state.memoryVariables[variable].previousEnable = false;
+    }
+
+    // Only load if accumulator is TRUE (load button is pressed)
+    if (this.accumulator) {
       const counter = state.memoryVariables[variable];
       counter.accumulated = value;
-      counter.done = counter.accumulated >= counter.preset;
+      counter.preset = value; // Also set preset for CTD to count down from
+      counter.done = counter.counterType === 'CTU'
+        ? counter.accumulated >= counter.preset
+        : counter.accumulated <= 0;
+
+      // DEBUG: Log load operation
+      if (this.DEBUG_MODE && this.instructionCount < 50) {
+        console.log(`  → CTL ${variable}: loaded accumulated=${counter.accumulated}, preset=${counter.preset}`);
+      }
     }
   }
 
