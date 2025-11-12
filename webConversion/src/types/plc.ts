@@ -25,13 +25,14 @@ export enum InputType {
 
 /**
  * Instruction List (IL) instruction types
- * All 12 supported instructions
+ * All supported instructions
  */
 export enum ILInstruction {
   LD = 'LD',       // Load
   LDN = 'LDN',     // Load Negated
   ST = 'ST',       // Store
   STN = 'STN',     // Store Negated
+  OUT = 'OUT',     // Output (alias for ST)
   AND = 'AND',     // AND operation
   ANDN = 'ANDN',   // AND Negated
   OR = 'OR',       // OR operation
@@ -40,6 +41,9 @@ export enum ILInstruction {
   TOFF = 'TOFF',   // Timer Off Delay
   CTU = 'CTU',     // Count Up
   CTD = 'CTD',     // Count Down
+  CTR = 'CTR',     // Counter Reset
+  CTL = 'CTL',     // Counter Load
+  RST = 'RST',     // Reset
 }
 
 /**

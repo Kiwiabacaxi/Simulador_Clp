@@ -20,18 +20,22 @@ export class Interpreter {
    * Valid operators for IL language
    */
   private static readonly VALID_OPERATORS = [
-    'LD',
-    'LDN',
-    'ST',
-    'STN',
-    'AND',
-    'ANDN',
-    'OR',
-    'ORN',
-    'TON',
-    'TOFF',
-    'CTU',
-    'CTD',
+    'LD',    // Load
+    'LDN',   // Load NOT
+    'ST',    // Store
+    'STN',   // Store NOT
+    'AND',   // AND
+    'ANDN',  // AND NOT
+    'OR',    // OR
+    'ORN',   // OR NOT
+    'OUT',   // Output (alias for ST)
+    'TON',   // Timer On-Delay
+    'TOFF',  // Timer Off-Delay
+    'CTU',   // Counter Up
+    'CTD',   // Counter Down
+    'CTR',   // Counter Reset
+    'CTL',   // Counter Load
+    'RST',   // Reset
   ];
 
   /**
@@ -199,6 +203,7 @@ export class Interpreter {
         break;
 
       case ILInstruction.ST:
+      case ILInstruction.OUT: // OUT is an alias for ST
         this.executeST(variable, state);
         break;
 
@@ -236,6 +241,18 @@ export class Interpreter {
 
       case ILInstruction.CTD:
         this.executeCTD(variable, operands[1], state);
+        break;
+
+      case ILInstruction.CTR:
+        this.executeCTR(variable, state);
+        break;
+
+      case ILInstruction.CTL:
+        this.executeCTL(variable, operands[1], state);
+        break;
+
+      case ILInstruction.RST:
+        this.executeRST(variable, state);
         break;
 
       default:
@@ -569,6 +586,80 @@ export class Interpreter {
       const counter = state.memoryVariables[variable];
       counter.counterType = 'CTD';
       counter.preset = preset;
+    }
+  }
+
+  /**
+   * CTR - Counter Reset
+   * Format: CTR C0 (Resets counter C0)
+   * Resets counter accumulated value to 0
+   */
+  private static executeCTR(variable: string, state: PLCState): void {
+    const varType = getVariableType(variable);
+
+    if (varType !== 'COUNTER') {
+      throw new Error(`CTR requires a counter variable (C0-Cn), got: ${variable}`);
+    }
+
+    const counter = state.memoryVariables[variable];
+    if (counter) {
+      counter.accumulated = 0;
+      counter.done = false;
+    }
+  }
+
+  /**
+   * CTL - Counter Load
+   * Format: CTL C0, 10 (Loads counter C0 with value 10)
+   * Sets the counter accumulated value to the specified value
+   */
+  private static executeCTL(variable: string, valueStr: string, state: PLCState): void {
+    const varType = getVariableType(variable);
+
+    if (varType !== 'COUNTER') {
+      throw new Error(`CTL requires a counter variable (C0-Cn), got: ${variable}`);
+    }
+
+    const value = parseInt(valueStr, 10);
+    if (isNaN(value) || value < 0) {
+      throw new Error(`Invalid load value: ${valueStr}`);
+    }
+
+    // Create counter if it doesn't exist
+    if (!state.memoryVariables[variable]) {
+      state.memoryVariables[variable] = MemoryService.createCounter(variable, 'CTU', value);
+      state.memoryVariables[variable].accumulated = value;
+    } else {
+      // Update existing counter
+      const counter = state.memoryVariables[variable];
+      counter.accumulated = value;
+      counter.done = counter.accumulated >= counter.preset;
+    }
+  }
+
+  /**
+   * RST - Reset
+   * Format: RST T0 or RST C0 or RST M0
+   * Resets a timer, counter, or memory bit
+   */
+  private static executeRST(variable: string, state: PLCState): void {
+    const varType = getVariableType(variable);
+
+    if (varType === 'TIMER' || varType === 'COUNTER') {
+      const memVar = state.memoryVariables[variable];
+      if (memVar) {
+        memVar.accumulated = 0;
+        memVar.done = false;
+      }
+    } else if (varType === 'MEMORY') {
+      const memVar = state.memoryVariables[variable];
+      if (memVar) {
+        memVar.currentValue = false;
+      }
+    } else if (varType === 'OUTPUT') {
+      state.outputs[variable] = false;
+    } else {
+      throw new Error(`RST can only reset timers, counters, memory bits, or outputs, got: ${variable}`);
     }
   }
 
