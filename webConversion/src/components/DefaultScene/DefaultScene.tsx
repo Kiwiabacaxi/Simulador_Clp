@@ -29,13 +29,13 @@ export function DefaultScene() {
 
     switch (inputType) {
       case InputType.SWITCH:
-        return inputValue ? '/assets/botao_ligado.png' : '/assets/botao_desligado.png';
+        return inputValue ? '/assets/chave_fechada.png' : '/assets/chave_aberta.png';
       case InputType.NO: // Normally Open
-        return inputValue ? '/assets/bta_ligado.png' : '/assets/bta_desligado.png';
+        return inputValue ? '/assets/botao_fechado.png' : '/assets/buttom.png';
       case InputType.NC: // Normally Closed
-        return inputValue ? '/assets/btf_desligado.png' : '/assets/btf_ligado.png';
+        return inputValue ? '/assets/buttom_pi.png' : '/assets/button_pi_aberto.png';
       default:
-        return '/assets/botao_desligado.png';
+        return '/assets/chave_aberta.png';
     }
   };
 

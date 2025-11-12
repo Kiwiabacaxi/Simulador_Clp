@@ -46,8 +46,9 @@
 
 /* Code Editor Side */
 .main-window__editor {
-  flex: 1;
-  min-width: 300px;
+  flex: 0.5;
+  min-width: 350px;
+  max-width: 500px;
   background-color: var(--color-white);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -58,8 +59,8 @@
 
 /* Right Side */
 .main-window__right {
-  flex: 1;
-  min-width: 400px;
+  flex: 1.5;
+  min-width: 500px;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);

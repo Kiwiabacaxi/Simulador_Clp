@@ -100,58 +100,12 @@ export function BatchScene() {
       </div>
 
       <div className="batch-scene__container">
-        {/* Tank Visualization */}
+        {/* Tank Visualization - Background image shows the tank */}
         <div className="batch-scene__tank-area">
-          <div className="tank">
-            {/* Tank body */}
-            <div className="tank__body">
-              {/* Fill level */}
-              <div
-                className="tank__fill"
-                style={{ height: `${tankLevel}%` }}
-              >
-                <div className="tank__wave" />
-              </div>
-
-              {/* Level markers */}
-              <div className="tank__marker tank__marker--high">
-                <span>HIGH (90%)</span>
-                <div className={`tank__marker-indicator ${state.inputs['I0.4'] ? 'active' : ''}`} />
-              </div>
-              <div className="tank__marker tank__marker--mid">
-                <span>MID (50%)</span>
-                <div className={`tank__marker-indicator ${state.inputs['I0.3'] ? 'active' : ''}`} />
-              </div>
-              <div className="tank__marker tank__marker--low">
-                <span>LOW (10%)</span>
-                <div className={`tank__marker-indicator ${state.inputs['I0.2'] ? 'active' : ''}`} />
-              </div>
-            </div>
-
-            {/* Level percentage display */}
-            <div className="tank__level-display">
-              <span className="tank__level-value">{Math.round(tankLevel)}%</span>
-            </div>
-
-            {/* Fill pipe */}
-            <div className={`tank__pipe tank__pipe--fill ${state.outputs['Q0.0'] ? 'active' : ''}`}>
-              <div className="tank__valve">
-                <span>FILL</span>
-                <div className={`tank__valve-indicator ${state.outputs['Q0.0'] ? 'open' : 'closed'}`}>
-                  {state.outputs['Q0.0'] ? '▼' : '■'}
-                </div>
-              </div>
-            </div>
-
-            {/* Drain pipe */}
-            <div className={`tank__pipe tank__pipe--drain ${state.outputs['Q0.1'] ? 'active' : ''}`}>
-              <div className="tank__valve">
-                <span>DRAIN</span>
-                <div className={`tank__valve-indicator ${state.outputs['Q0.1'] ? 'open' : 'closed'}`}>
-                  {state.outputs['Q0.1'] ? '▼' : '■'}
-                </div>
-              </div>
-            </div>
+          {/* Level percentage display */}
+          <div className="tank__level-display">
+            <span className="tank__level-value">{Math.round(tankLevel)}%</span>
+            <span className="tank__level-label">Nível</span>
           </div>
         </div>
 
