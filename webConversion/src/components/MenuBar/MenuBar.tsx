@@ -5,6 +5,7 @@
 
 import { useTranslation } from 'react-i18next';
 import { usePLCState } from '../../context/PLCStateContext';
+import { useToastContext } from '../../context/ToastContext';
 import { useTheme } from '../../hooks/useTheme';
 import { FileIOService } from '../../services/fileIO';
 import { SceneType } from '../../types/plc';
@@ -20,13 +21,15 @@ export function MenuBar({ onOpenHelp, onOpenAbout, onOpenDataTable }: MenuBarPro
   const { t, i18n } = useTranslation();
   const { state, dispatch } = usePLCState();
   const { nextTheme, theme } = useTheme();
+  const toast = useToastContext();
 
   const handleSave = async () => {
     try {
       await FileIOService.saveProgramToFile(state.programText);
+      toast.success(t('messages.programSaved') || 'Program saved successfully!');
     } catch (error) {
       console.error('Save error:', error);
-      alert(t('messages.error') + ': ' + (error as Error).message);
+      toast.error(t('messages.error') + ': ' + (error as Error).message);
     }
   };
 
@@ -34,11 +37,11 @@ export function MenuBar({ onOpenHelp, onOpenAbout, onOpenDataTable }: MenuBarPro
     try {
       const programText = await FileIOService.openProgram();
       dispatch({ type: 'SET_PROGRAM_TEXT', programText });
-      alert(t('messages.programLoaded'));
+      toast.success(t('messages.programLoaded'));
     } catch (error) {
       if ((error as Error).message.includes('cancelled')) return;
       console.error('Load error:', error);
-      alert(t('messages.error') + ': ' + (error as Error).message);
+      toast.error(t('messages.error') + ': ' + (error as Error).message);
     }
   };
 

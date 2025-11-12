@@ -4,10 +4,14 @@
  * Converted from src/screens/HomePg.java
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PLCStateProvider, usePLCState } from '../../context/PLCStateContext';
 import { useExecutionCycle } from '../../hooks/useExecutionCycle';
 import { useTheme } from '../../hooks/useTheme';
+import { useDragAndDrop } from '../../hooks/useDragAndDrop';
+import { useToastContext } from '../../context/ToastContext';
+import { FileIOService } from '../../services/fileIO';
 import { SceneType } from '../../types/plc';
 import { MenuBar } from '../MenuBar/MenuBar';
 import { ControlPanel } from '../ControlPanel/ControlPanel';
@@ -17,6 +21,8 @@ import { DataTable } from '../DataTable/DataTable';
 import { HelpDialog } from '../HelpDialog/HelpDialog';
 import { AboutDialog } from '../AboutDialog/AboutDialog';
 import { TimerCounterStatus } from '../TimerCounterStatus/TimerCounterStatus';
+import { KeyboardShortcuts } from '../KeyboardShortcuts/KeyboardShortcuts';
+import { DragDropOverlay } from '../DragDropOverlay/DragDropOverlay';
 import '../../i18n/config';
 import '../../styles/themes.css';
 import '../../styles/globals.css';
@@ -26,15 +32,36 @@ import './MainWindow.css';
  * Inner component that uses context
  */
 function MainWindowContent() {
-  const { state } = usePLCState();
+  const { t } = useTranslation();
+  const { state, dispatch } = usePLCState();
   const { theme } = useTheme();
   const executionCycle = useExecutionCycle();
+  const toast = useToastContext();
   const [showHelp, setShowHelp] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
   const [showDataTable, setShowDataTable] = useState(false);
 
   // Check if in batch mode to adjust layout
   const isBatchMode = state.currentScene === SceneType.BATCH_SIMULATION;
+
+  // Handle file drop
+  const handleFileDrop = useCallback(async (file: File) => {
+    try {
+      const programText = await FileIOService.loadProgramFromFile(file);
+      dispatch({ type: 'SET_PROGRAM_TEXT', programText });
+      toast.success(t('messages.programLoaded'));
+    } catch (error) {
+      console.error('File drop error:', error);
+      toast.error(t('messages.error') + ': ' + (error as Error).message);
+    }
+  }, [dispatch, toast, t]);
+
+  // Enable drag and drop
+  const { isDragging } = useDragAndDrop({
+    onFileDrop: handleFileDrop,
+    acceptedExtensions: ['.txt'],
+    enabled: true
+  });
 
   // Initialize i18n and theme on mount
   useEffect(() => {
@@ -45,6 +72,13 @@ function MainWindowContent() {
 
   return (
     <div className={`main-window ${isBatchMode ? 'main-window--batch' : ''}`}>
+      {/* Global Keyboard Shortcuts */}
+      <KeyboardShortcuts
+        onOpenHelp={() => setShowHelp(true)}
+        onOpenAbout={() => setShowAbout(true)}
+        onOpenDataTable={() => setShowDataTable(true)}
+      />
+
       {/* Top Bar - Menu and Controls */}
       <div className="main-window__top-bar">
         <MenuBar
@@ -86,6 +120,9 @@ function MainWindowContent() {
       {showDataTable && <DataTable onClose={() => setShowDataTable(false)} />}
       {showHelp && <HelpDialog onClose={() => setShowHelp(false)} />}
       {showAbout && <AboutDialog onClose={() => setShowAbout(false)} />}
+
+      {/* Drag & Drop Overlay */}
+      <DragDropOverlay isVisible={isDragging} />
     </div>
   );
 }
