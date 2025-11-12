@@ -6,11 +6,13 @@
 import { useTranslation } from 'react-i18next';
 import { ExecutionMode } from '../../types/plc';
 import { useExecutionCycle } from '../../hooks/useExecutionCycle';
+import { usePLCState } from '../../context/PLCStateContext';
 import './ControlPanel.css';
 
 export function ControlPanel() {
   const { t } = useTranslation();
   const { mode, start, stop, pause, isRunning } = useExecutionCycle();
+  const { dispatch } = usePLCState();
 
   const handleProgram = () => {
     pause(); // Sets mode to IDLE
@@ -22,6 +24,14 @@ export function ControlPanel() {
 
   const handleRun = () => {
     start(); // Initialize and set mode to RUNNING
+  };
+
+  const handleReset = () => {
+    // Reset all outputs and memory variables
+    dispatch({ type: 'RESET_OUTPUTS' });
+    dispatch({ type: 'RESET_MEMORY' });
+    // Set mode to IDLE
+    dispatch({ type: 'SET_MODE', mode: ExecutionMode.IDLE });
   };
 
   return (
@@ -56,6 +66,15 @@ export function ControlPanel() {
             className="control-icon"
           />
           <span>{t('modes.run')}</span>
+        </button>
+
+        <button
+          className="control-button control-button--reset"
+          onClick={handleReset}
+          title="Reset all variables"
+        >
+          <span className="reset-icon">⟲</span>
+          <span>RESET</span>
         </button>
       </div>
 

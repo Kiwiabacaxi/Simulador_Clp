@@ -62,10 +62,27 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
+.control-button--reset {
+  background-color: #ff9800;
+  color: white;
+  border-color: #f57c00;
+}
+
+.control-button--reset:hover:not(:disabled) {
+  background-color: #fb8c00;
+  border-color: #e65100;
+}
+
 .control-icon {
   width: 32px;
   height: 32px;
   object-fit: contain;
+}
+
+.reset-icon {
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1;
 }
 
 /* Status Display */
