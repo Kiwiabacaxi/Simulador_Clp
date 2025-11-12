@@ -45,6 +45,20 @@
   background-repeat: no-repeat;
   background-position: center;
   min-height: 400px;
+  position: relative;
+}
+
+/* Tank liquid fill - matches Java drawing coordinates */
+.tank__liquid {
+  position: absolute;
+  left: 28.5%;        /* Tank X position: 178/624 = 28.5% */
+  bottom: 16.2%;      /* Tank base position */
+  width: 51.4%;       /* Tank width: 321/624 = 51.4% */
+  max-height: 67.5%;  /* Tank height proportion */
+  background-color: rgba(255, 255, 0, 0.78); /* Yellow liquid - matches Java Color(255,255,0,200) */
+  transition: height 0.05s linear;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .batch-scene__controls {

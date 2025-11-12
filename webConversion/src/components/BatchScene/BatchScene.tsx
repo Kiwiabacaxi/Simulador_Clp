@@ -20,7 +20,7 @@ export function BatchScene() {
   const [tankLevel, setTankLevel] = useState(0); // 0-100%
   const animationRef = useRef<number>();
 
-  // Map PLC I/O to batch simulation
+  // Map PLC I/O to batch simulation (matching Java BatchSimulatorController)
   // Inputs:
   // I0.0 = Start button
   // I0.1 = Stop button
@@ -30,10 +30,10 @@ export function BatchScene() {
   // I0.5 = Emergency stop
 
   // Outputs:
-  // Q0.0 = Fill valve (opens to fill tank)
-  // Q0.1 = Drain valve (opens to drain tank)
-  // Q0.2 = Pump motor
-  // Q0.3 = Alarm indicator
+  // Q0.1 = Fill valve/pump (pump1 - opens to fill tank)
+  // Q0.3 = Drain valve/pump (pump3 - opens to drain tank)
+  // Q0.2 = Mixer motor indicator
+  // Q0.0 = Other indicator
 
   // Update level sensors based on tank level
   useEffect(() => {
@@ -59,13 +59,13 @@ export function BatchScene() {
       setTankLevel(prevLevel => {
         let newLevel = prevLevel;
 
-        // Fill valve open (Q0.0)
-        if (state.outputs['Q0.0']) {
+        // Fill valve open (Q0.1 = pump1)
+        if (state.outputs['Q0.1']) {
           newLevel = Math.min(TANK_MAX_LEVEL, newLevel + FILL_RATE);
         }
 
-        // Drain valve open (Q0.1)
-        if (state.outputs['Q0.1']) {
+        // Drain valve open (Q0.3 = pump3)
+        if (state.outputs['Q0.3']) {
           newLevel = Math.max(0, newLevel - DRAIN_RATE);
         }
 
@@ -102,6 +102,15 @@ export function BatchScene() {
       <div className="batch-scene__container">
         {/* Tank Visualization - Background image shows the tank */}
         <div className="batch-scene__tank-area">
+          {/* Tank liquid fill - positioned to match Java coordinates */}
+          <div
+            className="tank__liquid"
+            style={{
+              height: `${tankLevel}%`,
+              opacity: tankLevel > 0 ? 1 : 0
+            }}
+          />
+
           {/* Level percentage display */}
           <div className="tank__level-display">
             <span className="tank__level-value">{Math.round(tankLevel)}%</span>
