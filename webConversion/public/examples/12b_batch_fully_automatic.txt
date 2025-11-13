@@ -31,24 +31,8 @@
 // T0 = Mix timer (5 second delay)
 
 // ==================================
-// STATE 1: FILL STATE
-// Start filling when START pressed and not already in other states
-// Continue until tank is full (HI-LEVEL active)
-// ==================================
-LD I0.0
-OR M0
-ANDN M1
-ANDN M2
-ANDN I1.0
-ST M0
-
-// PUMP1 follows fill state
-LD M0
-ST Q0.1
-
-// ==================================
-// STATE 2: MIX STATE
-// Start mixing when tank is full
+// STATE 2: MIX STATE (evaluated FIRST to catch transition)
+// Start mixing when tank is full AND we were filling
 // Continue for 5 seconds (timer preset = 50 * 100ms)
 // ==================================
 LD M0
@@ -56,6 +40,21 @@ AND I1.0
 OR M1
 ANDN M2
 ST M1
+
+// ==================================
+// STATE 1: FILL STATE
+// Start filling when START pressed and not already in other states
+// Automatically stops when M1 activates (ANDN M1)
+// ==================================
+LD I0.0
+OR M0
+ANDN M1
+ANDN M2
+ST M0
+
+// PUMP1 follows fill state
+LD M0
+ST Q0.1
 
 // Start timer when in mix state
 LD M1
