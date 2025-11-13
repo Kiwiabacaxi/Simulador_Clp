@@ -103,6 +103,14 @@
       "category": "sequences",
       "difficulty": "advanced",
       "file": "13_traffic_light_crossroad.txt"
+    },
+    {
+      "id": "14_traffic_light_safe_crossroad",
+      "title": "Traffic Light - Safe Crossroad",
+      "description": "Synchronized traffic lights with collision prevention logic",
+      "category": "sequences",
+      "difficulty": "advanced",
+      "file": "14_traffic_light_safe_crossroad.txt"
     }
   ]
 }

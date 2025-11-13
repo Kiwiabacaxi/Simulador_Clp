@@ -282,19 +282,19 @@ export function TrafficLightScene() {
             <div className="status-items">
               <div className="status-item">
                 <span className="status-label">Q0.0 (Red):</span>
-                <span className={`status-value ${light1Red ? 'active' : ''}`}>
+                <span className={`status-value status-value--red ${light1Red ? 'active' : ''}`}>
                   {light1Red ? '1' : '0'}
                 </span>
               </div>
               <div className="status-item">
                 <span className="status-label">Q0.1 (Yellow):</span>
-                <span className={`status-value ${light1Yellow ? 'active' : ''}`}>
+                <span className={`status-value status-value--yellow ${light1Yellow ? 'active' : ''}`}>
                   {light1Yellow ? '1' : '0'}
                 </span>
               </div>
               <div className="status-item">
                 <span className="status-label">Q0.2 (Green):</span>
-                <span className={`status-value ${light1Green ? 'active' : ''}`}>
+                <span className={`status-value status-value--green ${light1Green ? 'active' : ''}`}>
                   {light1Green ? '1' : '0'}
                 </span>
               </div>
@@ -306,32 +306,25 @@ export function TrafficLightScene() {
             <div className="status-items">
               <div className="status-item">
                 <span className="status-label">Q1.0 (Red):</span>
-                <span className={`status-value ${light2Red ? 'active' : ''}`}>
+                <span className={`status-value status-value--red ${light2Red ? 'active' : ''}`}>
                   {light2Red ? '1' : '0'}
                 </span>
               </div>
               <div className="status-item">
                 <span className="status-label">Q1.1 (Yellow):</span>
-                <span className={`status-value ${light2Yellow ? 'active' : ''}`}>
+                <span className={`status-value status-value--yellow ${light2Yellow ? 'active' : ''}`}>
                   {light2Yellow ? '1' : '0'}
                 </span>
               </div>
               <div className="status-item">
                 <span className="status-label">Q1.2 (Green):</span>
-                <span className={`status-value ${light2Green ? 'active' : ''}`}>
+                <span className={`status-value status-value--green ${light2Green ? 'active' : ''}`}>
                   {light2Green ? '1' : '0'}
                 </span>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Info Footer */}
-      <div className="traffic-light-scene__footer">
-        <p className="traffic-light-scene__info">
-          {t('scenes.trafficLightInfo') || 'Traffic light sequence: Red (5s) → Green (5s) → Yellow (2s). Load example program 11_traffic_light.txt'}
-        </p>
       </div>
     </div>
   );

@@ -176,24 +176,26 @@
 }
 
 .traffic-light-scene__status .status-value.active {
+  text-shadow: 0 0 10px currentColor;
+}
+
+/* Color-specific status values */
+.traffic-light-scene__status .status-value--red.active {
+  color: #ff0000;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+  background: rgba(255, 0, 0, 0.1);
+}
+
+.traffic-light-scene__status .status-value--yellow.active {
+  color: #ffff00;
+  text-shadow: 0 0 10px rgba(255, 255, 0, 0.7);
+  background: rgba(255, 255, 0, 0.1);
+}
+
+.traffic-light-scene__status .status-value--green.active {
   color: #00ff00;
   text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
   background: rgba(0, 255, 0, 0.1);
-}
-
-/* Footer */
-.traffic-light-scene__footer {
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: center;
-}
-
-.traffic-light-scene__info {
-  font-size: 0.875rem;
-  color: #aaa;
-  margin: 0;
-  line-height: 1.5;
 }
 
 /* Responsive adjustments */
