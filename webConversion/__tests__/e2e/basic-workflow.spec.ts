@@ -3,7 +3,8 @@ import { test, expect } from '@playwright/test';
 test.describe('PLC Simulator - Basic Workflow', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/PLC Simulator/i);
+    await page.waitForSelector('#root', { state: 'attached', timeout: 10000 });
+    await expect(page).toHaveTitle(/PLC Simulator/i, { timeout: 10000 });
   });
 
   test('should load the application successfully', async ({ page }) => {
