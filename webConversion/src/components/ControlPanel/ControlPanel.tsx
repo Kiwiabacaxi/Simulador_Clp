@@ -15,7 +15,7 @@ export function ControlPanel() {
   const { t } = useTranslation();
   const { mode, start, stop, pause, isRunning } = useExecutionCycle();
   const { dispatch } = usePLCState();
-  const [isCompact, setIsCompact] = useState(false);
+  const [isCompact, setIsCompact] = useState(true);
 
   const handleProgram = () => {
     pause(); // Sets mode to IDLE
