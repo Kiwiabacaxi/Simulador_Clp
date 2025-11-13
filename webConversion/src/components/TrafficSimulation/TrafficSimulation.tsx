@@ -36,6 +36,15 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
   const ewYellow = state.outputs['Q1.1'] || false;
   const ewGreen = state.outputs['Q1.2'] || false;
 
+  // Toggle traffic handlers
+  const toggleNSTraffic = useCallback(() => {
+    setNsTrafficEnabled(prev => !prev);
+  }, []);
+
+  const toggleEWTraffic = useCallback(() => {
+    setEwTrafficEnabled(prev => !prev);
+  }, []);
+
   // Check for collision conditions
   const checkCollisionCondition = useCallback(() => {
     // Collision if both directions have green or yellow
@@ -156,15 +165,17 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
       <div className="traffic-controls">
         <button
           className={`traffic-toggle ${nsTrafficEnabled ? 'enabled' : 'disabled'}`}
-          onClick={() => setNsTrafficEnabled(!nsTrafficEnabled)}
+          onClick={toggleNSTraffic}
+          type="button"
         >
-          {nsTrafficEnabled ? '🚗' : '🚫'} North-South Traffic
+          {nsTrafficEnabled ? '🚗 Enabled' : '🚫 Disabled'} North-South Traffic
         </button>
         <button
           className={`traffic-toggle ${ewTrafficEnabled ? 'enabled' : 'disabled'}`}
-          onClick={() => setEwTrafficEnabled(!ewTrafficEnabled)}
+          onClick={toggleEWTraffic}
+          type="button"
         >
-          {ewTrafficEnabled ? '🚗' : '🚫'} East-West Traffic
+          {ewTrafficEnabled ? '🚗 Enabled' : '🚫 Disabled'} East-West Traffic
         </button>
       </div>
 

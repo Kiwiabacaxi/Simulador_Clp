@@ -9,7 +9,7 @@ import { useToastContext } from '../../context/ToastContext';
 import { useTheme } from '../../hooks/useTheme';
 import { useLoading } from '../../hooks/useLoading';
 import { FileIOService } from '../../services/fileIO';
-import { SceneType } from '../../types/plc';
+import { SceneType, ExecutionMode } from '../../types/plc';
 import { ASSETS } from '../../utils/assets';
 import { UnsavedIndicator } from '../UnsavedIndicator/UnsavedIndicator';
 import { ExamplesMenu } from '../ExamplesMenu/ExamplesMenu';
@@ -71,7 +71,13 @@ export function MenuBar({
       if (onLoadingChange) onLoadingChange(true, 'Loading program...');
       try {
         const programText = await FileIOService.openProgram();
+
+        // Reset PLC state and pause execution when loading a file
+        dispatch({ type: 'RESET_OUTPUTS' });
+        dispatch({ type: 'RESET_MEMORY' });
+        dispatch({ type: 'SET_MODE', mode: ExecutionMode.IDLE });
         dispatch({ type: 'SET_PROGRAM_TEXT', programText });
+
         if (onResetSavedState) {
           onResetSavedState(programText);
         }
@@ -95,6 +101,11 @@ export function MenuBar({
 
   const handleChangeScene = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newScene = event.target.value as SceneType;
+
+    // Reset PLC state and pause execution when changing scenes
+    dispatch({ type: 'RESET_OUTPUTS' });
+    dispatch({ type: 'RESET_MEMORY' });
+    dispatch({ type: 'SET_MODE', mode: ExecutionMode.IDLE });
     dispatch({ type: 'SET_SCENE', scene: newScene });
   };
 

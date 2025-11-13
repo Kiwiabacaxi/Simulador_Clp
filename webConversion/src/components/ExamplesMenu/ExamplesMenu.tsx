@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePLCState } from '../../context/PLCStateContext';
 import { useToastContext } from '../../context/ToastContext';
+import { ExecutionMode } from '../../types/plc';
 import {
   fetchExamplesIndex,
   loadExample,
@@ -79,6 +80,11 @@ export function ExamplesMenu({
 
     try {
       const programText = await loadExample(example.file);
+
+      // Reset PLC state and pause execution when loading an example
+      dispatch({ type: 'RESET_OUTPUTS' });
+      dispatch({ type: 'RESET_MEMORY' });
+      dispatch({ type: 'SET_MODE', mode: ExecutionMode.IDLE });
       dispatch({ type: 'SET_PROGRAM_TEXT', programText });
 
       if (onResetSavedState) {
