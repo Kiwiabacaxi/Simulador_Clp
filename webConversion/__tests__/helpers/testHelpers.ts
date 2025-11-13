@@ -1,5 +1,6 @@
 import { PLCState, ExecutionMode, Theme, Language, SceneType, InputType } from '../../src/types/plc';
 import { Interpreter } from '../../src/services/interpreter';
+import { MemoryService } from '../../src/services/memory';
 
 /**
  * Creates a minimal PLCState for testing
@@ -78,6 +79,11 @@ export function executeProgram(programText: string, state: PLCState): PLCState {
     program: [], // Will be parsed by executeProgram
   };
 
-  // Execute and return
-  return Interpreter.executeProgram(stateWithProgram);
+  // Execute the program
+  const result = Interpreter.executeProgram(stateWithProgram);
+
+  // Update timers (simulate scan cycle)
+  MemoryService.updateAllTimers(result.memoryVariables);
+
+  return result;
 }
