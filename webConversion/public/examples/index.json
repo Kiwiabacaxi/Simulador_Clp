@@ -82,8 +82,8 @@
     },
     {
       "id": "11_traffic_light",
-      "title": "Traffic Light Sequence",
-      "description": "Automatic traffic light cycle (Red→Green→Yellow)",
+      "title": "Traffic Light - Single",
+      "description": "Single traffic light cycle (Red→Green→Yellow)",
       "category": "sequences",
       "difficulty": "advanced",
       "file": "11_traffic_light.txt"
@@ -95,6 +95,14 @@
       "category": "sequences",
       "difficulty": "advanced",
       "file": "12_batch_automatic.txt"
+    },
+    {
+      "id": "13_traffic_light_crossroad",
+      "title": "Traffic Light - Crossroad (2 Lights)",
+      "description": "Two independent traffic lights for a crossroad intersection",
+      "category": "sequences",
+      "difficulty": "advanced",
+      "file": "13_traffic_light_crossroad.txt"
     }
   ]
 }

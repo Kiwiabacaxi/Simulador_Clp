@@ -1,7 +1,8 @@
 /**
  * Traffic Light Scene Component
- * Displays a crossroad intersection with 2 traffic lights
- * Outputs: Q0.0=Red, Q0.1=Yellow, Q0.2=Green for both lights
+ * Displays a crossroad intersection with 2 independent traffic lights
+ * North-South (I0.0): Q0.0=Red, Q0.1=Yellow, Q0.2=Green
+ * East-West (I0.1): Q1.0=Red, Q1.1=Yellow, Q1.2=Green
  */
 
 import { useTranslation } from 'react-i18next';
@@ -17,18 +18,26 @@ export function TrafficLightScene() {
   const light1Yellow = state.outputs['Q0.1'];
   const light1Green = state.outputs['Q0.2'];
 
-  // Traffic light 2 (East-West) could use Q1.x for independent control
-  // For now, we'll mirror the same lights (can be changed later)
-  const light2Red = light1Red;
-  const light2Yellow = light1Yellow;
-  const light2Green = light1Green;
+  // Traffic light 2 (East-West) uses Q1.x for independent control
+  const light2Red = state.outputs['Q1.0'];
+  const light2Yellow = state.outputs['Q1.1'];
+  const light2Green = state.outputs['Q1.2'];
 
-  // Toggle input I0.0 to start/stop the sequence
-  const toggleStartButton = () => {
+  // Toggle input I0.0 for North-South traffic light
+  const toggleNorthSouth = () => {
     dispatch({
       type: 'SET_INPUT',
       key: 'I0.0',
       value: !state.inputs['I0.0']
+    });
+  };
+
+  // Toggle input I0.1 for East-West traffic light
+  const toggleEastWest = () => {
+    dispatch({
+      type: 'SET_INPUT',
+      key: 'I0.1',
+      value: !state.inputs['I0.1']
     });
   };
 
@@ -41,15 +50,31 @@ export function TrafficLightScene() {
       <div className="traffic-light-scene__container">
         {/* Control Panel */}
         <div className="traffic-light-scene__controls">
-          <button
-            className={`control-button ${state.inputs['I0.0'] ? 'active' : ''}`}
-            onClick={toggleStartButton}
-          >
-            <span className="control-button__label">I0.0</span>
-            <span className="control-button__text">
-              {state.inputs['I0.0'] ? t('labels.stop') || 'STOP' : t('labels.start') || 'START'}
-            </span>
-          </button>
+          <div className="traffic-control-group">
+            <span className="traffic-control-group__title">Norte-Sul (N-S)</span>
+            <button
+              className={`traffic-control-button ${state.inputs['I0.0'] ? 'active' : ''}`}
+              onClick={toggleNorthSouth}
+            >
+              <span className="traffic-control-button__label">I0.0</span>
+              <span className="traffic-control-button__text">
+                {state.inputs['I0.0'] ? t('labels.stop') || 'STOP' : t('labels.start') || 'START'}
+              </span>
+            </button>
+          </div>
+
+          <div className="traffic-control-group">
+            <span className="traffic-control-group__title">Leste-Oeste (L-O)</span>
+            <button
+              className={`traffic-control-button ${state.inputs['I0.1'] ? 'active' : ''}`}
+              onClick={toggleEastWest}
+            >
+              <span className="traffic-control-button__label">I0.1</span>
+              <span className="traffic-control-button__text">
+                {state.inputs['I0.1'] ? t('labels.stop') || 'STOP' : t('labels.start') || 'START'}
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* Crossroad Visualization */}
@@ -252,23 +277,52 @@ export function TrafficLightScene() {
 
         {/* Output Status */}
         <div className="traffic-light-scene__status">
-          <div className="status-item">
-            <span className="status-label">Q0.0 (Red):</span>
-            <span className={`status-value ${light1Red ? 'active' : ''}`}>
-              {light1Red ? '1' : '0'}
-            </span>
+          <div className="status-group">
+            <span className="status-group__title">Norte-Sul (N-S)</span>
+            <div className="status-items">
+              <div className="status-item">
+                <span className="status-label">Q0.0 (Red):</span>
+                <span className={`status-value ${light1Red ? 'active' : ''}`}>
+                  {light1Red ? '1' : '0'}
+                </span>
+              </div>
+              <div className="status-item">
+                <span className="status-label">Q0.1 (Yellow):</span>
+                <span className={`status-value ${light1Yellow ? 'active' : ''}`}>
+                  {light1Yellow ? '1' : '0'}
+                </span>
+              </div>
+              <div className="status-item">
+                <span className="status-label">Q0.2 (Green):</span>
+                <span className={`status-value ${light1Green ? 'active' : ''}`}>
+                  {light1Green ? '1' : '0'}
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="status-item">
-            <span className="status-label">Q0.1 (Yellow):</span>
-            <span className={`status-value ${light1Yellow ? 'active' : ''}`}>
-              {light1Yellow ? '1' : '0'}
-            </span>
-          </div>
-          <div className="status-item">
-            <span className="status-label">Q0.2 (Green):</span>
-            <span className={`status-value ${light1Green ? 'active' : ''}`}>
-              {light1Green ? '1' : '0'}
-            </span>
+
+          <div className="status-group">
+            <span className="status-group__title">Leste-Oeste (L-O)</span>
+            <div className="status-items">
+              <div className="status-item">
+                <span className="status-label">Q1.0 (Red):</span>
+                <span className={`status-value ${light2Red ? 'active' : ''}`}>
+                  {light2Red ? '1' : '0'}
+                </span>
+              </div>
+              <div className="status-item">
+                <span className="status-label">Q1.1 (Yellow):</span>
+                <span className={`status-value ${light2Yellow ? 'active' : ''}`}>
+                  {light2Yellow ? '1' : '0'}
+                </span>
+              </div>
+              <div className="status-item">
+                <span className="status-label">Q1.2 (Green):</span>
+                <span className={`status-value ${light2Green ? 'active' : ''}`}>
+                  {light2Green ? '1' : '0'}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

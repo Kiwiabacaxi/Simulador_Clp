@@ -1,6 +1,7 @@
 // ==================================
-// Traffic Light Sequence
+// Traffic Light Sequence (1 Light)
 // ==================================
+// Single traffic light controller
 // I0.0 = Start sequence
 // Q0.0 = Red light (5s)
 // Q0.1 = Yellow light (2s)

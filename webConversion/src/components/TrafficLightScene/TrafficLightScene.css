@@ -36,7 +36,7 @@
 /* Control Panel */
 .traffic-light-scene__controls {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
   justify-content: center;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.05);
@@ -44,7 +44,22 @@
   backdrop-filter: blur(10px);
 }
 
-.control-button {
+.traffic-control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.traffic-control-group__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.traffic-control-button {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,29 +76,29 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.control-button:hover {
+.traffic-control-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
   border-color: #666;
 }
 
-.control-button.active {
+.traffic-control-button.active {
   background: linear-gradient(145deg, #4a7c59, #2d5a3d);
   border-color: #5fa777;
   box-shadow: 0 0 20px rgba(95, 167, 119, 0.5);
 }
 
-.control-button__label {
+.traffic-control-button__label {
   font-size: 0.875rem;
   color: #888;
 }
 
-.control-button__text {
+.traffic-control-button__text {
   font-size: 1.125rem;
   font-weight: 700;
 }
 
-.control-button.active .control-button__text {
+.traffic-control-button.active .traffic-control-button__text {
   color: #a3f7b5;
 }
 
@@ -104,7 +119,7 @@
 /* Output Status */
 .traffic-light-scene__status {
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
   justify-content: center;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.05);
@@ -112,20 +127,42 @@
   backdrop-filter: blur(10px);
 }
 
-.status-item {
+.traffic-light-scene__status .status-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.traffic-light-scene__status .status-group__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.traffic-light-scene__status .status-items {
+  display: flex;
+  gap: 1rem;
+}
+
+.traffic-light-scene__status .status-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
 }
 
-.status-label {
+.traffic-light-scene__status .status-label {
   font-size: 0.875rem;
   color: #aaa;
   font-weight: 500;
 }
 
-.status-value {
+.traffic-light-scene__status .status-value {
   font-size: 1.5rem;
   font-weight: 700;
   color: #666;
@@ -138,7 +175,7 @@
   transition: all 0.3s ease;
 }
 
-.status-value.active {
+.traffic-light-scene__status .status-value.active {
   color: #00ff00;
   text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
   background: rgba(0, 255, 0, 0.1);
@@ -171,10 +208,20 @@
 
   .traffic-light-scene__status {
     flex-direction: column;
+    gap: 1rem;
+  }
+
+  .traffic-light-scene__status .status-items {
+    flex-direction: column;
     gap: 0.5rem;
   }
 
-  .control-button {
+  .traffic-light-scene__controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .traffic-control-button {
     padding: 0.75rem 1.5rem;
   }
 
