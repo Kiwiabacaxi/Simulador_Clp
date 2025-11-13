@@ -57,18 +57,23 @@
   font-size: 14px;
   font-weight: 600;
   transition: all 0.2s ease;
+  pointer-events: auto;
 }
 
-.traffic-toggle.enabled {
+.traffic-toggle.traffic-enabled {
   background-color: #4caf50;
   color: white;
   border-color: #45a049;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
-.traffic-toggle.disabled {
+.traffic-toggle.traffic-disabled {
   background-color: #f44336;
   color: white;
   border-color: #d32f2f;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 .traffic-toggle:hover {

@@ -133,7 +133,7 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
       {/* Traffic Control Buttons */}
       <div className="traffic-controls">
         <button
-          className={`traffic-toggle ${nsTrafficEnabled ? 'enabled' : 'disabled'}`}
+          className={`traffic-toggle ${nsTrafficEnabled ? 'traffic-enabled' : 'traffic-disabled'}`}
           onClick={() => {
             console.log('NS Toggle clicked, current:', nsTrafficEnabled);
             setNsTrafficEnabled(prev => !prev);
@@ -143,7 +143,7 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
           {nsTrafficEnabled ? '🚗 Enabled' : '🚫 Disabled'} North-South Traffic
         </button>
         <button
-          className={`traffic-toggle ${ewTrafficEnabled ? 'enabled' : 'disabled'}`}
+          className={`traffic-toggle ${ewTrafficEnabled ? 'traffic-enabled' : 'traffic-disabled'}`}
           onClick={() => {
             console.log('EW Toggle clicked, current:', ewTrafficEnabled);
             setEwTrafficEnabled(prev => !prev);
