@@ -1,7 +1,7 @@
-( ST - Store Instruction )
-( Stores the accumulator value to output )
-( Press I0.0 to turn ON Q0.0 )
-( Press I0.1 to turn ON Q0.1 )
+// ST - Store Instruction
+// Stores the accumulator value to output
+// Press I0.0 to turn ON Q0.0
+// Press I0.1 to turn ON Q0.1
 
 LD I0.0
 ST Q0.0
