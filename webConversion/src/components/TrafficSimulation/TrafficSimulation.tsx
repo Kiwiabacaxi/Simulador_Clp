@@ -32,6 +32,9 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
   const [collisionOccurred, setCollisionOccurred] = useState(false);
   const collisionTimeoutRef = useRef<number>();
 
+  // Reset trigger - incremented to restart animation
+  const [resetTrigger, setResetTrigger] = useState(0);
+
   // Refs to track latest state values without causing re-renders
   const nsTrafficRef = useRef(nsTrafficEnabled);
   const ewTrafficRef = useRef(ewTrafficEnabled);
@@ -76,6 +79,8 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
     setShowCollisionWarning(false);
     setNsCarPosition(0);
     setEwCarPosition(0);
+    // Increment trigger to restart animation loop
+    setResetTrigger(prev => prev + 1);
   };
 
   // Animation loop - runs once and uses refs to avoid re-creation
@@ -170,8 +175,8 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
         clearTimeout(collisionTimeoutRef.current);
       }
     };
-    // Empty dependency array - effect runs once and uses refs for all state
-  }, []);
+    // Depends on resetTrigger to restart animation when reset is called
+  }, [resetTrigger, onCollision]);
 
   return (
     <div className="traffic-simulation">
