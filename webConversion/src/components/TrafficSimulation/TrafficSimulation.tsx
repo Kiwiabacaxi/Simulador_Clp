@@ -15,6 +15,9 @@ interface TrafficSimulationProps {
 export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
   const { state } = usePLCState();
 
+  // Debug mode toggle
+  const [debugMode, setDebugMode] = useState(false);
+
   // Single car per direction - position state
   const [nsCarPosition, setNsCarPosition] = useState(0);
   const [ewCarPosition, setEwCarPosition] = useState(0);
@@ -51,6 +54,13 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
   // Car speed (percentage per frame)
   const CAR_SPEED = 0.5;
 
+  // Critical positions
+  const SPAWN_POINT = 0;
+  const STOP_POINT_BEFORE_INTERSECTION = 30; // Stop before intersection (intersection starts at 32.5%)
+  const INTERSECTION_START = 32.5;
+  const INTERSECTION_END = 67.5;
+  const DESPAWN_POINT = 100;
+
   // Animation loop - runs once and uses refs to avoid re-creation
   useEffect(() => {
     let nsPos = 0;
@@ -60,39 +70,51 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
     const animate = () => {
       // Update NS car position
       if (nsTrafficRef.current) {
-        const isAtIntersection = nsPos >= 40 && nsPos <= 60;
-        const shouldStop = isAtIntersection && (nsRed || (!nsGreen && !nsYellow));
+        // Check if should stop BEFORE intersection (not inside)
+        const approachingIntersection = nsPos >= STOP_POINT_BEFORE_INTERSECTION && nsPos < INTERSECTION_START;
+
+        // Stop if red light OR if lights are all off (invalid state)
+        const shouldStop = approachingIntersection && (nsRed || (!nsGreen && !nsYellow && !nsRed));
 
         if (!shouldStop) {
           nsPos += CAR_SPEED;
-          if (nsPos >= 100) {
-            nsPos = 0;
+          // Loop back to spawn when reaching despawn point
+          if (nsPos >= DESPAWN_POINT) {
+            nsPos = SPAWN_POINT;
           }
         }
+        // If shouldStop is true, car stays at current position (doesn't reset)
+
         setNsCarPosition(nsPos);
       }
 
       // Update EW car position
       if (ewTrafficRef.current) {
-        const isAtIntersection = ewPos >= 40 && ewPos <= 60;
-        const shouldStop = isAtIntersection && (ewRed || (!ewGreen && !ewYellow));
+        // Check if should stop BEFORE intersection (not inside)
+        const approachingIntersection = ewPos >= STOP_POINT_BEFORE_INTERSECTION && ewPos < INTERSECTION_START;
+
+        // Stop if red light OR if lights are all off (invalid state)
+        const shouldStop = approachingIntersection && (ewRed || (!ewGreen && !ewYellow && !ewRed));
 
         if (!shouldStop) {
           ewPos += CAR_SPEED;
-          if (ewPos >= 100) {
-            ewPos = 0;
+          // Loop back to spawn when reaching despawn point
+          if (ewPos >= DESPAWN_POINT) {
+            ewPos = SPAWN_POINT;
           }
         }
+        // If shouldStop is true, car stays at current position (doesn't reset)
+
         setEwCarPosition(ewPos);
       }
 
-      // Check for collision
-      const nsAtIntersection = nsPos >= 45 && nsPos <= 55;
-      const ewAtIntersection = ewPos >= 45 && ewPos <= 55;
+      // Check for collision (both cars inside intersection at same time)
+      const nsInIntersection = nsPos >= INTERSECTION_START && nsPos <= INTERSECTION_END;
+      const ewInIntersection = ewPos >= INTERSECTION_START && ewPos <= INTERSECTION_END;
       const nsCanGo = nsGreen || nsYellow;
       const ewCanGo = ewGreen || ewYellow;
 
-      if (nsAtIntersection && ewAtIntersection && nsCanGo && ewCanGo &&
+      if (nsInIntersection && ewInIntersection && nsCanGo && ewCanGo &&
           nsTrafficRef.current && ewTrafficRef.current) {
         setShowCollisionWarning(true);
         onCollision?.();
@@ -152,10 +174,57 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
         >
           {ewTrafficEnabled ? '🚗 Enabled' : '🚫 Disabled'} East-West Traffic
         </button>
+        <button
+          className={`traffic-toggle ${debugMode ? 'traffic-enabled' : 'traffic-disabled'}`}
+          onClick={() => setDebugMode(prev => !prev)}
+          type="button"
+        >
+          {debugMode ? '🔍 Debug ON' : '🔍 Debug OFF'}
+        </button>
       </div>
 
       {/* Crossroad Visualization */}
       <div className="crossroad">
+        {/* Debug Markers */}
+        {debugMode && (
+          <>
+            {/* NS Spawn Point */}
+            <div className="debug-marker debug-spawn" style={{ top: '0%', left: '45%', width: '10%', height: '2px' }}>
+              <span className="debug-label">SPAWN (0%)</span>
+            </div>
+
+            {/* NS Stop Point */}
+            <div className="debug-marker debug-stop" style={{ top: `${STOP_POINT_BEFORE_INTERSECTION}%`, left: '45%', width: '10%', height: '3px' }}>
+              <span className="debug-label">STOP ({STOP_POINT_BEFORE_INTERSECTION}%)</span>
+            </div>
+
+            {/* NS Despawn Point */}
+            <div className="debug-marker debug-despawn" style={{ top: '98%', left: '45%', width: '10%', height: '2px' }}>
+              <span className="debug-label">DESPAWN (100%)</span>
+            </div>
+
+            {/* EW Spawn Point */}
+            <div className="debug-marker debug-spawn" style={{ left: '0%', top: '45%', width: '2px', height: '10%' }}>
+              <span className="debug-label" style={{ left: '5px' }}>SPAWN (0%)</span>
+            </div>
+
+            {/* EW Stop Point */}
+            <div className="debug-marker debug-stop" style={{ left: `${STOP_POINT_BEFORE_INTERSECTION}%`, top: '45%', width: '3px', height: '10%' }}>
+              <span className="debug-label" style={{ left: '5px' }}>STOP ({STOP_POINT_BEFORE_INTERSECTION}%)</span>
+            </div>
+
+            {/* EW Despawn Point */}
+            <div className="debug-marker debug-despawn" style={{ left: '98%', top: '45%', width: '2px', height: '10%' }}>
+              <span className="debug-label" style={{ left: '5px' }}>DESPAWN (100%)</span>
+            </div>
+
+            {/* Intersection boundaries */}
+            <div className="debug-intersection-marker" style={{ top: `${INTERSECTION_START}%`, left: '32.5%', width: '35%', height: '35%' }}>
+              <span className="debug-label">INTERSECTION ZONE</span>
+            </div>
+          </>
+        )}
+
         {/* Roads */}
         <div className="road road-vertical" />
         <div className="road road-horizontal" />
@@ -181,23 +250,25 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
         {/* Cars - only show if traffic is enabled */}
         {nsTrafficEnabled && (
           <div
-            className="car car-ns"
+            className={`car car-ns ${debugMode ? 'debug-active' : ''}`}
             style={{
               top: `${nsCarPosition}%`
             }}
           >
             🚗
+            {debugMode && <span className="car-position">{nsCarPosition.toFixed(1)}%</span>}
           </div>
         )}
 
         {ewTrafficEnabled && (
           <div
-            className="car car-ew"
+            className={`car car-ew ${debugMode ? 'debug-active' : ''}`}
             style={{
               left: `${ewCarPosition}%`
             }}
           >
             🚕
+            {debugMode && <span className="car-position">{ewCarPosition.toFixed(1)}%</span>}
           </div>
         )}
       </div>
@@ -226,6 +297,16 @@ export function TrafficSimulation({ onCollision }: TrafficSimulationProps) {
           {ewGreen && ' 🟢 Green'}
           {!ewRed && !ewYellow && !ewGreen && ' ⚫ Off'}
         </div>
+        {debugMode && (
+          <>
+            <div className="status-item">
+              <strong>NS Car Position:</strong> {nsCarPosition.toFixed(1)}%
+            </div>
+            <div className="status-item">
+              <strong>EW Car Position:</strong> {ewCarPosition.toFixed(1)}%
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
