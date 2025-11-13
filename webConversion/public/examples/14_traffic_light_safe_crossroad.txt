@@ -21,14 +21,13 @@
 // 4. NS Red + EW Yellow (2s)
 // 5. Repeat
 //
-// Press I0.0 to start the cycle
+// Runs automatically in continuous cycle
 
 // ========================================
 // STATE LOGIC - Determine which state is active
 // ========================================
-// State 1 (M0): NS Green + EW Red
-LD I0.0
-ANDN T0
+// State 1 (M0): NS Green + EW Red (default state when no timers active)
+LDN T0
 ANDN T1
 ANDN T2
 ANDN T3

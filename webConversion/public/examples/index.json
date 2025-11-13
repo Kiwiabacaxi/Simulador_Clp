@@ -84,7 +84,7 @@
       "id": "11_traffic_light",
       "title": "Traffic Light - Single",
       "description": "Single traffic light cycle (Red→Green→Yellow)",
-      "category": "sequences",
+      "category": "traffic-lights",
       "difficulty": "advanced",
       "file": "11_traffic_light.txt"
     },
@@ -100,7 +100,7 @@
       "id": "13_traffic_light_crossroad",
       "title": "Traffic Light - Crossroad (2 Lights)",
       "description": "Two independent traffic lights for a crossroad intersection",
-      "category": "sequences",
+      "category": "traffic-lights",
       "difficulty": "advanced",
       "file": "13_traffic_light_crossroad.txt"
     },
@@ -108,7 +108,7 @@
       "id": "14_traffic_light_safe_crossroad",
       "title": "Traffic Light - Safe Crossroad",
       "description": "Synchronized traffic lights with collision prevention logic",
-      "category": "sequences",
+      "category": "traffic-lights",
       "difficulty": "advanced",
       "file": "14_traffic_light_safe_crossroad.txt"
     }
