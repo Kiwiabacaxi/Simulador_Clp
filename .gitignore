@@ -52,6 +52,11 @@ lerna-debug.log*
 *.tgz
 .yarn-integrity
 
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
 # Build outputs
 dist/
 dist-ssr/

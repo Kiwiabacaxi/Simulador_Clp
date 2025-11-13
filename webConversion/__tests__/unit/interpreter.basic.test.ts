@@ -178,24 +178,73 @@ describe('Interpreter - Basic Instructions', () => {
     });
   });
 
-  describe('OUT', () => {
+  describe('OUT / ST (Store)', () => {
     it('should set output to accumulator value', () => {
       state.inputs['I0.0'] = true;
       const program = 'LD I0.0\nOUT Q0.0';
-      
+
       const result = executeProgram(program, state);
-      
+
       expect(result.outputs['Q0.0']).toBe(true);
     });
 
     it('should handle multiple outputs', () => {
       state.inputs['I0.0'] = true;
       const program = 'LD I0.0\nOUT Q0.0\nOUT Q0.1';
-      
+
       const result = executeProgram(program, state);
-      
+
       expect(result.outputs['Q0.0']).toBe(true);
       expect(result.outputs['Q0.1']).toBe(true);
+    });
+
+    it('ST should work the same as OUT', () => {
+      state.inputs['I0.0'] = true;
+      const program = 'LD I0.0\nST Q0.0';
+
+      const result = executeProgram(program, state);
+
+      expect(result.outputs['Q0.0']).toBe(true);
+    });
+  });
+
+  describe('STN (Store Negated)', () => {
+    it('should store negated accumulator when input is ON', () => {
+      state.inputs['I0.0'] = true;
+      const program = 'LD I0.0\nSTN Q0.0';
+
+      const result = executeProgram(program, state);
+
+      expect(result.outputs['Q0.0']).toBe(false);
+    });
+
+    it('should store negated accumulator when input is OFF', () => {
+      state.inputs['I0.0'] = false;
+      const program = 'LD I0.0\nSTN Q0.0';
+
+      const result = executeProgram(program, state);
+
+      expect(result.outputs['Q0.0']).toBe(true);
+    });
+
+    it('should work with complex logic', () => {
+      state.inputs['I0.0'] = true;
+      state.inputs['I0.1'] = true;
+      const program = 'LD I0.0\nAND I0.1\nSTN Q0.0';
+
+      const result = executeProgram(program, state);
+
+      expect(result.outputs['Q0.0']).toBe(false);
+    });
+
+    it('should compare ST and STN behavior', () => {
+      state.inputs['I0.0'] = true;
+      const program = 'LD I0.0\nST Q0.0\nLD I0.0\nSTN Q0.1';
+
+      const result = executeProgram(program, state);
+
+      expect(result.outputs['Q0.0']).toBe(true);
+      expect(result.outputs['Q0.1']).toBe(false);
     });
   });
 

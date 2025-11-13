@@ -4,7 +4,8 @@ import path from 'path';
 test.describe('PLC Simulator - File I/O', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/PLC Simulator/i);
+    await page.waitForSelector('#root', { state: 'attached', timeout: 10000 });
+    await expect(page).toHaveTitle(/PLC Simulator/i, { timeout: 10000 });
   });
 
   test.describe('Save Program', () => {
