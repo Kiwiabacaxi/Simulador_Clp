@@ -103,10 +103,10 @@ export class MemoryService {
           }
         }
       } else if (!enabled) {
-        // Timer reset
-        timer.accumulated = 0;
-        timer.done = false;
+        // TON behavior: When disabled, stop timing but KEEP done state
+        // Only reset with explicit RST instruction
         timer.startTime = undefined;
+        // DO NOT reset accumulated or done - they persist until RST
       }
     }
 
@@ -130,10 +130,10 @@ export class MemoryService {
           }
         }
       } else if (enabled) {
-        // Timer reset
-        timer.accumulated = 0;
-        timer.done = true;
+        // TOFF behavior: When enabled, stop timing but KEEP done state
+        // Only reset with explicit RST instruction
         timer.startTime = undefined;
+        // DO NOT reset accumulated or done - they persist until RST
       }
     }
 

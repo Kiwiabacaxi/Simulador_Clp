@@ -148,8 +148,17 @@ export class Interpreter {
       return state;
     }
 
-    // Create mutable copy of state
-    const newState = { ...state };
+    // Create deep copy of state to avoid mutations
+    const newState = {
+      ...state,
+      inputs: { ...state.inputs },
+      outputs: { ...state.outputs },
+      // Deep clone memory variables to prevent state mutation
+      memoryVariables: Object.keys(state.memoryVariables).reduce((acc, key) => {
+        acc[key] = { ...state.memoryVariables[key] };
+        return acc;
+      }, {} as Record<string, any>),
+    };
 
     // Execute each instruction
     for (const instruction of state.program) {
@@ -769,6 +778,12 @@ export class Interpreter {
    * Resets a timer, counter, or memory bit
    */
   private static executeRST(variable: string, state: PLCState): void {
+    // RST only executes when accumulator is TRUE (like SET instruction)
+    // This prevents timers from being reset every scan cycle
+    if (this.accumulator !== true) {
+      return; // Skip reset if accumulator is not true
+    }
+
     const varType = getVariableType(variable);
 
     if (varType === 'TIMER' || varType === 'COUNTER') {
@@ -776,6 +791,10 @@ export class Interpreter {
       if (memVar) {
         memVar.accumulated = 0;
         memVar.done = false;
+        memVar.enabled = false;
+        if (memVar.type === 'TIMER') {
+          memVar.startTime = undefined;
+        }
       }
     } else if (varType === 'MEMORY') {
       const memVar = state.memoryVariables[variable];

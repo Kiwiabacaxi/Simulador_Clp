@@ -44,12 +44,19 @@ export function useExecutionCycle(options: UseExecutionCycleOptions = {}) {
   const { state, dispatch } = usePLCState();
   const intervalRef = useRef<number | null>(null);
 
+  // Use ref to always access the latest state (fixes stale closure bug)
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
   /**
    * Execute one scan cycle
    */
   const executeCycle = useCallback(() => {
     try {
-      const newState = ScanCycleService.executeCycle(state);
+      // Use stateRef.current to get the latest state, not captured state
+      const newState = ScanCycleService.executeCycle(stateRef.current);
 
       // Update state with new values
       dispatch({
@@ -72,32 +79,32 @@ export function useExecutionCycle(options: UseExecutionCycleOptions = {}) {
         onCycleError(error);
       }
     }
-  }, [state, dispatch, onCycleComplete, onCycleError]);
+  }, [dispatch, onCycleComplete, onCycleError]); // Removed 'state' from deps!
 
   /**
    * Start the execution cycle
    */
   const startCycle = useCallback(() => {
-    // Initialize and start
-    const initializedState = ScanCycleService.start(state);
+    // Initialize and start using latest state
+    const initializedState = ScanCycleService.start(stateRef.current);
     dispatch({ type: 'UPDATE_STATE', state: initializedState });
-  }, [state, dispatch]);
+  }, [dispatch]);
 
   /**
    * Stop the execution cycle
    */
   const stopCycle = useCallback(() => {
-    const stoppedState = ScanCycleService.stop(state);
+    const stoppedState = ScanCycleService.stop(stateRef.current);
     dispatch({ type: 'UPDATE_STATE', state: stoppedState });
-  }, [state, dispatch]);
+  }, [dispatch]);
 
   /**
    * Pause the execution cycle
    */
   const pauseCycle = useCallback(() => {
-    const pausedState = ScanCycleService.pause(state);
+    const pausedState = ScanCycleService.pause(stateRef.current);
     dispatch({ type: 'UPDATE_STATE', state: pausedState });
-  }, [state, dispatch]);
+  }, [dispatch]);
 
   /**
    * Effect to manage interval based on execution mode
@@ -125,14 +132,14 @@ export function useExecutionCycle(options: UseExecutionCycleOptions = {}) {
         intervalRef.current = null;
       }
     };
-  }, [enabled, state.mode, executeCycle]);
+  }, [enabled, state.mode, executeCycle]); // executeCycle is now stable since it doesn't depend on state
 
   /**
    * Get current cycle statistics
    */
   const getStats = useCallback(() => {
-    return ScanCycleService.getStats(state);
-  }, [state]);
+    return ScanCycleService.getStats(stateRef.current);
+  }, []);
 
   return {
     /** Start PLC execution */

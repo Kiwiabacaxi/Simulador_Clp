@@ -9,7 +9,7 @@ import { useToastContext } from '../../context/ToastContext';
 import { useTheme } from '../../hooks/useTheme';
 import { useLoading } from '../../hooks/useLoading';
 import { FileIOService } from '../../services/fileIO';
-import { SceneType } from '../../types/plc';
+import { SceneType, ExecutionMode } from '../../types/plc';
 import { ASSETS } from '../../utils/assets';
 import { UnsavedIndicator } from '../UnsavedIndicator/UnsavedIndicator';
 import { ExamplesMenu } from '../ExamplesMenu/ExamplesMenu';
@@ -71,7 +71,13 @@ export function MenuBar({
       if (onLoadingChange) onLoadingChange(true, 'Loading program...');
       try {
         const programText = await FileIOService.openProgram();
+
+        // Reset PLC state and pause execution when loading a file
+        dispatch({ type: 'RESET_OUTPUTS' });
+        dispatch({ type: 'RESET_MEMORY' });
+        dispatch({ type: 'SET_MODE', mode: ExecutionMode.IDLE });
         dispatch({ type: 'SET_PROGRAM_TEXT', programText });
+
         if (onResetSavedState) {
           onResetSavedState(programText);
         }
@@ -93,8 +99,13 @@ export function MenuBar({
     i18n.changeLanguage(languages[nextIndex]);
   };
 
-  const handleChangeScene = () => {
-    const newScene: SceneType = state.currentScene === SceneType.DEFAULT ? SceneType.BATCH_SIMULATION : SceneType.DEFAULT;
+  const handleChangeScene = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newScene = event.target.value as SceneType;
+
+    // Reset PLC state and pause execution when changing scenes
+    dispatch({ type: 'RESET_OUTPUTS' });
+    dispatch({ type: 'RESET_MEMORY' });
+    dispatch({ type: 'SET_MODE', mode: ExecutionMode.IDLE });
     dispatch({ type: 'SET_SCENE', scene: newScene });
   };
 
@@ -133,9 +144,20 @@ export function MenuBar({
 
       {/* Simulation Menu */}
       <div className="menu-group">
-        <button className="menu-button" onClick={handleChangeScene}>
-          {state.currentScene === 'DEFAULT' ? t('scenes.batch') : t('scenes.default')}
-        </button>
+        <label className="menu-label" htmlFor="scene-select">
+          🎬 {t('menu.scene')}:
+        </label>
+        <select
+          id="scene-select"
+          className="menu-select"
+          value={state.currentScene}
+          onChange={handleChangeScene}
+        >
+          <option value={SceneType.DEFAULT}>{t('scenes.default')}</option>
+          <option value={SceneType.BATCH_SIMULATION}>{t('scenes.batch')}</option>
+          <option value={SceneType.TRAFFIC_LIGHT}>{t('scenes.trafficLight')}</option>
+          <option value={SceneType.TRAFFIC_SIMULATION}>{t('scenes.trafficSimulation')}</option>
+        </select>
       </div>
 
       <div className="menu-divider" />

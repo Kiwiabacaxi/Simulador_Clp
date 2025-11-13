@@ -9,7 +9,7 @@ export interface Example {
   id: string;
   title: string;
   description: string;
-  category: 'basics' | 'logic' | 'control' | 'timers' | 'counters' | 'sequences';
+  category: 'basics' | 'logic' | 'control' | 'timers' | 'counters' | 'sequences' | 'traffic-lights';
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   file: string;
 }
@@ -96,6 +96,8 @@ export function getCategoryName(category: Example['category']): string {
       return 'Counters';
     case 'sequences':
       return 'Sequences';
+    case 'traffic-lights':
+      return 'Traffic Lights';
     default:
       return category;
   }

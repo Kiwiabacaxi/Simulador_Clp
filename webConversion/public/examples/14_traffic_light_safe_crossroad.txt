@@ -1,0 +1,106 @@
+// =============================================
+// Traffic Light Crossroad (2 Lights)
+// =============================================
+// Two synchronized traffic lights for a crossroad intersection
+// When one direction is green, the other is red
+//
+// North-South traffic light:
+//   Q0.0 = Red light
+//   Q0.1 = Yellow light
+//   Q0.2 = Green light
+//
+// East-West traffic light:
+//   Q1.0 = Red light
+//   Q1.1 = Yellow light
+//   Q1.2 = Green light
+//
+// Sequence:
+// 1. NS Green (5s) + EW Red
+// 2. NS Yellow (2s) + EW Red
+// 3. NS Red + EW Green (5s)
+// 4. NS Red + EW Yellow (2s)
+// 5. Repeat
+//
+// Runs automatically in continuous cycle
+
+// ========================================
+// STATE LOGIC - Determine which state is active
+// ========================================
+// State 1 (M0): NS Green + EW Red (default state when no timers active)
+LDN T0
+ANDN T1
+ANDN T2
+ANDN T3
+ST M0
+
+// State 2 (M1): NS Yellow + EW Red
+LD T0
+ANDN T1
+ST M1
+
+// State 3 (M2): NS Red + EW Green
+LD T1
+ANDN T2
+ST M2
+
+// State 4 (M3): NS Red + EW Yellow
+LD T2
+ANDN T3
+ST M3
+
+// ========================================
+// OUTPUT LOGIC - Each output written ONCE
+// ========================================
+// Q0.2 (NS Green): ON only in State 1
+LD M0
+OUT Q0.2
+
+// Q0.1 (NS Yellow): ON only in State 2
+LD M1
+OUT Q0.1
+
+// Q0.0 (NS Red): ON in States 3 and 4
+LD M2
+OR M3
+OUT Q0.0
+
+// Q1.0 (EW Red): ON in States 1 and 2
+LD M0
+OR M1
+OUT Q1.0
+
+// Q1.1 (EW Yellow): ON only in State 4
+LD M3
+OUT Q1.1
+
+// Q1.2 (EW Green): ON only in State 3
+LD M2
+OUT Q1.2
+
+// ========================================
+// TIMER LOGIC
+// ========================================
+// Timer T0: State 1 duration (5 seconds)
+LD M0
+TON T0 50
+
+// Timer T1: State 2 duration (2 seconds)
+LD M1
+TON T1 20
+
+// Timer T2: State 3 duration (5 seconds)
+LD M2
+TON T2 50
+
+// Timer T3: State 4 duration (2 seconds)
+LD M3
+TON T3 20
+
+// ========================================
+// RESET CYCLE
+// ========================================
+LD T3
+RST T0
+RST T1
+RST T2
+RST T3
