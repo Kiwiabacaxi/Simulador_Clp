@@ -148,8 +148,17 @@ export class Interpreter {
       return state;
     }
 
-    // Create mutable copy of state
-    const newState = { ...state };
+    // Create deep copy of state to avoid mutations
+    const newState = {
+      ...state,
+      inputs: { ...state.inputs },
+      outputs: { ...state.outputs },
+      // Deep clone memory variables to prevent state mutation
+      memoryVariables: Object.keys(state.memoryVariables).reduce((acc, key) => {
+        acc[key] = { ...state.memoryVariables[key] };
+        return acc;
+      }, {} as Record<string, any>),
+    };
 
     // Execute each instruction
     for (const instruction of state.program) {
