@@ -63,8 +63,8 @@ npm run test:watch
 ### Total Test Count
 - **Unit Tests**: 150+ tests
 - **Integration Tests**: 80+ tests
-- **E2E Tests**: 54 tests (23 instructions + 31 traffic lights)
-- **Total**: 284+ tests
+- **E2E Tests**: 98 tests (23 instructions + 16 batch manual + 17 batch auto + 11 batch overflow + 31 traffic lights)
+- **Total**: 328+ tests
 
 ### Coverage by Component
 
@@ -77,6 +77,9 @@ npm run test:watch
 | Memory Service | 15+ | - | - |
 | Examples | - | 30+ | - |
 | Instructions (All) | - | - | 23 |
+| Batch Manual | - | - | 16 |
+| Batch Fully Auto | - | - | 17 |
+| Batch Overflow | - | - | 11 |
 | Traffic Lights | - | 30+ | 31 |
 | Complex Scenarios | - | 30+ | - |
 
@@ -363,6 +366,174 @@ Each test:
 3. Toggles inputs as needed
 4. Verifies correct output states
 5. Tests both positive and negative cases
+
+### Batch Simulation E2E Tests (`batch-simulation.spec.ts`)
+
+Comprehensive browser-based tests for batch tank simulation (16 tests):
+
+#### Batch Scene Setup (3 tests)
+- Switch to Batch scene
+- Display tank visualization
+- Show control buttons (START and STOP)
+
+#### Batch Example Loading (1 test)
+- Load "Batch Process - Automatic" example
+
+#### Fill Cycle (2 tests)
+- Fill tank when START pressed
+- Stop filling when tank reaches 100%
+
+#### Mixer Operation (1 test)
+- Start mixer when tank is full
+
+#### Drain Cycle (1 test)
+- Drain tank when STOP pressed
+
+#### Status LEDs (3 tests)
+- Show RUN LED when system operating
+- Show IDLE LED when system stopped
+- Show FULL LED when tank at 100%
+
+#### Complete Batch Cycle (1 test)
+- Execute full cycle: fill → mix → drain
+
+#### Emergency Stop (1 test)
+- Stop filling immediately when STOP pressed
+
+#### Sensor Behavior (2 tests)
+- Activate HI-LEVEL sensor at 100%
+- Deactivate LO-LEVEL sensor when empty
+
+Each batch test verifies:
+- Proper I/O mapping (I0.0=START, I0.1=STOP, I1.0=HI-LEVEL, I1.1=LO-LEVEL)
+- Output control (Q0.1=PUMP1, Q0.2=MIXER, Q0.3=PUMP3)
+- LED indicators (Q1.0=RUN, Q1.1=IDLE, Q1.2=FULL)
+- Tank level sensor behavior
+- Complete automation cycle
+
+### Batch Fully Automatic E2E Tests (`batch-fully-automatic.spec.ts`)
+
+Comprehensive tests for fully automatic batch process with state machine (17 tests):
+
+#### Setup and Loading (2 tests)
+- Load "Batch Process - Fully Automatic" example
+- Display correct state machine logic
+
+#### Automatic Fill Cycle (3 tests)
+- Start fill cycle when START pressed
+- Continue filling after START is released
+- Transition to mix when tank reaches 100%
+
+#### Automatic Mix Cycle (2 tests)
+- Run mixer for exactly 5 seconds
+- Show FULL LED during mixing
+
+#### Automatic Drain Cycle (2 tests)
+- Automatically transition to drain after mixing
+- Complete drain and return to IDLE
+
+#### Complete Automatic Cycle (2 tests)
+- Execute full automatic cycle without intervention
+- Allow multiple cycles with same START button
+
+#### State Machine Behavior (2 tests)
+- Maintain RUN LED throughout entire cycle
+- Properly transition between all three states
+
+#### Timer Behavior (1 test)
+- Use T0 timer for 5-second mix delay
+
+This fully automatic batch process demonstrates:
+- **State machine implementation** with 3 states (M0=Fill, M1=Mix, M2=Drain)
+- **Self-maintaining logic** (seal-in without needing to hold START)
+- **Timer-based sequencing** (TON T0 for 5-second mix)
+- **Automatic state transitions** based on sensors and timers
+- **Complete automation** - only ONE button press needed!
+- **Cycle reset logic** - returns to IDLE when complete
+
+Sequence flow:
+1. Press START (I0.0) → Release immediately
+2. Fill state (M0) activates → PUMP1 fills tank
+3. HI-LEVEL (I1.0) triggers → Mix state (M1)
+4. Timer T0 runs for 5 seconds → MIXER operates
+5. Timer done → Drain state (M2)
+6. PUMP3 drains until LO-LEVEL (I1.1) off
+7. Cycle complete → Returns to IDLE
+
+### Batch Overflow Detection E2E Tests (`batch-overflow-detection.spec.ts`)
+
+Advanced error handling tests for batch process with overflow/spill detection (11 tests):
+
+#### Setup and Loading (1 test)
+- Load "Batch Process - Overflow Detection" example
+- Verify overflow detection logic and timers
+
+#### Normal Operation Without Overflow (1 test)
+- Execute normal cycle with brief START press
+- Verify no alarm triggers during normal operation
+- Complete full cycle successfully
+
+#### Overflow Detection (1 test)
+- Hold START button for extended period (>12 seconds)
+- Verify ERROR LED and ALARM activate
+- Confirm alarm remains latched after START release
+
+#### Emergency Drain System (1 test)
+- Activate emergency drain when overflow detected
+- Verify PUMP3 operates until tank empty
+- Confirm emergency drain stops when LO-LEVEL deactivates
+
+#### Alarm Reset (1 test)
+- Clear overflow alarm using RESET (STOP) button
+- Verify ERROR and ALARM LEDs turn off
+- Confirm system ready for new cycle
+
+#### Safety Interlocks (1 test)
+- Block normal operations during overflow alarm
+- Verify PUMP1 and MIXER disabled
+- Confirm RUN LED remains OFF
+
+#### Timer Management (1 test)
+- Separate timers for fill timeout (T1) and mix duration (T0)
+- Verify T1 monitors 12-second fill limit
+- Confirm T0 controls 5-second mix phase
+
+#### Timer Reset Behavior (1 test)
+- Reset fill timeout timer when not filling
+- Verify timer clears on STOP
+- Confirm full timeout available on restart
+
+#### Full Recovery Cycle (1 test)
+- Complete overflow → emergency drain → reset → restart sequence
+- Verify system returns to fully operational state
+- Confirm new normal cycle executes successfully
+
+#### LED Status Indicators (1 test)
+- Verify RUN LED OFF during alarm
+- Confirm ERROR LED ON during overflow
+- Check ALARM output activates
+
+#### Robustness Testing (1 test)
+- Handle rapid START/STOP cycles without false alarms
+- Verify no spurious overflow detection
+- Confirm stable operation under stress
+
+This overflow detection system demonstrates:
+- **Error detection** using timeout timers (T1 = 12 second limit)
+- **Latched alarm** (M3) that persists until manually reset
+- **Emergency response** with automatic drain activation (M4)
+- **Safety interlocks** preventing normal operation during fault
+- **Fault recovery** with proper reset and restart sequence
+- **Multi-timer coordination** (T0 for mixing, T1 for overflow)
+- **Real-world PLC safety patterns** for industrial applications
+
+Error handling flow:
+1. Normal fill starts, T1 timer begins counting
+2. If T1 expires (12s) → Overflow alarm (M3) latches
+3. M3 activates ERROR LED, ALARM output, and blocks normal ops
+4. Emergency drain (M4) activates to safely empty tank
+5. User presses RESET to clear alarm
+6. System ready for new cycle
 
 ### Traffic Lights E2E Tests (`traffic-lights.spec.ts`)
 
@@ -659,6 +830,62 @@ Tests are run automatically on:
 ---
 
 ## Changelog
+
+### 2025-11-14 (Update 5)
+- **Added Batch Overflow Detection Example** with comprehensive error handling
+- Implements overflow/spill detection using timeout timer (T1 = 12 seconds)
+- Features latched alarm (M3), emergency drain (M4), and safety interlocks
+- **Added 11 E2E tests for Batch Overflow Detection**:
+  - Setup and loading (1 test)
+  - Normal operation without overflow (1 test)
+  - Overflow detection (1 test)
+  - Emergency drain system (1 test)
+  - Alarm reset (1 test)
+  - Safety interlocks (1 test)
+  - Timer management (1 test)
+  - Timer reset behavior (1 test)
+  - Full recovery cycle (1 test)
+  - LED status indicators (1 test)
+  - Robustness testing (1 test)
+- Demonstrates real-world PLC safety patterns for industrial applications
+- Total E2E tests increased from 87 to 98
+- Total project tests: 328+ (150 unit + 80 integration + 98 E2E)
+
+### 2025-11-14 (Update 4)
+- **Fixed Batch Fully Automatic state transition bug** (M0→M1)
+- Reordered IL logic to evaluate M1 BEFORE M0
+- Removed unnecessary ANDN I1.0 from M0 state logic
+- M0 now automatically stops when M1 activates via ANDN M1
+- **Added 17 E2E tests for Batch Fully Automatic**:
+  - Setup and loading (2 tests)
+  - Automatic fill cycle (3 tests)
+  - Automatic mix cycle (2 tests)
+  - Automatic drain cycle (2 tests)
+  - Complete automatic cycle (2 tests)
+  - State machine behavior (2 tests)
+  - Timer behavior (1 test)
+  - Edge cases and timing (3 tests)
+- Batch fully automatic now completes entire cycle with single START press
+- Total E2E tests increased from 70 to 87
+- Total project tests: 317+ (150 unit + 80 integration + 87 E2E)
+
+### 2025-11-13 (Update 3)
+- **Fixed Batch Simulation IL code** to use correct sensor mapping
+- Changed sensors from I0.5/I0.6/I0.7 to I1.0/I1.1 (matching BatchScene component)
+- Updated batch logic: fill → mix → drain cycle
+- Added comprehensive Batch README documentation with I/O mapping and operation guide
+- **Added 16 E2E tests for Batch Simulation**:
+  - Scene setup (3 tests)
+  - Fill cycle (2 tests)
+  - Mixer operation (1 test)
+  - Drain cycle (1 test)
+  - Status LEDs (3 tests)
+  - Complete cycle (1 test)
+  - Emergency stop (1 test)
+  - Sensor behavior (2 tests)
+  - Complete cycle integration (2 tests)
+- Total E2E tests increased from 54 to 70
+- Total project tests: 300+ (150 unit + 80 integration + 70 E2E)
 
 ### 2025-11-13 (Update 2)
 - Added comprehensive E2E tests for ALL PLC instructions (23 tests)
