@@ -1,67 +1,85 @@
 // ==================================
-// Batch Process - Automatic Cycle
+// Batch Process - REFLEX GAME
 // ==================================
-// Automatic tank filling, mixing, and draining
+// Test your reflexes! Click START to begin filling, then click STOP
+// exactly when the tank reaches 100%. If you overfill, the ERROR LED
+// will light up and emergency drain will activate!
+//
+// GAME RULES:
+// 1. Click START - tank begins filling continuously
+// 2. Watch the level closely!
+// 3. Click STOP when you think it's at 100%
+// 4. If you overfill (>100%), ERROR LED turns on + emergency drain
 //
 // INPUTS:
-// I0.0 = Start button (Normally Open)
-// I0.1 = Stop button (Normally Closed)
+// I0.0 = START button (click once to start filling)
+// I0.1 = STOP button (click to stop - tests your timing!)
 // I1.0 = HI-LEVEL sensor (ON when tank >= 100%)
 // I1.1 = LO-LEVEL sensor (ON when tank > 1%)
 //
 // OUTPUTS:
-// Q0.1 = PUMP1 (Fill valve - opens to fill tank)
-// Q0.2 = MIXER (Mixing motor)
-// Q0.3 = PUMP3 (Drain valve - opens to drain tank)
-// Q1.0 = RUN LED (System running indicator)
-// Q1.1 = IDLE LED (System idle indicator)
-// Q1.2 = FULL LED (Tank full indicator)
+// Q0.1 = PUMP1 (Fill valve - fills tank continuously)
+// Q0.3 = PUMP3 (Emergency drain - activates on overflow)
+// Q1.0 = RUN LED (Filling in progress)
+// Q1.1 = ERROR LED (You overfilled! Try again!)
+// Q1.2 = FULL LED (Tank at 100%)
+//
+// MEMORY:
+// M0 = System running state (SR latch: SET by START, RESET by STOP)
+// M1 = Overflow detected (latched when tank passes 100% while filling)
 
 // ==================================
-// FILL CYCLE - Start filling when:
-// - Start button pressed (I0.0 = ON)
-// - Stop button not pressed (I0.1 = OFF)
-// - Tank not full (I1.0 = OFF)
+// SR LATCH for system running state
+// M0 = (START OR M0) AND STOP_not_pressed
+// When START pressed: M0 turns ON and stays ON
+// When STOP pressed: M0 turns OFF (game stops)
 // ==================================
 LD I0.0
-OR Q0.1
-ANDN I0.1
-ANDN I1.0
+OR M0
+AND I0.1
+ST M0
+
+// ==================================
+// OVERFLOW DETECTION - Latch when filling past 100%
+// M1 = (filling AND reached 100%) OR M1
+// This detects if you failed to stop in time!
+// STOP button resets M1 to allow retry
+// ==================================
+LD Q0.1
+AND I1.0
+OR M1
+AND I0.1
+ST M1
+
+// ==================================
+// PUMP1 - Fill continuously while running
+// Fills as long as system is ON and no overflow detected yet
+// ==================================
+LD M0
+ANDN M1
 ST Q0.1
 
 // ==================================
-// MIXER - Start mixer when tank is full
+// PUMP3 - Emergency drain activates on overflow
+// Drains the tank when overflow is detected
 // ==================================
-LD I0.0
-AND I1.0
-ST Q0.2
-
-// ==================================
-// DRAIN CYCLE - Start draining when:
-// - Stop button pressed (I0.1 = ON)
-// - Tank has liquid (I1.1 = ON)
-// ==================================
-LD I0.1
-OR Q0.3
-AND I1.1
+LD M1
 ST Q0.3
 
 // ==================================
-// RUN LED - ON when any pump or mixer is active
+// RUN LED - ON when filling is active
 // ==================================
 LD Q0.1
-OR Q0.2
-OR Q0.3
 ST Q1.0
 
 // ==================================
-// IDLE LED - ON when system is idle
+// ERROR LED - ON when overflow detected (you lost!)
 // ==================================
-LDN Q1.0
+LD M1
 ST Q1.1
 
 // ==================================
-// FULL LED - ON when tank is full
+// FULL LED - ON when tank reaches 100%
 // ==================================
 LD I1.0
 ST Q1.2

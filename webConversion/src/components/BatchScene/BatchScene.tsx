@@ -13,14 +13,16 @@ import './BatchScene.css';
 
 // Tank configuration (matching Java implementation)
 const TANK_MAX_LEVEL = 100; // Maximum level (100%)
-const FILL_RATE = 2; // Fill rate per cycle when valve is open
+const FILL_RATE = 0.8; // Fill rate per cycle when valve is open (slower for reflex game)
 const DRAIN_RATE = 1.5; // Drain rate per cycle when valve is open
 
 export function BatchScene() {
   const { t } = useTranslation();
   const { state, dispatch } = usePLCState();
-  const [tankLevel, setTankLevel] = useState(0); // 0-100%
+  const [tankLevel, setTankLevel] = useState(0); // 0-100% (can overflow past 100)
+  const [overflowWarning, setOverflowWarning] = useState(false);
   const animationRef = useRef<number>();
+  const prevMemoryKeysCount = useRef<number>(0);
 
   // Map PLC I/O to batch simulation (matching Java BatchSimulationScenePanel)
   // Inputs:
@@ -60,8 +62,9 @@ export function BatchScene() {
         let newLevel = prevLevel;
 
         // Fill valve open (Q0.1 = pump1)
+        // NOTE: No Math.min here - allows overflow for testing!
         if (state.outputs['Q0.1']) {
-          newLevel = Math.min(TANK_MAX_LEVEL, newLevel + FILL_RATE);
+          newLevel = newLevel + FILL_RATE;
         }
 
         // Drain valve open (Q0.3 = pump3)
@@ -116,11 +119,46 @@ export function BatchScene() {
     dispatch({ type: 'SET_INPUT', key: 'I0.1', value: true });
   }, [dispatch]);
 
+  // Detect overflow condition (tank > 100% AND error LED is ON)
+  useEffect(() => {
+    const errorLED = state.outputs['Q1.1']; // ERROR LED
+    const isOverflowing = tankLevel > TANK_MAX_LEVEL && errorLED;
+
+    if (isOverflowing && !overflowWarning) {
+      setOverflowWarning(true);
+    } else if (!errorLED && overflowWarning) {
+      // Clear warning when error LED is turned off (user pressed RESET)
+      setOverflowWarning(false);
+    }
+  }, [tankLevel, state.outputs, overflowWarning]);
+
+  // Reset tank level when PLC variables are reset
+  // This detects when memory variables were cleared (transition from having variables to none)
+  useEffect(() => {
+    const currentMemoryKeysCount = Object.keys(state.memoryVariables).length;
+
+    // Detect a reset: had memory variables before, now they're gone
+    if (prevMemoryKeysCount.current > 0 && currentMemoryKeysCount === 0 && tankLevel > 0) {
+      setTankLevel(0);
+      setOverflowWarning(false);
+    }
+
+    // Update the previous count
+    prevMemoryKeysCount.current = currentMemoryKeysCount;
+  }, [state.memoryVariables, tankLevel]);
+
   return (
     <div className="batch-scene">
       <div className="batch-scene__header">
         <h2 className="batch-scene__title">{t('scenes.batch')}</h2>
       </div>
+
+      {/* Overflow Warning */}
+      {overflowWarning && (
+        <div className="overflow-warning">
+          💧 YOU OVERFILLED! Emergency drain activated. Press STOP to reset and try again!
+        </div>
+      )}
 
       <div className="batch-scene__container">
         {/* Tank Visualization - Background image shows the tank */}
@@ -216,16 +254,16 @@ export function BatchScene() {
               <span className="batch-indicator__status">{state.outputs['Q1.0'] ? 'ON' : 'OFF'}</span>
             </div>
 
-            {/* Idle LED (Q1.1) */}
-            <div className={`batch-indicator ${state.outputs['Q1.1'] ? 'active' : ''}`}>
-              <span className="batch-indicator__label">IDLE (Q1.1)</span>
+            {/* Error LED (Q1.1) - Overflow detection */}
+            <div className={`batch-indicator ${state.outputs['Q1.1'] ? 'active error' : ''}`}>
+              <span className="batch-indicator__label">ERROR (Q1.1)</span>
               <div className="batch-indicator__led" />
               <span className="batch-indicator__status">{state.outputs['Q1.1'] ? 'ON' : 'OFF'}</span>
             </div>
 
-            {/* Full LED (Q1.2) */}
-            <div className={`batch-indicator ${state.outputs['Q1.2'] ? 'active' : ''}`}>
-              <span className="batch-indicator__label">FULL (Q1.2)</span>
+            {/* Alarm LED (Q1.2) - Audio/visual alarm */}
+            <div className={`batch-indicator ${state.outputs['Q1.2'] ? 'active alarm' : ''}`}>
+              <span className="batch-indicator__label">ALARM (Q1.2)</span>
               <div className="batch-indicator__led" />
               <span className="batch-indicator__status">{state.outputs['Q1.2'] ? 'ON' : 'OFF'}</span>
             </div>

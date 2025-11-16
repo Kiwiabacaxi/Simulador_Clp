@@ -52,8 +52,9 @@ ANDN M1
 ANDN M2
 ST M0
 
-// PUMP1 follows fill state
+// PUMP1 follows fill state (stop immediately at HI-LEVEL)
 LD M0
+ANDN I1.0
 ST Q0.1
 
 // Start timer when in mix state
