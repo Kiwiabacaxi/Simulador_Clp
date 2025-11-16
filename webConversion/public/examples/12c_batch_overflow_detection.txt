@@ -16,13 +16,14 @@
 // 5. Ready for next cycle
 //
 // ERROR DETECTION:
-// - If filling takes > 12 seconds = OVERFLOW ALARM
-// - If overflow detected, emergency drain activates
-// - Press RESET (STOP) to clear alarm and restart
+// - If filling takes > 3 seconds = OVERFLOW ALARM
+// - Tank will fill past 100% before alarm triggers
+// - Emergency drain automatically activates
+// - Press STOP to reset alarm and clear all states
 //
 // INPUTS:
-// I0.0 = START button (brief press to start)
-// I0.1 = STOP/RESET button (clears alarm)
+// I0.0 = START button (click once to start - latches on)
+// I0.1 = STOP/RESET button (click to stop and clear alarm)
 // I1.0 = HI-LEVEL sensor (ON when tank >= 100%)
 // I1.1 = LO-LEVEL sensor (ON when tank > 1%)
 //
@@ -35,17 +36,18 @@
 // Q1.2 = ALARM (Audio/visual alarm)
 //
 // MEMORY:
-// M0 = Fill state
+// M0 = Fill state (latched with START/STOP)
 // M1 = Mix state
 // M2 = Drain state
 // M3 = Overflow detected (latched alarm)
 // M4 = Emergency drain state
 // T0 = Mix timer (5 seconds)
-// T1 = Fill timeout timer (12 seconds max)
+// T1 = Fill timeout timer (3 seconds - detects overflow)
 
 // ==================================
-// STATE 1: FILL STATE
-// Only if no overflow alarm
+// STATE 1: FILL STATE (with SR latch)
+// M0 = (START OR M0) AND STOP_not_pressed AND not_in_other_states
+// Click START once to begin, click STOP to stop
 // NOTE: Does NOT stop at 100% - allows overflow for testing!
 // ==================================
 LD I0.0
@@ -53,17 +55,20 @@ OR M0
 ANDN M1
 ANDN M2
 ANDN M3
+AND I0.1
 ST M0
 
 // ==================================
 // OVERFLOW DETECTION
-// Monitor fill time - if > 12 seconds, trigger alarm
+// Monitor fill time - if > 3 seconds, trigger alarm
+// This detects overflow condition (filling continues past HI-LEVEL)
 // ==================================
 LD M0
-TON T1,120
+TON T1,30
 
 // Latch overflow alarm if fill timer expires
 // NOTE: Timer continues running even at 100% to trigger overflow!
+// Press STOP (I0.1) to reset alarm and clear all states
 LD T1
 OR M3
 ANDN I0.1
