@@ -21,6 +21,7 @@ export function BatchScene() {
   const { state, dispatch } = usePLCState();
   const [tankLevel, setTankLevel] = useState(0); // 0-100%
   const animationRef = useRef<number>();
+  const prevMemoryKeysCount = useRef<number>(0);
 
   // Map PLC I/O to batch simulation (matching Java BatchSimulationScenePanel)
   // Inputs:
@@ -117,13 +118,17 @@ export function BatchScene() {
   }, [dispatch]);
 
   // Reset tank level when PLC variables are reset
-  // This detects when memory is cleared (empty memoryVariables object)
+  // This detects when memory variables were cleared (transition from having variables to none)
   useEffect(() => {
-    const memoryKeys = Object.keys(state.memoryVariables);
-    // If no memory variables exist, assume a reset occurred
-    if (memoryKeys.length === 0 && tankLevel > 0) {
+    const currentMemoryKeysCount = Object.keys(state.memoryVariables).length;
+
+    // Detect a reset: had memory variables before, now they're gone
+    if (prevMemoryKeysCount.current > 0 && currentMemoryKeysCount === 0 && tankLevel > 0) {
       setTankLevel(0);
     }
+
+    // Update the previous count
+    prevMemoryKeysCount.current = currentMemoryKeysCount;
   }, [state.memoryVariables, tankLevel]);
 
   return (
