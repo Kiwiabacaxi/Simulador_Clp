@@ -7,6 +7,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePLCState } from '../../context/PLCStateContext';
+import { PushButton, ButtonPalette } from '../PushButton';
+import { InputType } from '../../types/plc';
 import './BatchScene.css';
 
 // Tank configuration (matching Java implementation)
@@ -82,14 +84,37 @@ export function BatchScene() {
     };
   }, [state.outputs]);
 
-  const toggleInput = (index: number) => {
-    const key = `I0.${index}`;
+  /**
+   * Handle button press (NO activates, NC deactivates)
+   */
+  const handlePressed = (key: string) => {
+    const inputType = state.inputsType[key];
     dispatch({
       type: 'SET_INPUT',
       key,
-      value: !state.inputs[key]
+      value: inputType === InputType.NO ? true : false
     });
   };
+
+  /**
+   * Handle button release (NO deactivates, NC activates)
+   */
+  const handleReleased = (key: string) => {
+    const inputType = state.inputsType[key];
+    dispatch({
+      type: 'SET_INPUT',
+      key,
+      value: inputType === InputType.NO ? false : true
+    });
+  };
+
+  // Set input types on mount (START = NO, STOP = NC)
+  useEffect(() => {
+    dispatch({ type: 'SET_INPUT_TYPE', key: 'I0.0', inputType: InputType.NO });
+    dispatch({ type: 'SET_INPUT_TYPE', key: 'I0.1', inputType: InputType.NC });
+    // NC defaults to true
+    dispatch({ type: 'SET_INPUT', key: 'I0.1', value: true });
+  }, [dispatch]);
 
   return (
     <div className="batch-scene">
@@ -121,23 +146,39 @@ export function BatchScene() {
           <div className="batch-scene__control-group">
             <h3 className="batch-scene__control-title">{t('labels.inputs')}</h3>
 
-            {/* Start Button (I0.0) */}
-            <button
-              className={`batch-button ${state.inputs['I0.0'] ? 'active' : ''}`}
-              onClick={() => toggleInput(0)}
-            >
-              <span className="batch-button__label">START (I0.0)</span>
-              <span className="batch-button__status">{state.inputs['I0.0'] ? '1' : '0'}</span>
-            </button>
+            <div className="batch-scene__buttons">
+              {/* Start Button (I0.0 - Normally Open) */}
+              <div className="batch-scene__button-container">
+                <PushButton
+                  inputKey="I0.0"
+                  inputType={InputType.NO}
+                  palette={ButtonPalette.GRAY}
+                  value={state.inputs['I0.0']}
+                  onPressed={handlePressed}
+                  onReleased={handleReleased}
+                />
+                <span className="batch-scene__button-label">START</span>
+                <span className="batch-scene__button-status">
+                  I0.0: {state.inputs['I0.0'] ? '1' : '0'}
+                </span>
+              </div>
 
-            {/* Stop Button (I0.1) */}
-            <button
-              className={`batch-button ${state.inputs['I0.1'] ? 'active' : ''}`}
-              onClick={() => toggleInput(1)}
-            >
-              <span className="batch-button__label">STOP (I0.1)</span>
-              <span className="batch-button__status">{state.inputs['I0.1'] ? '1' : '0'}</span>
-            </button>
+              {/* Stop Button (I0.1 - Normally Closed) */}
+              <div className="batch-scene__button-container">
+                <PushButton
+                  inputKey="I0.1"
+                  inputType={InputType.NC}
+                  palette={ButtonPalette.RED}
+                  value={state.inputs['I0.1']}
+                  onPressed={handlePressed}
+                  onReleased={handleReleased}
+                />
+                <span className="batch-scene__button-label">STOP</span>
+                <span className="batch-scene__button-status">
+                  I0.1: {state.inputs['I0.1'] ? '1' : '0'}
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="batch-scene__control-group">

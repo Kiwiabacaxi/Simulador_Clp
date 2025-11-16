@@ -1,0 +1,132 @@
+/**
+ * PushButton Styles
+ * Converted from src/screens/scenes/PushButton.java rendering logic
+ */
+
+.push-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border-radius: 50%;
+  border: 3px solid;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  outline: none;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.push-button:active {
+  transform: scale(0.95);
+}
+
+.push-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.2);
+}
+
+/* Inner circle (visible when pressed) */
+.push-button__inner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+/* GRAY Palette - Default */
+.push-button--gray {
+  background-color: rgb(200, 200, 200);
+  border-color: rgb(100, 100, 100);
+}
+
+.push-button--gray.push-button--pressed {
+  background-color: rgb(150, 150, 150);
+}
+
+.push-button--gray .push-button__inner {
+  background-color: rgb(80, 80, 80);
+}
+
+.push-button--gray.push-button--pressed .push-button__inner {
+  opacity: 1;
+}
+
+.push-button--gray:hover:not(:disabled) {
+  background-color: rgb(210, 210, 210);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.push-button--gray.push-button--pressed:hover:not(:disabled) {
+  background-color: rgb(140, 140, 140);
+}
+
+/* RED Palette - Emergency/Stop */
+.push-button--red {
+  background-color: rgb(255, 138, 128);
+  border-color: rgb(183, 28, 28);
+}
+
+.push-button--red.push-button--pressed {
+  background-color: rgb(229, 57, 53);
+}
+
+.push-button--red .push-button__inner {
+  background-color: rgb(127, 0, 0);
+}
+
+.push-button--red.push-button--pressed .push-button__inner {
+  opacity: 1;
+}
+
+.push-button--red:hover:not(:disabled) {
+  background-color: rgb(255, 160, 150);
+  box-shadow: 0 4px 8px rgba(183, 28, 28, 0.3);
+}
+
+.push-button--red.push-button--pressed:hover:not(:disabled) {
+  background-color: rgb(211, 47, 47);
+}
+
+/* Disabled state */
+.push-button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.push-button--disabled:hover {
+  background-color: inherit !important;
+  box-shadow: none !important;
+}
+
+/* Responsive sizing */
+@media (max-width: 768px) {
+  .push-button {
+    width: 40px;
+    height: 40px;
+    border-width: 2px;
+  }
+
+  .push-button__inner {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .push-button {
+    width: 35px;
+    height: 35px;
+  }
+
+  .push-button__inner {
+    width: 14px;
+    height: 14px;
+  }
+}

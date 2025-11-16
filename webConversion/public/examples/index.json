@@ -223,6 +223,30 @@
       "category": "traffic-lights",
       "difficulty": "advanced",
       "file": "14_traffic_light_safe_crossroad.txt"
+    },
+    {
+      "id": "27_button_type_switch",
+      "title": "Button Type: SWITCH",
+      "description": "Toggle switch that maintains state - Click to toggle ON/OFF",
+      "category": "button-types",
+      "difficulty": "beginner",
+      "file": "27_button_type_switch.txt"
+    },
+    {
+      "id": "28_button_type_no",
+      "title": "Button Type: NO (Normally Open)",
+      "description": "Momentary push button - TRUE only while held down",
+      "category": "button-types",
+      "difficulty": "beginner",
+      "file": "28_button_type_no.txt"
+    },
+    {
+      "id": "29_button_type_nc",
+      "title": "Button Type: NC (Normally Closed)",
+      "description": "Inverted push button - FALSE when pressed, TRUE when released",
+      "category": "button-types",
+      "difficulty": "beginner",
+      "file": "29_button_type_nc.txt"
     }
   ]
 }

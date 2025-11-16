@@ -14,12 +14,115 @@ export function DefaultScene() {
   const { t } = useTranslation();
   const { state, dispatch } = usePLCState();
 
+  /**
+   * Toggle input (for SWITCH type)
+   * SWITCH: Toggles state on click and maintains it
+   */
   const toggleInput = (index: number) => {
     const key = `I0.${index}`;
+    const inputType = state.inputsType[key];
+
+    // Only toggle for SWITCH type
+    if (inputType === InputType.SWITCH) {
+      dispatch({
+        type: 'SET_INPUT',
+        key,
+        value: !state.inputs[key]
+      });
+    }
+  };
+
+  /**
+   * Handle mouse down on button
+   * NO: Activates (true) when pressed
+   * NC: Deactivates (false) when pressed
+   */
+  const handleMouseDown = (index: number) => {
+    const key = `I0.${index}`;
+    const inputType = state.inputsType[key];
+
+    switch (inputType) {
+      case InputType.NO: // Normally Open - activates when pressed
+        dispatch({
+          type: 'SET_INPUT',
+          key,
+          value: true
+        });
+        break;
+      case InputType.NC: // Normally Closed - deactivates when pressed
+        dispatch({
+          type: 'SET_INPUT',
+          key,
+          value: false
+        });
+        break;
+    }
+  };
+
+  /**
+   * Handle mouse up on button
+   * NO: Deactivates (false) when released
+   * NC: Activates (true) when released
+   */
+  const handleMouseUp = (index: number) => {
+    const key = `I0.${index}`;
+    const inputType = state.inputsType[key];
+
+    switch (inputType) {
+      case InputType.NO: // Normally Open - deactivates when released
+        dispatch({
+          type: 'SET_INPUT',
+          key,
+          value: false
+        });
+        break;
+      case InputType.NC: // Normally Closed - activates when released
+        dispatch({
+          type: 'SET_INPUT',
+          key,
+          value: true
+        });
+        break;
+    }
+  };
+
+  /**
+   * Cycle through input types (right-click)
+   * SWITCH → NO → NC → SWITCH
+   */
+  const cycleInputType = (index: number, e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent context menu
+    const key = `I0.${index}`;
+    const currentType = state.inputsType[key];
+
+    let newType: InputType;
+    switch (currentType) {
+      case InputType.SWITCH:
+        newType = InputType.NO;
+        break;
+      case InputType.NO:
+        newType = InputType.NC;
+        break;
+      case InputType.NC:
+        newType = InputType.SWITCH;
+        break;
+      default:
+        newType = InputType.SWITCH;
+    }
+
+    // Update input type
+    dispatch({
+      type: 'SET_INPUT_TYPE',
+      key,
+      inputType: newType
+    });
+
+    // Set default state for new type
+    // NC defaults to true, others to false
     dispatch({
       type: 'SET_INPUT',
       key,
-      value: !state.inputs[key]
+      value: newType === InputType.NC
     });
   };
 
@@ -63,17 +166,25 @@ export function DefaultScene() {
                   <button
                     className="io-item__button"
                     onClick={() => toggleInput(i)}
-                    title={`I0.${i} - ${t(`inputTypes.${state.inputsType[inputKey].toLowerCase()}`)}`}
+                    onMouseDown={() => handleMouseDown(i)}
+                    onMouseUp={() => handleMouseUp(i)}
+                    onMouseLeave={() => handleMouseUp(i)}
+                    onContextMenu={(e) => cycleInputType(i, e)}
+                    title={`I0.${i} - ${t(`inputTypes.${state.inputsType[inputKey].toLowerCase()}`)} (Right-click to change type)`}
                   >
                     <img
                       src={getInputIcon(i)}
                       alt={`Input ${i}`}
                       className="io-item__icon"
+                      draggable={false}
                     />
                   </button>
                   <span className="io-item__label">I0.{i}</span>
                   <span className={`io-item__status ${state.inputs[inputKey] ? 'active' : ''}`}>
                     {state.inputs[inputKey] ? '1' : '0'}
+                  </span>
+                  <span className="io-item__type">
+                    {state.inputsType[inputKey]}
                   </span>
                 </div>
               );
