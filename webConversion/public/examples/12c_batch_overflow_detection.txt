@@ -46,11 +46,12 @@ ST M0
 // OVERFLOW ALARM
 // Triggers when HI-LEVEL sensor activates
 // This means tank is >= 100%
+// Latches ON until STOP is pressed
 // ==================================
 LD I1.0
 AND M0
 OR M1
-ANDN I0.1
+AND I0.1
 ST M1
 
 // ==================================
