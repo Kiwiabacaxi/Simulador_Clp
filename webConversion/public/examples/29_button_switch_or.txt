@@ -1,12 +1,12 @@
-// SWITCH - Lógica OR (Dois Switches em Paralelo)
-// ===============================================
-// Qualquer um dos switches pode acionar a saída.
+// SWITCH - OR Logic (Two Switches in Parallel)
+// ==============================================
+// Either switch can activate the output.
 //
-// Como testar:
-// 1. I0.0 e I0.1 devem estar em modo SWITCH
-// 2. Ligue I0.0 - Q0.0 acende
-// 3. Desligue I0.0 e ligue I0.1 - Q0.0 continua aceso
-// 4. Ambos desligados - Q0.0 apaga
+// How to test:
+// 1. I0.0 and I0.1 should be in SWITCH mode
+// 2. Turn ON I0.0 - Q0.0 turns ON
+// 3. Turn OFF I0.0 and turn ON I0.1 - Q0.0 stays ON
+// 4. Both OFF - Q0.0 turns OFF
 
 LD I0.0
 OR I0.1

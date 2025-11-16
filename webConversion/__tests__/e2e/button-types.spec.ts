@@ -248,7 +248,7 @@ test.describe('Button Type Examples', () => {
     await page.getByRole('button', { name: /examples/i }).click();
     await page.waitForTimeout(500);
 
-    const switchExample = page.locator('text=/SWITCH.*Básico/i').first();
+    const switchExample = page.locator('text=/SWITCH.*Basic/i').first();
     if (await switchExample.isVisible()) {
       await switchExample.click();
       await page.waitForTimeout(500);
@@ -265,7 +265,7 @@ test.describe('Button Type Examples', () => {
     await page.getByRole('button', { name: /examples/i }).click();
     await page.waitForTimeout(500);
 
-    const noExample = page.locator('text=/NO.*Básico/i').first();
+    const noExample = page.locator('text=/NO.*Basic/i').first();
     if (await noExample.isVisible()) {
       await noExample.click();
       await page.waitForTimeout(500);
@@ -281,7 +281,7 @@ test.describe('Button Type Examples', () => {
     await page.getByRole('button', { name: /examples/i }).click();
     await page.waitForTimeout(500);
 
-    const ncExample = page.locator('text=/NC.*Básico/i').first();
+    const ncExample = page.locator('text=/NC.*Basic/i').first();
     if (await ncExample.isVisible()) {
       await ncExample.click();
       await page.waitForTimeout(500);
@@ -313,14 +313,14 @@ test.describe('Button Type Examples', () => {
     await page.getByRole('button', { name: /examples/i }).click();
     await page.waitForTimeout(500);
 
-    const safetyExample = page.locator('text=/NC.*Segurança/i').first();
+    const safetyExample = page.locator('text=/NC.*Safety/i').first();
     if (await safetyExample.isVisible()) {
       await safetyExample.click();
       await page.waitForTimeout(500);
 
       const codeEditor = page.locator('[role="textbox"]').first();
       const content = await codeEditor.inputValue();
-      expect(content).toContain('Circuito de Segurança');
+      expect(content).toContain('Safety Circuit');
       expect(content).toContain('AND I0.0');
       expect(content).toContain('AND I0.1');
     }

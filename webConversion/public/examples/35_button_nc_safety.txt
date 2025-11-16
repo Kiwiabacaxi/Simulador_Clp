@@ -1,23 +1,23 @@
-// NC - Circuito de Segurança (Dois NC em Série)
-// ===============================================
-// Dois botões NC de segurança devem estar soltos
-// para permitir operação (prensa, guilhotina, etc).
+// NC - Safety Circuit (Two NC in Series)
+// ========================================
+// Two NC safety buttons must be released
+// to allow operation (press, guillotine, etc).
 //
-// Como testar:
-// 1. Configure I0.0 como NC (segurança 1)
-// 2. Configure I0.1 como NC (segurança 2)
-// 3. Configure I0.2 como NO (ativar máquina)
-// 4. Ambos NC soltos (I0.0=1, I0.1=1) - pode operar
-// 5. Pressione I0.2 - Q0.0 liga
-// 6. Pressione qualquer NC - Q0.0 desliga IMEDIATAMENTE
+// How to test:
+// 1. Configure I0.0 as NC (safety 1)
+// 2. Configure I0.1 as NC (safety 2)
+// 3. Configure I0.2 as NO (activate machine)
+// 4. Both NC released (I0.0=1, I0.1=1) - can operate
+// 5. Press I0.2 - Q0.0 turns ON
+// 6. Press any NC - Q0.0 turns OFF IMMEDIATELY
 
-// I0.0 = Botão segurança 1 (NC)
-// I0.1 = Botão segurança 2 (NC)
-// I0.2 = Ativar (NO)
-// Q0.0 = Máquina
+// I0.0 = Safety button 1 (NC)
+// I0.1 = Safety button 2 (NC)
+// I0.2 = Activate (NO)
+// Q0.0 = Machine
 
-LD I0.2      // Ativar pressionado?
-OR Q0.0      // OU máquina já ativa? (selo)
-AND I0.0     // E segurança 1 OK? (NC não pressionado)
-AND I0.1     // E segurança 2 OK? (NC não pressionado)
-OUT Q0.0     // Controla máquina
+LD I0.2      // Activate pressed?
+OR Q0.0      // OR machine already active? (seal)
+AND I0.0     // AND safety 1 OK? (NC not pressed)
+AND I0.1     // AND safety 2 OK? (NC not pressed)
+OUT Q0.0     // Control machine

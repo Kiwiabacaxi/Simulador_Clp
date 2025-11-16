@@ -324,6 +324,116 @@
   transform: translateY(0);
 }
 
+/* Button Types Section */
+.help-section__desc {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: var(--font-sm);
+  color: var(--color-text-secondary);
+}
+
+.help-button-types {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.help-button-type {
+  padding: var(--spacing-md);
+  background-color: var(--color-tertiary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: var(--transition-colors);
+}
+
+.help-button-type:hover {
+  background-color: var(--color-secondary);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.help-button-type__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.help-button-type__images {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.help-button-type__image {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.help-button-type__arrow {
+  font-size: var(--font-xl);
+  color: var(--color-primary);
+  font-weight: 700;
+  margin: 0 var(--spacing-xs);
+}
+
+.help-button-type__name {
+  margin: 0;
+  font-size: var(--font-md);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.help-button-type__content {
+  font-size: var(--font-sm);
+  color: var(--color-text);
+}
+
+.help-button-type__content p {
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.help-button-type__list {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+  list-style-type: disc;
+}
+
+.help-button-type__list li {
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.5;
+}
+
+.help-button-type__list li:last-child {
+  margin-bottom: 0;
+}
+
+.help-button-tip {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: rgba(59, 130, 246, 0.1);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-sm);
+  color: var(--color-text);
+}
+
+.help-button-tip strong {
+  color: var(--color-primary);
+}
+
+.help-button-tip em {
+  font-style: italic;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
 /* Scrollbar styling */
 .help-dialog__content::-webkit-scrollbar {
   width: 12px;

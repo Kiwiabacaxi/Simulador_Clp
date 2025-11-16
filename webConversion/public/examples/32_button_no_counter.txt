@@ -1,27 +1,27 @@
-// NO - Contador de Pressionamentos
-// ==================================
-// Conta quantas vezes o botão foi pressionado.
+// NO - Button Press Counter
+// ==========================
+// Counts how many times the button was pressed.
 //
-// Como testar:
-// 1. Configure I0.0 como NO
-// 2. Configure I0.1 como NO (reset)
-// 3. Pressione I0.0 cinco vezes (solte entre cada pressionamento)
-// 4. Após 5 pressionamentos, Q0.0 acende
-// 5. Pressione I0.1 para resetar o contador
+// How to test:
+// 1. Configure I0.0 as NO
+// 2. Configure I0.1 as NO (reset)
+// 3. Press I0.0 five times (release between each press)
+// 4. After 5 presses, Q0.0 turns ON
+// 5. Press I0.1 to reset the counter
 
-// I0.0 = Botão contador (NO)
-// I0.1 = Botão reset (NO)
-// C0 = Contador
-// Q0.0 = LED de 5 pressionamentos
+// I0.0 = Counter button (NO)
+// I0.1 = Reset button (NO)
+// C0 = Counter
+// Q0.0 = LED for 5 presses
 
-// Conta até 5
+// Count up to 5
 LD I0.0
 CTU C0, 5
 
-// Acende LED quando atingir 5
+// Turn ON LED when reaching 5
 LD C0
 OUT Q0.0
 
-// Reset do contador
+// Counter reset
 LD I0.1
 CTR C0

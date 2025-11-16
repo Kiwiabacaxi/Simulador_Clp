@@ -1,15 +1,15 @@
-// NC (Normally Closed) - Exemplo Básico
-// =======================================
-// Botão NC tem lógica INVERTIDA:
-// - Não pressionado = TRUE (1)
-// - Pressionado = FALSE (0)
+// NC (Normally Closed) - Basic Example
+// ======================================
+// NC button has INVERTED logic:
+// - Not pressed = TRUE (1)
+// - Pressed = FALSE (0)
 //
-// Como testar:
-// 1. Clique direito em I0.0 até aparecer "NC"
-// 2. I0.0 inicia em 1 (TRUE) sem pressionar
-// 3. Q0.0 inicia LIGADO
-// 4. Pressione I0.0 - Q0.0 APAGA
-// 5. Solte I0.0 - Q0.0 LIGA novamente
+// How to test:
+// 1. Right-click I0.0 until it shows "NC"
+// 2. I0.0 starts at 1 (TRUE) without pressing
+// 3. Q0.0 starts ON
+// 4. Press I0.0 - Q0.0 turns OFF
+// 5. Release I0.0 - Q0.0 turns ON again
 
 LD I0.0
 OUT Q0.0

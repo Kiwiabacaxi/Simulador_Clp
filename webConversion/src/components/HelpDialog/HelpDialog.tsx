@@ -106,6 +106,82 @@ export function HelpDialog({ onClose }: HelpDialogProps) {
             </div>
           </section>
 
+          {/* Button Types */}
+          <section className="help-section">
+            <h3 className="help-section__title">🔘 Button Types (Input Behavior)</h3>
+            <p className="help-section__desc">
+              Right-click any input button to cycle through types: <strong>SWITCH → NO → NC</strong>
+            </p>
+
+            <div className="help-button-types">
+              {/* SWITCH */}
+              <div className="help-button-type">
+                <div className="help-button-type__header">
+                  <div className="help-button-type__images">
+                    <img src="/assets/chave_aberta.png" alt="SWITCH OFF" className="help-button-type__image" />
+                    <span className="help-button-type__arrow">↔</span>
+                    <img src="/assets/chave_fechada.png" alt="SWITCH ON" className="help-button-type__image" />
+                  </div>
+                  <h4 className="help-button-type__name">SWITCH (Toggle)</h4>
+                </div>
+                <div className="help-button-type__content">
+                  <p><strong>Behavior:</strong> Maintains state when clicked</p>
+                  <ul className="help-button-type__list">
+                    <li>Click to turn ON (1) - stays ON</li>
+                    <li>Click again to turn OFF (0) - stays OFF</li>
+                    <li><strong>Use cases:</strong> Main power switches, mode selection, enable/disable controls</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* NO - Normally Open */}
+              <div className="help-button-type">
+                <div className="help-button-type__header">
+                  <div className="help-button-type__images">
+                    <img src="/assets/buttom.png" alt="NO Released" className="help-button-type__image" />
+                    <span className="help-button-type__arrow">→</span>
+                    <img src="/assets/botao_fechado.png" alt="NO Pressed" className="help-button-type__image" />
+                  </div>
+                  <h4 className="help-button-type__name">NO (Normally Open)</h4>
+                </div>
+                <div className="help-button-type__content">
+                  <p><strong>Behavior:</strong> Momentary push button</p>
+                  <ul className="help-button-type__list">
+                    <li>Released = OFF (0)</li>
+                    <li>Press and HOLD = ON (1)</li>
+                    <li>Release = OFF (0) immediately</li>
+                    <li><strong>Use cases:</strong> START buttons, test/jog buttons, manual overrides</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* NC - Normally Closed */}
+              <div className="help-button-type">
+                <div className="help-button-type__header">
+                  <div className="help-button-type__images">
+                    <img src="/assets/buttom_pi.png" alt="NC Released" className="help-button-type__image" />
+                    <span className="help-button-type__arrow">→</span>
+                    <img src="/assets/button_pi_aberto.png" alt="NC Pressed" className="help-button-type__image" />
+                  </div>
+                  <h4 className="help-button-type__name">NC (Normally Closed)</h4>
+                </div>
+                <div className="help-button-type__content">
+                  <p><strong>Behavior:</strong> Inverted logic (fail-safe)</p>
+                  <ul className="help-button-type__list">
+                    <li>Released (default) = ON (1)</li>
+                    <li>Press = OFF (0)</li>
+                    <li>Release = ON (1) again</li>
+                    <li><strong>Use cases:</strong> STOP/E-STOP buttons, safety interlocks (broken wire = stop)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="help-button-tip">
+              <strong>💡 Tip:</strong> Check the <em>button-types</em> category in Examples menu for interactive demos of each type!
+            </div>
+          </section>
+
           {/* Example Programs */}
           <section className="help-section">
             <h3 className="help-section__title">💡 {t('help.examples')}</h3>

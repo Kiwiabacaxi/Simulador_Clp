@@ -1,12 +1,12 @@
-// SWITCH - Lógica AND (Dois Switches em Série)
-// ==============================================
-// Dois switches devem estar ligados para acionar a saída.
+// SWITCH - AND Logic (Two Switches in Series)
+// =============================================
+// Both switches must be ON to activate the output.
 //
-// Como testar:
-// 1. I0.0 e I0.1 devem estar em modo SWITCH
-// 2. Ligue I0.0 - Q0.0 permanece desligado
-// 3. Ligue I0.1 - Q0.0 acende (ambos ligados)
-// 4. Desligue qualquer um - Q0.0 apaga
+// How to test:
+// 1. I0.0 and I0.1 should be in SWITCH mode
+// 2. Turn ON I0.0 - Q0.0 stays OFF
+// 3. Turn ON I0.1 - Q0.0 turns ON (both ON)
+// 4. Turn OFF either one - Q0.0 turns OFF
 
 LD I0.0
 AND I0.1
