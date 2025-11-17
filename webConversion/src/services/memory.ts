@@ -96,44 +96,44 @@ export class MemoryService {
           const elapsed = now - timer.startTime;
           timer.accumulated = Math.floor(elapsed / PLC_CONFIG.TIMER_BASE_MS);
 
-          // Check if timer done
+          // Check if timer done (both preset and accumulated are in units of TIMER_BASE_MS)
           if (timer.accumulated >= timer.preset) {
             timer.accumulated = timer.preset;
             timer.done = true;
           }
         }
       } else if (!enabled) {
-        // TON behavior: When disabled, stop timing but KEEP done state
-        // Only reset with explicit RST instruction
+        // TON behavior: When disabled, reset timing
         timer.startTime = undefined;
-        // DO NOT reset accumulated or done - they persist until RST
+        timer.accumulated = 0;
+        timer.done = false;
       }
     }
 
     // Timer Off Delay (TOFF)
     else if (timer.timerType === 'TOFF') {
-      if (!enabled && timer.enabled) {
-        // Falling edge - start timer
+      if (enabled) {
+        // TOFF behavior: When enabled, output is immediately ON
+        timer.done = true;
+        timer.startTime = undefined;
+        timer.accumulated = 0;
+      } else if (!enabled && timer.enabled) {
+        // Falling edge - start delay timer
         timer.startTime = now;
         timer.accumulated = 0;
-        timer.done = true; // TOFF starts with done=true
+        timer.done = true; // TOFF stays ON during delay
       } else if (!enabled && !timer.enabled) {
         // Timer running - update accumulated time
         if (timer.startTime !== undefined) {
           const elapsed = now - timer.startTime;
           timer.accumulated = Math.floor(elapsed / PLC_CONFIG.TIMER_BASE_MS);
 
-          // Check if timer done
+          // Check if delay expired (both preset and accumulated are in units of TIMER_BASE_MS)
           if (timer.accumulated >= timer.preset) {
             timer.accumulated = timer.preset;
-            timer.done = false; // TOFF done=false when time expired
+            timer.done = false; // TOFF turns OFF after delay
           }
         }
-      } else if (enabled) {
-        // TOFF behavior: When enabled, stop timing but KEEP done state
-        // Only reset with explicit RST instruction
-        timer.startTime = undefined;
-        // DO NOT reset accumulated or done - they persist until RST
       }
     }
 
