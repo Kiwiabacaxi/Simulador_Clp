@@ -1,0 +1,130 @@
+name: Release Electron App
+
+on:
+  push:
+    tags:
+      - 'v*' # Dispara apenas quando uma tag começando com 'v' for criada (ex: v1.0.0)
+
+permissions:
+  contents: write # Necessário para criar releases
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: webConversion/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./webConversion
+        run: npm ci
+
+      - name: Build application
+        working-directory: ./webConversion
+        run: npm run build
+
+      - name: Build Electron app (Windows)
+        if: matrix.os == 'windows-latest'
+        working-directory: ./webConversion
+        run: npm run electron:dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Electron app (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        working-directory: ./webConversion
+        run: npm run electron:dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Electron app (macOS)
+        if: matrix.os == 'macos-latest'
+        working-directory: ./webConversion
+        run: npm run electron:dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Windows artifacts
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: |
+            webConversion/release/*.exe
+
+      - name: Upload Linux artifacts
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: |
+            webConversion/release/*.AppImage
+            webConversion/release/*.deb
+
+      - name: Upload macOS artifacts
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: |
+            webConversion/release/*.dmg
+            webConversion/release/*.zip
+
+  create-release:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Display structure of downloaded files
+        run: ls -R artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/windows-build/*
+            artifacts/linux-build/*
+            artifacts/macos-build/*
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          body: |
+            ## 🚀 Simulador de CLP - Nova Release!
+
+            ### 📦 Downloads disponíveis:
+
+            **Windows:**
+            - `.exe` - Instalador NSIS (recomendado)
+
+            **Linux:**
+            - `.AppImage` - AppImage universal
+            - `.deb` - Pacote Debian/Ubuntu
+
+            **macOS:**
+            - `.dmg` - Imagem de disco
+            - `.zip` - Arquivo compactado
+
+            ### 📝 Changelog
+
+            As alterações desta versão estão listadas abaixo:
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -191,6 +191,26 @@ cd java-original
 
 ---
 
+## 📦 Releases
+
+O projeto possui sistema automatizado de releases via GitHub Actions. Para criar uma nova release:
+
+```bash
+# 1. Atualize a versão no package.json
+# 2. Crie e publique uma tag
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+O GitHub Actions automaticamente:
+- ✅ Builda para Windows, Linux e macOS
+- ✅ Cria uma GitHub Release com os instaladores
+- ✅ Gera changelog automático
+
+📖 **Guia completo:** Veja [`docs/RELEASES.md`](./docs/RELEASES.md) para instruções detalhadas
+
+---
+
 ## 📖 Referências
 
 - Projeto base: [https://github.com/IasminPieraco/Trabalho-Final-CLP](https://github.com/IasminPieraco/Trabalho-Final-CLP)

@@ -7,6 +7,10 @@
   "author": "PLC Simulator Team",
   "description": "Educational PLC Simulator with IL (Instruction List) programming",
   "homepage": "https://github.com/Kiwiabacaxi/Simulador_Clp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kiwiabacaxi/Simulador_Clp.git"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
@@ -74,6 +78,11 @@
     "productName": "PLC Simulator",
     "directories": {
       "output": "release"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "Kiwiabacaxi",
+      "repo": "Simulador_Clp"
     },
     "files": [
       "dist/**/*",
