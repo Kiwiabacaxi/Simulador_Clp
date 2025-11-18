@@ -9,7 +9,7 @@ permissions:
   contents: write # Necessário para criar releases
 
 jobs:
-  release:
+  build-and-release:
     runs-on: windows-latest
 
     steps:
@@ -27,42 +27,20 @@ jobs:
         working-directory: ./webConversion
         run: npm ci
 
-      - name: Build application
+      - name: Build web application
         working-directory: ./webConversion
         run: npm run build
 
-      - name: Build Electron app for Windows
+      - name: Build Electron installer for Windows
         working-directory: ./webConversion
         run: npm run electron:dist -- --win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-build
-          path: |
-            webConversion/release/*.exe
-
-  create-release:
-    needs: release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: Display structure of downloaded files
-        run: ls -R artifacts
-
-      - name: Create Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/windows-build/*
+          files: webConversion/release/*.exe
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -72,7 +50,7 @@ jobs:
             ### 📦 Downloads disponíveis:
 
             **Windows:**
-            - `.exe` - Instalador NSIS para Windows (x64 e x86)
+            - Instalador NSIS para Windows (x64 e x86)
 
             > 💡 **Nota:** Builds para Linux e macOS estarão disponíveis em versões futuras.
 
