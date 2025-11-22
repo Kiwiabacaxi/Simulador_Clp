@@ -114,11 +114,10 @@ export function MenuBar({
       {/* File Menu */}
       <div className="menu-group">
         <button className="menu-button" onClick={handleSave}>
-          <img src={ASSETS.BLOCO_NOTAS} alt="Save" className="menu-icon" />
-          {t('menu.save')}
+          💾 {t('menu.save')}
         </button>
         <button className="menu-button" onClick={handleLoad}>
-          {t('menu.load')}
+          📂 {t('menu.load')}
         </button>
         <ExamplesMenu
           hasUnsavedChanges={hasUnsavedChanges}
